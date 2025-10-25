@@ -41,6 +41,15 @@
     .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
     .footer{font-size:12px;color:var(--muted);text-align:center;padding:24px 0}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
+  
+    /* Light theme overrides */
+    body[data-theme="light"]{
+      --bg:#f7fafc; --card:#ffffff; --border:#e5e7eb; --fg:#0b1220; --muted:#475569;
+      --primary:#0ea5e9; --accent:#2563eb; --badge:#eff6ff; --good:#059669; --warn:#d97706; --danger:#dc2626;
+    }
+    body[data-theme="light"] .btn.secondary{ background:#f1f5f9; color:#0b1220 }
+    body[data-theme="light"] nav a.active, body[data-theme="light"] nav a:hover{ background:rgba(0,0,0,0.04) }
+
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
@@ -64,6 +73,7 @@
       <a href="#/" id="link-home">الرئيسية</a>
       <a href="#/quiz" id="link-quiz">التقييم</a>
       <a href="#/results" id="link-results">النتائج</a>
+      <button class="btn small secondary" id="theme-toggle" title="تبديل النمط">تبديل النمط</button>
     </nav>
   </header>
 
@@ -370,19 +380,12 @@ function renderQuiz(){
     const fav = !!state.favorites[name];
     const wrap = document.createElement("div");
     wrap.className = "name-item";
-    wrap.innerHTML = `
-      <div class="row">
-        <div class="left" style="gap:6px">
-          <button class="btn small ${fav?'':'secondary'}" title="تبديل المفضلة">★</button>
-          <strong>${name}</strong>
-        </div>
-        <span class="muted">${val}</span>
-      </div>
-      <input class="range" type="range" min="0" max="100" value="${val}">
-    `;
+    wrap.innerHTML = `\n      <div class=\"row\">\n        <div class=\"left\" style=\"gap:6px\">\n          <button class=\"btn small ${fav?'':'secondary'}\" title=\"تبديل المفضلة\">★</button>\n          <strong style=\"cursor:pointer\">${name}</strong>\n          <button class=\"btn small secondary\" title=\"تفاصيل\" data-details>تفاصيل</button>\n        </div>\n        <span class=\"muted\">${val}</span>\n      </div>\n      <input class=\"range\" type=\"range\" min=\"0\" max=\"100\" value=\"${val}\">\n    `;
     const range = wrap.querySelector(".range");
     const valueEl = wrap.querySelector(".muted");
     const star = wrap.querySelector("button");
+    const titleEl = wrap.querySelector("strong");
+    const detailsBtn = wrap.querySelector("[data-details]");
     range.addEventListener("input", e=>{
       const v = Number(e.target.value);
       state.scores[name] = v; valueEl.textContent = v; saveLocal();
@@ -390,6 +393,8 @@ function renderQuiz(){
     star.addEventListener("click", ()=>{
       state.favorites[name] = !state.favorites[name]; saveLocal(); renderQuiz();
     });
+    titleEl.addEventListener('click', ()=>openNameDetails(name));
+    detailsBtn.addEventListener('click', ()=>openNameDetails(name));
     container.appendChild(wrap);
   });
 }
@@ -434,6 +439,46 @@ function renderResults(){
   });
 }
 
+
+// THEME: dark/light toggle
+(function themeInit(){
+  const saved = localStorage.getItem("zid_theme") || "dark";
+  document.body.dataset.theme = saved;
+  document.getElementById("theme-toggle").addEventListener("click", ()=>{
+    const cur = document.body.dataset.theme === "dark" ? "light" : "dark";
+    document.body.dataset.theme = cur;
+    localStorage.setItem("zid_theme", cur);
+  });
+})();
+
+// Minimal details for names (fallback text used for all)
+const NAME_DETAILS = {};
+const DEFAULT_DETAILS = {
+  meaning: "تأمل في معنى الاسم وآثاره العملية في حياتك اليومية.",
+  reflections: [
+    "ما الموقف الأخير الذي لمست فيه هذا الاسم؟",
+    "اذكر أثرًا عمليًا واحدًا اليوم يتسق مع الاسم.",
+    "اذكر ذكرًا أو دعاءً متعلقًا بالاسم لمدة 2-3 دقائق.",
+    "دوّن تغير شعورك بعد التطبيق."
+  ],
+  sources: [
+    "راجع كتب الأسماء الحسنى وشروح العلماء الموثوقين."
+  ]
+};
+
+function openNameDetails(name){
+  const det = NAME_DETAILS[name] || DEFAULT_DETAILS;
+  document.getElementById("modal-title").textContent = name;
+  document.getElementById("modal-meaning").textContent = det.meaning;
+  let html = "<div class='grid'>";
+  html += "<div class='card'><strong>تأملات مقترحة</strong><ul class='list'>" + det.reflections.map(r=>`<li style='margin:6px 0'>${r}</li>`).join("") + "</ul></div>";
+  html += "<div class='card'><strong>مصادر عامة</strong><ul class='list'>" + det.sources.map(r=>`<li style='margin:6px 0'>${r}</li>`).join("") + "</ul></div>";
+  html += "</div>";
+  document.getElementById("modal-body").innerHTML = html;
+  document.getElementById("modal").style.display = "flex";
+}
+function closeModal(){ document.getElementById("modal").style.display = "none"; }
+
 // Boot
 (function init(){
   document.getElementById("year").textContent = new Date().getFullYear();
@@ -444,5 +489,16 @@ function renderResults(){
   filterCluster('all', document.querySelector(".pill[data-cluster='all']"));
 })();
 </script>
+
+  <!-- Name details modal -->
+  <div id="modal" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);z-index:50">
+    <div class="card" style="max-width:700px;width:92%;max-height:80vh;overflow:auto;position:relative">
+      <button class="btn small secondary" style="position:absolute;top:10px;left:10px" onclick="closeModal()">إغلاق</button>
+      <h3 id="modal-title" style="margin:0 0 8px"></h3>
+      <p id="modal-meaning" class="muted"></p>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
 </body>
 </html>
