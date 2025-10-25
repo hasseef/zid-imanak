@@ -126,6 +126,24 @@
       .brand-logo{ width:40px; height:40px }
     }
 
+  
+    .verse-box{
+      text-align:center;
+      margin: 40px auto 24px;
+      padding:20px;
+      border-radius:20px;
+      background: linear-gradient(135deg, rgba(250,250,255,0.6), rgba(230,250,250,0.4));
+      box-shadow: 0 0 20px rgba(20,184,166,0.1);
+      font-family: 'Amiri', 'Scheherazade New', serif;
+      color:#0F172A;
+    }
+    .verse-box .ayah{ font-size: 28px; font-weight:600; line-height:1.8; }
+    .verse-box .ref{ font-size:16px; opacity:0.7; }
+    .verse-box .subtext{ font-family:'Tajawal','Noto Kufi Arabic',sans-serif; font-size:15px; color:#2563EB; margin-top:8px; }
+    @media (max-width:600px){
+      .verse-box .ayah{ font-size:22px; }
+    }
+
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
@@ -157,7 +175,14 @@
         <div class="card">
           <h1 style="margin:0 0 8px">ارفع وعيك بأسماء الله الحسنى</h1>
           <p class="muted">اختبر ارتباطك القلبي والعملي بالأسماء الحسنى، وشاهد تحليلاً يحدّد عنق الزجاجة في هرم ماسلو ويقترح رحلة أسبوعية لتعزيز الأسماء الأضعف.</p>
-          <div class="toolbar">
+          
+      <div class="verse-box">
+        <div class="ayah">﴿ مَا ظَنُّكُم بِرَبِّ الْعَالَمِينَ ﴾</div>
+        <div class="ref">سورة الصافات – الآية 87</div>
+        <div class="subtext">هي دعوة لتجديد ظنك بربك… لتبدأ رحلتك مع الأسماء الحسنى.</div>
+      </div>
+
+      <div class="toolbar">
             <button class="btn" onclick="go('#/quiz')">ابدأ التقييم</button>
             <button class="btn secondary" onclick="exportJSON()">تصدير JSON</button>
             <button class="btn secondary" onclick="exportCSV()">تصدير CSV</button>
