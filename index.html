@@ -1,598 +1,475 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Volume2, VolumeX, ChevronRight, ChevronLeft, Play, Pause, Info, Phone, Mail, ExternalLink, Triangle } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Toaster } from "@/components/ui/sonner";
-import { toast } from "sonner";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip as RTooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  Cell,
-} from "recharts";
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>منصة إيماني</title>
+<meta name="theme-color" content="#0f6781" />
 
-// ========
-// Single-file React App for "إيماني" (Desktop + Mobile)
-// - RTL, Tailwind CSS, shadcn/ui, framer-motion, recharts
-// - In-app routing via state (no external router)
-// - Mobile-ready and Web-ready. For mobile packaging use Capacitor/Cordova WebView.
-// - All strings are Arabic and UI flows match user's spec.
-// ========
+<style>
+  :root{
+    --blue:#0f6781; --blue-2:#2a7c92; --beige:#e9dec7; --gold:#d4a944; --ink:#0f2a32;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Noto Kufi Arabic','Cairo',sans-serif;color:#1f2937;background:linear-gradient(#f6f1e6,#fff)}
+  a,button{cursor:pointer}
+  .container{max-width:1100px;margin:0 auto;padding:0 16px}
+  .shadow{box-shadow:0 8px 24px rgba(0,0,0,.06)}
+  .card{background:#fff;border:1px solid #eef0f2;border-radius:18px}
+  .btn{border:none;border-radius:12px;padding:12px 20px;font-weight:800}
+  .btn-primary{background:var(--gold);color:#1c2a2f}
+  .btn-primary:hover{background:#c79b34}
+  .btn-ghost{background:transparent;color:#334155;border:1px solid #e5e7eb}
+  .header{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);background:rgba(255,255,255,.8);border-bottom:1px solid #eef0f2}
+  .nav{display:flex;gap:10px;flex-wrap:wrap}
+  .nav button{padding:10px 14px;border-radius:12px;border:1px solid transparent;background:transparent}
+  .nav button.active{background:rgba(212,169,68,.15);color:var(--blue);border-color:rgba(212,169,68,.25)}
+  .grid{display:grid;gap:18px}
+  .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+  @media(max-width:900px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+  .hero{
+    border-radius:24px;overflow:hidden;color:#fff;
+    background:linear-gradient(135deg,var(--blue),var(--blue-2) 60%,rgba(212,169,68,.5))
+  }
+  .hero .inner{padding:56px 22px;text-align:center}
+  h1{margin:0;font-size:clamp(24px,4vw,42px);line-height:1.5;font-weight:900}
+  .muted{color:#6b7280}
+  .section{margin:38px 0}
+  .list{padding-right:18px;margin:10px 0}
+  .list li{margin:8px 0}
+  .footer{border-top:1px solid #eef0f2;background:rgba(255,255,255,.8)}
+  .brand-right{display:flex;align-items:center;gap:10px;font-weight:900}
+  .brand-box{width:44px;height:44px;border-radius:14px;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:800}
+  .logos{display:flex;align-items:center;gap:12px}
+  .tag{border:1px solid #e5e7eb;padding:4px 8px;border-radius:8px;font-size:12px}
+  .small{font-size:12px}
+  .center{text-align:center}
+  .hidden{display:none}
+  .range{accent-color:var(--gold);width:100%}
+  .pill{border-radius:12px;padding:10px 12px;border:1px solid #e5e7eb;background:#fff}
+  .warn{color:#b45309;background:#fffbeb;border:1px solid #fef3c7;padding:10px;border-radius:10px}
+  .ok{color:#065f46;background:#ecfdf5;border:1px solid #a7f3d0;padding:10px;border-radius:10px}
+  .chart{height:320px;border:1px solid #eef0f2;border-radius:16px;padding:12px;background:#fff}
+  .bar{height:32px;margin:8px 0;background:#f1f5f9;border-radius:999px;position:relative;overflow:hidden}
+  .bar > span{position:absolute;left:0;top:0;bottom:0;background:var(--gold)}
+  .ticks{display:flex;justify-content:space-between;font-size:12px;color:#64748b}
+  .area{position:relative;height:180px;background:linear-gradient(180deg,rgba(212,169,68,.6),rgba(42,124,146,.2));border-radius:12px}
+  .area::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient( to right, transparent, transparent 30px, rgba(0,0,0,.04) 31px);}
+  .legend{display:flex;justify-content:space-between;font-size:12px;color:#475569;margin-top:8px}
+  .partners{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+  @media(max-width:900px){.partners{grid-template-columns:repeat(3,1fr)}}
+  .partner{height:80px;border:1px solid #e5e7eb;border-radius:12px;display:grid;place-items:center;color:#64748b;font-weight:700;background:#fff}
+  .sr{position:absolute;clip:rect(1px,1px,1px,1px);padding:0;border:0;height:1px;width:1px;overflow:hidden}
+</style>
+</head>
+<body>
 
-// Utility: join class names
-function cn(...a) { return a.filter(Boolean).join(" "); }
+<header class="header">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;">
+    <div class="brand-right">
+      <div class="brand-box">إ</div><span>إيماني</span>
+    </div>
 
-// Palette
-const palette = {
-  bg: "from-[#0f6781] via-[#2a7c92] to-[#d7c7a1]",
-  blue: "#2a7c92",
-  beige: "#f3ead8",
-  gold: "#d4a944",
-  text: "#0f2a32",
-};
+    <nav class="nav" id="nav"></nav>
 
-// App routes
-const routes = [
-  { key: "home", label: "الرئيسية" },
-  { key: "vision", label: "الارتباط برؤية 2030" },
-  { key: "assessment", label: "التقييم" },
-  { key: "results", label: "النتائج" },
-  { key: "partners", label: "شركاؤنا" },
-  { key: "contact", label: "تواصل معنا" },
-];
+    <div class="logos">
+      <!-- بدائل SVG داخلية للشعارات (يمكن استبدالها بصور PNG الرسمية لو رغبت) -->
+      <div title="رؤية السعودية 2030" class="tag" id="visionLogo">
+        <!-- Vision 2030 SVG placeholder -->
+        <svg width="84" height="22" viewBox="0 0 200 50" aria-hidden="true">
+          <text x="0" y="16" font-size="16" fill="#6b7280" font-weight="700">VISION 2030</text>
+        </svg>
+      </div>
+      <div title="مبادرة تلبية" class="tag" id="talbiyaLogo">
+        <!-- Talbiya SVG placeholder -->
+        <svg width="70" height="22" viewBox="0 0 160 50" aria-hidden="true">
+          <text x="0" y="16" font-size="16" fill="#22a35a" font-weight="700">Talbiya</text>
+        </svg>
+      </div>
+      <button id="audioBtn" class="btn-ghost" style="padding:8px 12px;border-radius:10px">
+        🔊 تشغيل التلاوة
+      </button>
+    </div>
+  </div>
+</header>
 
-// Vision 2030 goals (strategic -> sub -> final) based on user's table
-const VISION = [
-  {
-    icon: "🕊️",
-    title: "تعزيز القيم الإسلامية والهوية الوطنية",
-    subs: [
-      "تعزيز قيم الوسطية والتسامح",
-      "تعزيز قيم الإتقان والانضباط",
-      "تعزيز قيم العدالة والشفافية",
-      "تعزيز قيم العزيمة والمثابرة",
-    ],
-    final: "ترسيخ الإيمان والهوية الإيجابية في سلوك الفرد والمجتمع.",
-  },
-  {
-    icon: "💫",
-    title: "تمكين حياة عامرة وصحية",
-    subs: [
-      "تعزيز نمط حياة صحي",
-      "الارتقاء بجودة الحياة في المدن",
-      "تعزيز الوقاية من المخاطر الصحية",
-      "دعم الثقافة والترفيه",
-    ],
-    final: "مجتمع متوازن يعيش حياة صحية وروحية متكاملة.",
-  },
-  {
-    icon: "🤝",
-    title: "تمكين المسؤولية الاجتماعية",
-    subs: [
-      "تعزيز قيام الأفراد والشركات بدورهم المجتمعي",
-      "تمكين المنظمات غير الربحية لتحقيق أثر أعمق",
-    ],
-    final: "مجتمع متكافل يشارك بفاعلية في التنمية المستدامة.",
-  },
-];
+<!-- الصوت: ضع ملف عبدالباسط هنا لاحقًا مكان src -->
+<audio id="recitation" loop preload="auto">
+  <source src="audio/abdulbasit.mp3" type="audio/mpeg" />
+</audio>
 
-// Hawkins scale (selected levels) for visualization
-const hawkinsLevels = [
-  { name: "خزي", value: 20 },
-  { name: "حزن", value: 75 },
-  { name: "خوف", value: 100 },
-  { name: "غضب", value: 150 },
-  { name: "شجاعة", value: 200 },
-  { name: "استعداد", value: 310 },
-  { name: "قبول", value: 350 },
-  { name: "محبة", value: 500 },
-  { name: "فرح", value: 540 },
-  { name: "سلام", value: 600 },
-];
+<main class="container" style="padding-bottom:60px">
+  <!-- الصفحة الرئيسية -->
+  <section class="section" data-route="home">
+    <div class="hero shadow">
+      <div class="inner">
+        <h1>ابدأ رحلتك نحو معرفة نفسك من خلال أسماء الله الحسنى</h1>
+        <p class="muted" style="max-width:700px;margin:12px auto 0">
+          مساحة إيمانية عملية تساعدك على الوعي بذاتك وتحسين سلوكك اليومي وخلق اتساق روحي مع معاني الأسماء الحسنى.
+        </p>
+        <div style="margin-top:18px">
+          <button class="btn btn-primary" id="startAssessment">ابدأ التقييم الآن</button>
+        </div>
+        <div style="margin-top:24px;font-weight:700;font-size:20px">ما ظَنُّكُم بِرَبِّ العَالَمِينَ</div>
+      </div>
+    </div>
 
-const maslow = [
-  { name: "فيسيولوجي", value: 1 },
-  { name: "أمان", value: 2 },
-  { name: "انتماء", value: 3 },
-  { name: "تقدير", value: 4 },
-  { name: "تحقيق ذات", value: 5 },
-];
+    <div class="section grid grid-2">
+      <div class="card shadow" style="padding:18px">
+        <h3 style="margin:0 0 10px;font-weight:800">عن المنصة</h3>
+        <p class="muted" style="line-height:1.9">
+          منصة إيماني تمزج بين الروحانية والحداثة لتقوية الوعي الذاتي عبر أدوات تقييم ونتائج عملية تربط قيم الإيمان بسلوك الحياة اليومية.
+        </p>
+      </div>
+      <div class="grid grid-2">
+        <div class="card shadow" style="display:grid;place-items:center;padding:24px;font-weight:800">الإيمان</div>
+        <div class="card shadow" style="display:grid;place-items:center;padding:24px;font-weight:800">التوازن</div>
+        <div class="card shadow" style="display:grid;place-items:center;padding:24px;font-weight:800">الوعي</div>
+        <div class="card shadow" style="display:grid;place-items:center;padding:24px;font-weight:800">النمو</div>
+      </div>
+    </div>
+  </section>
 
-// Simple partner list (placeholders)
-const partners = [
-  { name: "رؤية 2030", logo: "VISION2030" },
-  { name: "تلبية للبحث والتطوير", logo: "TELBIYA" },
-  { name: "جامعة حائل", logo: "UOH" },
-  { name: "غرفة حائل", logo: "HCCI" },
-];
+  <!-- الارتباط برؤية 2030 -->
+  <section class="section hidden" data-route="vision">
+    <div class="card shadow" style="padding:22px;background:linear-gradient(90deg,var(--beige),#fff)">
+      <h2 style="margin:0 0 8px;font-size:28px;color:var(--ink);font-weight:900">الارتباط برؤية 2030</h2>
+      <p class="muted">منصة إيماني تُجسّد مستهدفات الرؤية عبر ثلاثة محاور استراتيجية:</p>
 
-export default function ImaniApp() {
-  const [route, setRoute] = useState("home");
-  const [openMenu, setOpenMenu] = useState(false);
-  const [playing, setPlaying] = useState(true);
-  const audioRef = useRef(null);
+      <div class="grid grid-3 section">
+        <div class="card" style="padding:16px">
+          <h4 style="margin:0 0 8px">🕊️ تعزيز القيم الإسلامية والهوية الوطنية</h4>
+          <ul class="list">
+            <li>تعزيز قيم الوسطية والتسامح</li>
+            <li>تعزيز قيم الإتقان والانضباط</li>
+            <li>تعزيز قيم العدالة والشفافية</li>
+            <li>تعزيز قيم العزيمة والمثابرة</li>
+          </ul>
+          <div class="pill warn">ترسيخ الإيمان والهوية الإيجابية في سلوك الفرد والمجتمع.</div>
+        </div>
 
-  // Assessment state (sliders 1..5)
-  const [answers, setAnswers] = useState({
-    حضور_الذكر: 0,
-    التفكر: 0,
-    التوكل: 0,
-    الصبر: 0,
-    الشكر: 0,
+        <div class="card" style="padding:16px">
+          <h4 style="margin:0 0 8px">💫 تمكين حياة عامرة وصحية</h4>
+          <ul class="list">
+            <li>تعزيز نمط حياة صحي</li>
+            <li>الارتقاء بجودة الحياة في المدن</li>
+            <li>تعزيز الوقاية من المخاطر الصحية</li>
+            <li>دعم الثقافة والترفيه</li>
+          </ul>
+          <div class="pill ok">مجتمع متوازن يعيش حياة صحية وروحية متكاملة.</div>
+        </div>
+
+        <div class="card" style="padding:16px">
+          <h4 style="margin:0 0 8px">🤝 تمكين المسؤولية الاجتماعية</h4>
+          <ul class="list">
+            <li>تعزيز قيام الأفراد والشركات بدورهم المجتمعي</li>
+            <li>تمكين المنظمات غير الربحية لتحقيق أثر أعمق</li>
+          </ul>
+          <div class="pill warn">مجتمع متكافل يشارك بفاعلية في التنمية المستدامة.</div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:16px">
+        <h4 style="margin:0 0 8px">كيف ترتبط مكونات المنصة بمحاور الرؤية؟</h4>
+        <div class="grid grid-3">
+          <div class="pill">التقييم الذاتي → يعزز القيم الإسلامية</div>
+          <div class="pill">نتائج الوعي والمتابعة → تدعم جودة الحياة</div>
+          <div class="pill">المشاركة المجتمعية وبرامج الشراكة → تمكّن المسؤولية الاجتماعية</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- التقييم -->
+  <section class="section hidden" data-route="assessment">
+    <div class="card shadow" style="overflow:hidden">
+      <div style="padding:20px;background:linear-gradient(90deg,var(--beige),#fff)">
+        <h2 style="margin:0 0 6px;font-size:28px;color:var(--ink);font-weight:900">التقييم الذاتي</h2>
+        <p class="muted">حرّك المؤشرات أولًا، ولن تظهر النتائج قبل بدء التقييم.</p>
+      </div>
+
+      <div class="grid grid-2" style="padding:18px" id="sliders"></div>
+
+      <div style="padding:0 18px 18px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-ghost" id="howWorks">كيف يعمل التقييم؟</button>
+        <button class="btn" style="background:var(--blue);color:#fff" id="showResults">استعراض النتائج</button>
+      </div>
+      <div id="msg" class="section hidden" style="padding:0 18px 18px"></div>
+    </div>
+  </section>
+
+  <!-- النتائج -->
+  <section class="section hidden" data-route="results">
+    <div class="card shadow" style="overflow:hidden">
+      <div style="padding:20px;background:linear-gradient(90deg,var(--beige),#fff)">
+        <h2 style="margin:0 0 6px;font-size:28px;color:var(--ink);font-weight:900">النتائج</h2>
+        <p class="muted">سُلّم هاوكنز وهرم ماسلو بصريًا وتحليل موجز.</p>
+      </div>
+
+      <div class="grid grid-2" style="padding:18px">
+        <!-- Hawkins -->
+        <div class="chart">
+          <h4 style="margin:0 0 8px">موضعك التقريبي على سُلّم هاوكنز</h4>
+          <div class="area" id="area"></div>
+          <div class="legend">
+            <span>خزي</span><span>حزن</span><span>خوف</span><span>غضب</span><span>شجاعة</span><span>استعداد</span><span>قبول</span><span>محبة</span><span>فرح</span><span>سلام</span>
+          </div>
+          <div id="hawkinsInfo" class="small" style="margin-top:8px;color:#475569"></div>
+        </div>
+
+        <!-- Maslow -->
+        <div class="chart">
+          <h4 style="margin:0 0 8px">موضعك في هرم ماسلو</h4>
+          <div class="bar"><span id="m1" style="width:0%"></span></div>
+          <div class="bar"><span id="m2" style="width:0%"></span></div>
+          <div class="bar"><span id="m3" style="width:0%"></span></div>
+          <div class="bar"><span id="m4" style="width:0%"></span></div>
+          <div class="bar"><span id="m5" style="width:0%"></span></div>
+          <div class="ticks"><span>فيسيولوجي</span><span>أمان</span><span>انتماء</span><span>تقدير</span><span>تحقيق ذات</span></div>
+          <div id="maslowInfo" class="small" style="margin-top:8px;color:#475569"></div>
+        </div>
+      </div>
+
+      <div style="padding:0 18px 18px;color:#334155;line-height:1.9">
+        التحليل الموجز: تعكس الدرجة توازنًا عامًا في مؤشرات (الذكر، التفكر، التوكل، الصبر، الشكر). ننصح بخطة أسبوعية صغيرة قابلة للقياس لرفع مستوى الوعي العاطفي والسلوكي.
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-ghost" id="backToAssessment">↩︎ العودة للتقييم</button>
+          <button class="btn" style="background:var(--blue);color:#fff" onclick="go('partners')">استكشاف شركاؤنا</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- شركاؤنا -->
+  <section class="section hidden" data-route="partners">
+    <div class="card shadow" style="padding:22px">
+      <h2 style="margin:0 0 6px;font-size:28px;color:var(--ink);font-weight:900">شركاؤنا</h2>
+      <p class="muted">نماذج لشعارات شركاء داعمين للمنصة. يمكنك استبدالها لاحقًا بالملفات الرسمية.</p>
+      <div class="partners section">
+        <div class="partner">VISION2030</div>
+        <div class="partner">TELBIYA</div>
+        <div class="partner">UOH</div>
+        <div class="partner">HCCI</div>
+        <div class="partner">Partner</div>
+        <div class="partner">Partner</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- تواصل معنا -->
+  <section class="section hidden" data-route="contact">
+    <div class="card shadow" style="overflow:hidden">
+      <div style="padding:20px;background:linear-gradient(90deg,var(--beige),#fff)">
+        <h2 style="margin:0 0 6px;font-size:28px;color:var(--ink);font-weight:900">تواصل معنا</h2>
+        <p class="muted">نسعد برسالتك واقتراحاتك.</p>
+      </div>
+      <div class="grid grid-2" style="padding:18px">
+        <div class="grid">
+          <input class="pill" placeholder="الاسم" />
+          <input class="pill" placeholder="البريد الإلكتروني" type="email" />
+          <textarea class="pill" rows="6" placeholder="نص الرسالة"></textarea>
+          <button class="btn" style="background:var(--blue);color:#fff">إرسال</button>
+        </div>
+        <div class="small muted" style="line-height:2">
+          <div>📞 0000 000 555</div>
+          <div>✉️ contact@imani.sa</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:16px 0;gap:12px;flex-wrap:wrap">
+    <div><b>إيماني</b> — منصة وعي إيماني معاصر</div>
+    <div class="muted">© جميع الحقوق محفوظة لشركة تلبية للبحث والتطوير</div>
+  </div>
+</footer>
+
+<script>
+  /* --------------------- Router & Nav --------------------- */
+  const routes = [
+    {key:'home', label:'الرئيسية'},
+    {key:'vision', label:'الارتباط برؤية 2030'},
+    {key:'assessment', label:'التقييم'},
+    {key:'results', label:'النتائج'},
+    {key:'partners', label:'شركاؤنا'},
+    {key:'contact', label:'تواصل معنا'}
+  ];
+  const nav = document.getElementById('nav');
+  routes.forEach(r=>{
+    const b=document.createElement('button'); b.textContent=r.label; b.onclick=()=>go(r.key);
+    nav.appendChild(b);
+  });
+  function go(key){
+    document.querySelectorAll('[data-route]').forEach(s=>s.classList.add('hidden'));
+    const el=document.querySelector(`[data-route="${key}"]`);
+    if(el) el.classList.remove('hidden');
+    [...nav.children].forEach((b,i)=>b.classList.toggle('active', routes[i].key===key));
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(key!=='home') audioPauseSoft();
+    history.replaceState(null,'',`#${key}`);
+  }
+  window.addEventListener('load',()=>{
+    go(location.hash.replace('#','')||'home');
   });
 
-  const answered = useMemo(() => Object.values(answers).some((v) => v > 0), [answers]);
+  /* --------------------- Audio (Abdulbasit) --------------------- */
+  const audio = document.getElementById('recitation');
+  const audioBtn = document.getElementById('audioBtn');
+  let audioOn=false;
+  function audioPauseSoft(){ if(!audio.paused){ audio.pause(); audioOn=false; audioBtn.textContent='🔊 تشغيل التلاوة'; } }
+  audioBtn.addEventListener('click', async ()=>{
+    try{
+      if(!audioOn){ await audio.play(); audioOn=true; audioBtn.textContent='🔇 إيقاف التلاوة'; }
+      else{ audio.pause(); audioOn=false; audioBtn.textContent='🔊 تشغيل التلاوة'; }
+    }catch(e){ alert('ضع ملف التلاوة في: audio/abdulbasit.mp3 أو اسمح بالتشغيل من المتصفح.'); }
+  });
 
-  useEffect(() => {
-    if (audioRef.current) {
-      try {
-        if (playing) audioRef.current.play().catch(() => {});
-        else audioRef.current.pause();
-      } catch (e) {}
+  // زر ابدأ التقييم
+  document.getElementById('startAssessment').addEventListener('click',()=>go('assessment'));
+
+  /* --------------------- Assessment --------------------- */
+  const slidersHost=document.getElementById('sliders');
+  const items=['حضور الذكر','التفكر','التوكل','الصبر','الشكر'];
+  const answers={};
+  items.forEach((name,i)=>{
+    const wrap=document.createElement('div'); wrap.className='grid';
+    const head=document.createElement('div'); head.style.display='flex'; head.style.justifyContent='space-between'; head.style.alignItems='center';
+    head.innerHTML=`<div style="font-weight:700">${name}</div><div class="small muted" id="v${i}">0</div>`;
+    const input=document.createElement('input'); input.type='range'; input.min=0; input.max=5; input.step=1; input.value=0; input.className='range';
+    input.addEventListener('input',()=>{ answers[name]=+input.value; document.getElementById('v'+i).textContent=input.value; });
+    const ticks=document.createElement('div'); ticks.className='ticks'; ticks.innerHTML='<span>0</span><span>5</span>';
+    wrap.append(head,input,ticks); slidersHost.appendChild(wrap);
+  });
+
+  const msg=document.getElementById('msg');
+  document.getElementById('howWorks').addEventListener('click',()=>{
+    msg.classList.remove('hidden');
+    msg.innerHTML='<div class="pill">حرّك كل مؤشر من 0 إلى 5 بحسب واقعك الحالي. نحسب درجة وعي مركبة ونربطها بسُلّم هاوكنز وطبقات ماسلو. يمكنك إعادة التقييم لاحقًا للمقارنة.</div>';
+  });
+
+  document.getElementById('showResults').addEventListener('click',()=>{
+    const started = Object.values(answers).some(v=>v>0);
+    if(!started){
+      msg.classList.remove('hidden');
+      msg.innerHTML='<div class="warn">يجب البدء بتحريك المؤشرات قبل استعراض النتائج.</div>';
+      return;
     }
-  }, [playing]);
+    updateResults();
+    go('results');
+  });
 
-  useEffect(() => {
-    // Close drawer on route change
-    setOpenMenu(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [route]);
-
-  return (
-    <div dir="rtl" className="min-h-screen bg-gradient-to-b from-[#0f6781] to-[#e9dec7] text-[#{palette.text}] text-slate-900 selection:bg-yellow-200/60">
-      {/* Top Wave / Hero BG */}
-      <header className="sticky top-0 z-50 backdrop-blur bg-white/70 border-b border-white/40">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          {/* Right: Imani Logo */}
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-2xl bg-[#0f6781] text-white grid place-items-center font-semibold">إ</div>
-            <span className="font-extrabold text-xl tracking-tight">إيماني</span>
-          </div>
-
-          {/* Center: Nav */}
-          <nav className="hidden md:flex gap-6 text-sm font-medium">
-            {routes.map((r) => (
-              <button
-                key={r.key}
-                onClick={() => setRoute(r.key)}
-                className={cn(
-                  "px-3 py-2 rounded-xl transition",
-                  route === r.key ? "bg-[#d4a944]/15 text-[#0f6781]" : "hover:bg-slate-100"
-                )}
-              >
-                {r.label}
-              </button>
-            ))}
-          </nav>
-
-          {/* Left: Logos + Audio */}
-          <div className="flex items-center gap-3">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button size="icon" variant="ghost" onClick={() => setPlaying((p) => !p)} aria-label="تشغيل/إيقاف التلاوة">
-                    {playing ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>تلاوة عبدالباسط (هادئة)</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-
-            <div className="hidden sm:flex items-center gap-2">
-              {/* Vision 2030 */}
-              <span className="px-2 py-1 rounded-md border text-xs">رؤية 2030</span>
-              {/* Telbiya */}
-              <span className="px-2 py-1 rounded-md border text-xs">تلبية</span>
-            </div>
-
-            {/* Mobile menu */}
-            <Button className="md:hidden" variant="ghost" size="icon" onClick={() => setOpenMenu((o) => !o)}>
-              {openMenu ? <X /> : <Menu />}
-            </Button>
-          </div>
-        </div>
-
-        {/* Mobile drawer */}
-        <AnimatePresence>
-          {openMenu && (
-            <motion.div
-              initial={{ height: 0 }}
-              animate={{ height: "auto" }}
-              exit={{ height: 0 }}
-              className="md:hidden border-t bg-white/80 backdrop-blur"
-            >
-              <div className="px-4 py-3 grid gap-2">
-                {routes.map((r) => (
-                  <Button key={r.key} variant={route === r.key ? "secondary" : "ghost"} className="justify-start" onClick={() => setRoute(r.key)}>
-                    {r.label}
-                  </Button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </header>
-
-      {/* Hidden audio element */}
-      <audio ref={audioRef} loop autoPlay muted={!playing} className="hidden">
-        {/* You can replace the src with an actual hosted MP3 of Abdulbasit recitation */}
-        <source src="" type="audio/mpeg" />
-      </audio>
-
-      <main className="container mx-auto px-4 pb-20">
-        <AnimatePresence mode="wait">
-          {route === "home" && <Home onStart={() => setRoute("assessment")} />}
-          {route === "vision" && <Vision2030 />}
-          {route === "assessment" && (
-            <Assessment answers={answers} setAnswers={setAnswers} onNext={() => setRoute("results")} />
-          )}
-          {route === "results" && (
-            <Results answers={answers} onBack={() => setRoute("assessment")} onPartners={() => setRoute("partners")} />
-          )}
-          {route === "partners" && <Partners />}
-          {route === "contact" && <Contact />}
-        </AnimatePresence>
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t bg-white/70 backdrop-blur">
-        <div className="container mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-sm">
-          <div className="flex items-center gap-2">
-            <span className="font-bold">إيماني</span>
-            <span className="text-slate-500">— منصة وعي إيماني معاصر</span>
-          </div>
-          <div className="text-slate-600">© جميع الحقوق محفوظة لشركة تلبية للبحث والتطوير</div>
-        </div>
-      </footer>
-
-      <Toaster richColors closeButton />
-    </div>
-  );
-}
-
-function Section({ children, className }) {
-  return (
-    <section className={cn("my-10 md:my-14", className)}>
-      {children}
-    </section>
-  );
-}
-
-function Home({ onStart }) {
-  return (
-    <motion.div key="home" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-      {/* Hero */}
-      <Section className="pt-6">
-        <div className="rounded-3xl overflow-hidden bg-gradient-to-br from-[#0f6781] via-[#2a7c92] to-[#d4a944]/40 text-white">
-          <div className="px-6 md:px-12 py-16 md:py-24 text-center">
-            <h1 className="text-3xl md:text-5xl font-black leading-relaxed">ابدأ رحلتك نحو معرفة نفسك من خلال أسماء الله الحسنى</h1>
-            <p className="mt-4 text-white/90 max-w-2xl mx-auto">
-              مساحة إيمانية عملية تساعدك على الوعي بذاتك، وتحسين سلوكك اليومي، وخلق اتساق روحي مع معاني الأسماء الحسنى.
-            </p>
-            <div className="mt-8">
-              <Button size="lg" className="bg-[#d4a944] text-[#0f2a32] hover:bg-[#c79b34] font-extrabold px-8 rounded-xl" onClick={onStart}>
-                ابدأ التقييم الآن
-              </Button>
-            </div>
-            <div className="mt-10 text-2xl font-semibold text-white/90">
-              ما ظَنُّكُم بِرَبِّ العَالَمِينَ
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* About */}
-      <Section>
-        <div className="grid md:grid-cols-2 gap-6 items-stretch">
-          <Card className="rounded-2xl shadow-sm">
-            <CardHeader>
-              <CardTitle>عن المنصة</CardTitle>
-            </CardHeader>
-            <CardContent className="text-slate-700 leading-8">
-              منصة إيماني تمزج بين الروحانية والحداثة لتقوية الوعي الذاتي عبر أدوات تقييم ونتائج عملية تربط قيم الإيمان بسلوك الحياة اليومية.
-            </CardContent>
-          </Card>
-          <div className="grid grid-cols-2 gap-4">
-            {["الإيمان", "التوازن", "الوعي", "النمو"].map((t, i) => (
-              <Card key={i} className="rounded-2xl grid place-items-center py-8">
-                <div className="text-xl font-bold">{t}</div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      {/* Quick cards */}
-      <Section>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[{ k: "assessment", t: "التقييم الذاتي" }, { k: "results", t: "النتائج" }, { k: "partners", t: "شركاؤنا" }, { k: "programs", t: "البرامج الإيمانية" }].map((c) => (
-            <Card key={c.k} className="rounded-2xl hover:shadow-md transition">
-              <CardContent className="py-8 text-center font-semibold">{c.t}</CardContent>
-            </Card>
-          ))}
-        </div>
-      </Section>
-    </motion.div>
-  );
-}
-
-function Vision2030() {
-  return (
-    <motion.div key="vision" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-      <Section>
-        <div className="rounded-3xl bg-gradient-to-br from-[#e9dec7] to-white p-6 md:p-10 border">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-[#0f2a32] mb-2">الارتباط برؤية 2030</h2>
-          <p className="text-slate-700">منصة إيماني تُجسّد مستهدفات الرؤية عبر ثلاثة محاور استراتيجية:</p>
-
-          <div className="grid md:grid-cols-3 gap-6 mt-6">
-            {VISION.map((v, idx) => (
-              <Card key={idx} className="rounded-2xl">
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <span className="text-xl font-bold">{v.title}</span>
-                    <span className="text-2xl" aria-hidden>{v.icon}</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="list-disc pr-5 leading-8 text-slate-700">
-                    {v.subs.map((s, i) => (
-                      <li key={i}>{s}</li>
-                    ))}
-                  </ul>
-                  <div className="mt-4 p-3 rounded-xl bg-amber-50 border text-amber-900 text-sm">{v.final}</div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      {/* Integration map */}
-      <Section>
-        <Card className="rounded-2xl">
-          <CardHeader>
-            <CardTitle>كيف ترتبط مكونات المنصة بمحاور الرؤية؟</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-3 gap-4 text-sm">
-              <div className="p-4 rounded-xl bg-sky-50 border">التقييم الذاتي → يعزز القيم الإسلامية</div>
-              <div className="p-4 rounded-xl bg-emerald-50 border">نتائج الوعي والمتابعة → تدعم جودة الحياة</div>
-              <div className="p-4 rounded-xl bg-amber-50 border">المشاركة المجتمعية وبرامج الشراكة → تمكّن المسؤولية الاجتماعية</div>
-            </div>
-          </CardContent>
-        </Card>
-      </Section>
-    </motion.div>
-  );
-}
-
-function Slider({ label, value, onChange }) {
-  return (
-    <div className="grid gap-2">
-      <div className="flex items-center justify-between">
-        <div className="font-medium">{label}</div>
-        <div className="text-xs text-slate-500">{value}</div>
-      </div>
-      <input
-        type="range"
-        min={0}
-        max={5}
-        step={1}
-        value={value}
-        onChange={(e) => onChange(+e.target.value)}
-        className="w-full accent-[#d4a944]"
-      />
-      <div className="flex justify-between text-xs text-slate-500"><span>0</span><span>5</span></div>
-    </div>
-  );
-}
-
-function Assessment({ answers, setAnswers, onNext }) {
-  const setVal = (k, v) => setAnswers((s) => ({ ...s, [k]: v }));
-
-  return (
-    <motion.div key="assessment" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-      <Section>
-        <div className="rounded-3xl overflow-hidden border bg-white">
-          <div className="px-6 md:px-10 py-8 bg-gradient-to-r from-[#e9dec7] to-white">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-[#0f2a32] mb-2">التقييم الذاتي</h2>
-            <p className="text-slate-700">أجب عن المؤشرات الخمسة أدناه بصدق. لن تظهر النتائج قبل بدء التقييم.</p>
-          </div>
-
-          <div className="p-6 grid md:grid-cols-2 gap-6">
-            {Object.entries(answers).map(([k, v]) => (
-              <Slider key={k} label={k.replaceAll("_", " ")} value={v} onChange={(val) => setVal(k, val)} />
-            ))}
-          </div>
-
-          <div className="px-6 pb-8 flex items-center gap-3">
-            <Button className="bg-[#0f6781] hover:bg-[#0d566b]" onClick={() => {
-              const started = Object.values(answers).some((v) => v > 0);
-              if (!started) {
-                toast.warning("يجب البدء بتحريك المؤشرات قبل استعراض النتائج.");
-                return;
-              }
-              onNext();
-            }}>
-              استعراض النتائج
-            </Button>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="ghost" className="gap-2"><Info className="w-4 h-4" /> كيف يعمل التقييم؟</Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>آلية التقييم</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-3 text-slate-700 leading-7">
-                  <p>حرّك كل مؤشر من 0 إلى 5 بحسب واقعك الحالي. تحت الغطاء نقوم بحساب درجة وعي مركبة ونربطها بمستويات هاوكنز وطبقات ماسلو. يمكنك إعادة التقييم لاحقًا للمقارنة.</p>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </div>
-        </div>
-      </Section>
-    </motion.div>
-  );
-}
-
-function Results({ answers, onBack, onPartners }) {
-  const started = Object.values(answers).some((v) => v > 0);
-  const score = useMemo(() => {
+  /* --------------------- Results (Hawkins & Maslow) --------------------- */
+  const hawkinsLevels = [
+    { name:'خزي', value:20 },{ name:'حزن', value:75 },{ name:'خوف', value:100 },
+    { name:'غضب', value:150 },{ name:'شجاعة', value:200 },{ name:'استعداد', value:310 },
+    { name:'قبول', value:350 },{ name:'محبة', value:500 },{ name:'فرح', value:540 },{ name:'سلام', value:600 }
+  ];
+  function totalScore(){
     const vals = Object.values(answers);
-    const s = vals.reduce((a, b) => a + b, 0);
-    return Math.round((s / (vals.length * 5)) * 100);
-  }, [answers]);
-
-  // Map to an approximate Hawkins level
-  const hawkinsIndex = useMemo(() => {
-    const idx = Math.min(hawkinsLevels.length - 1, Math.floor((score / 100) * (hawkinsLevels.length - 1)));
+    const s = vals.reduce((a,b)=>a+b,0);
+    const pct = Math.round( (s / (items.length * 5)) * 100 );
+    return pct;
+  }
+  function hawkinsIndex(score){
+    const idx = Math.min(hawkinsLevels.length-1, Math.floor((score/100) * (hawkinsLevels.length-1)));
     return idx;
-  }, [score]);
+  }
+  function maslowLevel(score){
+    if(score<20) return 1;
+    if(score<40) return 2;
+    if(score<60) return 3;
+    if(score<80) return 4;
+    return 5;
+  }
+  function updateResults(){
+    const score = totalScore();
+    const hIdx = hawkinsIndex(score);
+    const mLvl = maslowLevel(score);
 
-  // Maslow layer suggestion
-  const maslowLevel = useMemo(() => {
-    if (score < 20) return 1; // physiological
-    if (score < 40) return 2; // safety
-    if (score < 60) return 3; // love/belonging
-    if (score < 80) return 4; // esteem
-    return 5; // self-actualization
-  }, [score]);
+    // Area (simple marker)
+    const area = document.getElementById('area');
+    area.innerHTML='';
+    const marker = document.createElement('div');
+    marker.style.position='absolute';
+    marker.style.bottom='10px';
+    marker.style.left = (hIdx/(hawkinsLevels.length-1))*100 + '%';
+    marker.style.transform='translateX(-50%)';
+    marker.style.width='10px'; marker.style.height='10px';
+    marker.style.background='var(--ink)'; marker.style.borderRadius='999px';
+    marker.style.boxShadow='0 0 0 6px rgba(15,42,50,.15)';
+    area.appendChild(marker);
 
-  useEffect(() => {
-    if (!started) toast.info("ابدأ بتحريك المؤشرات في صفحة التقييم أولًا.");
-  }, [started]);
+    document.getElementById('hawkinsInfo').textContent =
+      `درجتك الإجمالية: ${score} / 100 — أقرب مستوى: ${hawkinsLevels[hIdx].name}.`;
 
-  return (
-    <motion.div key="results" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-      <Section>
-        <div className="rounded-3xl border overflow-hidden">
-          <div className="px-6 md:px-10 py-8 bg-gradient-to-r from-[#e9dec7] to-white">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-[#0f2a32] mb-2">النتائج</h2>
-            <p className="text-slate-700">سُلّم هاوكنز وهرم ماسلو بصريًا وتحليل موجز.</p>
-          </div>
+    // Maslow bars
+    for(let i=1;i<=5;i++){
+      document.getElementById('m'+i).style.width = (i<=mLvl? '100%':'20%');
+      document.getElementById('m'+i).style.background = i<=mLvl? 'var(--gold)':'#e9dec7';
+    }
+    const names=['فيسيولوجي','أمان','انتماء','تقدير','تحقيق ذات'];
+    document.getElementById('maslowInfo').textContent = `مستواك الحالي المقترح: ${names[mLvl-1]}.`;
+  }
+  document.getElementById('backToAssessment').addEventListener('click',()=>go('assessment'));
 
-          <div className="p-6 grid lg:grid-cols-2 gap-8">
-            {/* Hawkins area chart */}
-            <Card className="rounded-2xl">
-              <CardHeader>
-                <CardTitle>موضعك التقريبي على سُلّم هاوكنز</CardTitle>
-              </CardHeader>
-              <CardContent style={{ height: 320 }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={hawkinsLevels} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="g" x1="0" x2="0" y1="0" y2="1">
-                        <stop offset="0%" stopColor="#d4a944" stopOpacity={0.8} />
-                        <stop offset="100%" stopColor="#2a7c92" stopOpacity={0.2} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis domain={[0, 600]} />
-                    <RTooltip />
-                    <Area type="monotone" dataKey="value" stroke="#0f6781" fill="url(#g)" />
-                  </AreaChart>
-                </ResponsiveContainer>
-                <div className="mt-3 text-sm text-slate-600">درجتك الإجمالية: <b>{score}</b> / 100 — أقرب مستوى: <b>{hawkinsLevels[hawkinsIndex].name}</b>.</div>
-              </CardContent>
-            </Card>
+  /* --------------------- Build Nav initially --------------------- */
+  function initNavActive(){
+    const key = location.hash.replace('#','') || 'home';
+    [...nav.children].forEach((b,i)=>b.classList.toggle('active', routes[i].key===key));
+  }
+  initNavActive();
 
-            {/* Maslow pyramid (bar chart ascending) */}
-            <Card className="rounded-2xl">
-              <CardHeader>
-                <CardTitle>موضعك في هرم ماسلو</CardTitle>
-              </CardHeader>
-              <CardContent style={{ height: 320 }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={maslow} layout="vertical" margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" domain={[0, 5]} hide />
-                    <YAxis type="category" dataKey="name" width={80} />
-                    <RTooltip />
-                    <Bar dataKey="value">
-                      {maslow.map((entry, index) => (
-                        <Cell key={`c-${index}`} fill={index + 1 <= maslowLevel ? "#d4a944" : "#e9dec7"} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-                <div className="mt-3 text-sm text-slate-600">مستواك الحالي المقترح: <b>{maslow.find((m) => m.value === maslowLevel)?.name}</b>.</div>
-              </CardContent>
-            </Card>
-          </div>
+  /* --------------------- PWA: Dynamic manifest + SW --------------------- */
+  (function makePWA(){
+    // Manifest
+    const manifest = {
+      name: "إيماني - منصة وعي إيماني",
+      short_name: "إيماني",
+      start_url:"./",
+      display:"standalone",
+      dir:"rtl",
+      lang:"ar",
+      background_color:"#e9dec7",
+      theme_color:"#0f6781",
+      icons:[
+        {src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192'><rect width='100%' height='100%' fill='%230f6781'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='110' fill='white'>إ</text></svg>", sizes:"192x192", type:"image/svg+xml"},
+        {src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='512'><rect width='100%' height='100%' fill='%230f6781'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='300' fill='white'>إ</text></svg>", sizes:"512x512", type:"image/svg+xml", purpose:"maskable any"}
+      ]
+    };
+    const mBlob = new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'});
+    const mURL = URL.createObjectURL(mBlob);
+    const link = document.createElement('link'); link.rel='manifest'; link.href=mURL; document.head.appendChild(link);
 
-          {/* Narrative */}
-          <div className="px-6 pb-8 text-slate-700 leading-8">
-            <p>
-              التحليل الموجز: تعكس الدرجة توازنًا عامًا في مؤشرات (الذكر، التفكر، التوكل، الصبر، الشكر). ننصح بالاستمرار على خطة أسبوعية
-              صغيرة قابلة للقياس لرفع مستوى الوعي العاطفي والسلوكي.
-            </p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              <Button variant="outline" onClick={onBack}><ChevronRight className="w-4 h-4" /> العودة للتقييم</Button>
-              <Button className="bg-[#0f6781] hover:bg-[#0d566b]" onClick={onPartners}>استكشاف شركاؤنا</Button>
-            </div>
-          </div>
-        </div>
-      </Section>
-    </motion.div>
-  );
-}
+    // Service Worker (cache this single file)
+    const swCode = `
+      const CACHE = 'imani-v1';
+      self.addEventListener('install', e=>{
+        e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./'])));
+      });
+      self.addEventListener('activate', e=>{
+        e.waitUntil(caches.keys().then(keys=>Promise.all(keys.map(k=>k!==CACHE && caches.delete(k)))));
+      });
+      self.addEventListener('fetch', e=>{
+        e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));
+      });
+    `;
+    if('serviceWorker' in navigator){
+      const swBlob = new Blob([swCode], {type:'text/javascript'});
+      const swURL = URL.createObjectURL(swBlob);
+      navigator.serviceWorker.register(swURL).catch(()=>{});
+    }
+  })();
 
-function Partners() {
-  return (
-    <motion.div key="partners" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-      <Section>
-        <div className="rounded-3xl border p-6 md:p-10 bg-white">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-[#0f2a32] mb-2">شركاؤنا</h2>
-          <p className="text-slate-700">نماذج لشعارات شركاء داعمين للمنصة. يمكن ربط كل شعار بصفحة الشريك.</p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-6">
-            {partners.map((p) => (
-              <div key={p.name} className="h-20 rounded-xl border grid place-items-center text-xs sm:text-sm font-bold text-slate-500">
-                {p.logo}
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
-    </motion.div>
-  );
-}
+  /* --------------------- Replace placeholders with real PNGs (optional) --------------------- */
+  // إن رغبت بوضع الصور الرسمية داخل نفس الملف (Base64)، استبدل الـ SVGs أعلاه.
+  // أو ضع ملفات PNG بجانب هذا الملف وعدّل السطرين التاليين:
+  // document.getElementById('visionLogo').innerHTML = '<img src="Vision2030.png" alt="رؤية السعودية 2030" style="height:24px" />';
+  // document.getElementById('talbiyaLogo').innerHTML = '<img src="talbiya.png" alt="مبادرة تلبية" style="height:28px" />';
+</script>
 
-function Contact() {
-  return (
-    <motion.div key="contact" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-      <Section>
-        <div className="rounded-3xl border overflow-hidden">
-          <div className="px-6 md:px-10 py-8 bg-gradient-to-r from-[#e9dec7] to-white">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-[#0f2a32] mb-2">تواصل معنا</h2>
-            <p className="text-slate-700">نسعد برسالتك واقتراحاتك.</p>
-          </div>
-          <div className="p-6 grid md:grid-cols-2 gap-6 items-start">
-            <div className="grid gap-3">
-              <Input placeholder="الاسم" />
-              <Input type="email" placeholder="البريد الإلكتروني" />
-              <Textarea rows={6} placeholder="نص الرسالة" />
-              <Button className="bg-[#0f6781] hover:bg-[#0d566b]">إرسال</Button>
-            </div>
-            <div className="text-slate-600 text-sm leading-7">
-              <div className="flex items-center gap-2"><Phone className="w-4 h-4" /> 0000 000 555</div>
-              <div className="flex items-center gap-2"><Mail className="w-4 h-4" /> contact@imani.sa</div>
-            </div>
-          </div>
-        </div>
-      </Section>
-    </motion.div>
-  );
-}
+</body>
+</html>
