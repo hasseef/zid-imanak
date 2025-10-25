@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>منصة زد إيمانك — نسخة ثابتة</title>
+  <style>
+    :root { --bg:#fafafa; --fg:#111; --muted:#666; --card:#fff; --border:#e5e5e5; --primary:#0f172a; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Kufi Arabic", "Noto Sans Arabic", Tahoma, sans-serif; background:var(--bg); color:var(--fg); }
+    header, footer { max-width: 1100px; margin: 0 auto; padding: 16px; }
+    main { max-width: 1100px; margin: 0 auto; padding: 16px; }
+    nav a { text-decoration: none; color: var(--fg); padding:8px 12px; border-radius: 10px; }
+    nav a.active, nav a:hover { background: var(--border); }
+    .hero { display:grid; gap:12px; grid-template-columns: 1.2fr 1fr; align-items:center; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:16px; }
+    .btn { background:var(--primary); color:#fff; border:none; padding:12px 18px; border-radius:12px; cursor:pointer; }
+    .btn.secondary { background:#334155; }
+    .grid { display:grid; gap:12px; }
+    .range { width:100%; }
+    .name-item { padding:12px; border:1px solid var(--border); border-radius:12px; background:#fff; }
+    .muted { color: var(--muted); }
+    .flex { display:flex; align-items:center; gap:10px; }
+    .space-between { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+    .hidden { display:none; }
+    .list { list-style: none; padding:0; margin:0; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:999px; background:#eef2ff; color:#1e1b4b; font-size:12px; }
+    .footer { font-size: 12px; color: var(--muted); text-align:center; padding:24px 0; }
+    @media (max-width:900px){ .hero { grid-template-columns: 1fr; } }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header class="space-between">
+    <div class="flex">
+      <strong>منصة زد إيمانك</strong>
+      <span class="badge">نسخة ثابتة</span>
+    </div>
+    <nav class="flex">
+      <a href="#/" id="link-home">الرئيسية</a>
+      <a href="#/quiz" id="link-quiz">التقييم</a>
+      <a href="#/results" id="link-results">النتائج</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Home -->
+    <section id="view-home" class="grid">
+      <div class="hero">
+        <div class="card">
+          <h1>ارفع وعيك بأسماء الله الحسنى</h1>
+          <p class="muted">اختبر ارتباطك القلبي والعملي بالأسماء الحسنى، وشاهد تحليلاً ذكيًا يقدّم لك موضعك التقريبي في هرم ماسلو ونصائح عملية للتقدم.</p>
+          <div class="flex">
+            <button class="btn" onclick="go('#/quiz')">ابدأ التقييم</button>
+            <button class="btn secondary" onclick="exportData()">تصدير بياناتي</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>كيف يعمل؟</h3>
+          <ol>
+            <li>قيِّم ارتباطك بكل اسم (0–100).</li>
+            <li>نحسب معدلًا عامًا ونحدّد عنق الزجاجة في هرم ماسلو.</li>
+            <li>نقترح توصيات عملية وروحية لتعزيز الأسماء الأضعف.</li>
+          </ol>
+          <p class="muted" style="font-size:12px">هذه نسخة تعليمية تعمل كليًا داخل المتصفح (بدون خادم). تُحفظ بياناتك محليًا عبر LocalStorage.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3>تنبيه واحترام</h3>
+        <p class="muted">التعامل مع أسماء الله الحسنى يكون بكل توقير واحترام. هذا العمل تعليمي وتجريبي لربط المعنى بالسلوك، وليس للفتوى أو الإلزام الشرعي.</p>
+      </div>
+    </section>
+
+    <!-- Quiz -->
+    <section id="view-quiz" class="hidden">
+      <div class="card">
+        <h2>التقييم</h2>
+        <p class="muted">حرّك المؤشر لكل اسم بحسب قوة ارتباطك القلبي/العملي به (0 ضعيف جدًا → 100 قوي جدًا). يمكنك الإرسال في أي وقت، ويفضل تعبئة أكبر عدد ممكن.</p>
+        <div class="flex" style="gap:6px; margin:10px 0">
+          <input id="email" placeholder="بريدك (اختياري للحفظ المحلي)" style="padding:10px; border:1px solid var(--border); border-radius:10px; width:100%">
+          <button class="btn" onclick="submitQuiz()">إرسال</button>
+        </div>
+      </div>
+      <div id="names" class="grid" style="grid-template-columns: repeat(auto-fill, minmax(260px,1fr));"></div>
+    </section>
+
+    <!-- Results -->
+    <section id="view-results" class="hidden">
+      <div class="card">
+        <h2>نتيجتك</h2>
+        <div id="results-summary" class="grid" style="grid-template-columns: 1fr 1fr;">
+          <div>
+            <p>المعدل العام: <strong id="overall">—</strong></p>
+            <p>الموضع التقريبي في هرم ماسلو: <strong id="maslow">—</strong></p>
+            <div id="recs"></div>
+          </div>
+          <div>
+            <canvas id="radar" width="400" height="300"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>تفاصيل الدرجات</h3>
+        <ul id="scores-list" class="list"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    © <span id="year"></span> منصة زد إيمانك — نسخة ثابتة (GitHub Pages جاهزة)
+  </footer>
+
+<script>
+const NAMES = [
+  "الله","الرحمن","الرحيم","الملك","القدوس","السلام","المؤمن","المهيمن","العزيز","الجبار",
+  "المتكبر","الخالق","البارئ","المصور","الغفار","القهار","الوهاب","الرزاق","الفتاح","العليم",
+  "القابض","الباسط","الخافض","الرافع","المعز","المذل","السميع","البصير","الحكم","العدل",
+  "اللطيف","الخبير","الحليم","العظيم","الغفور","الشكور","العلي","الكبير","الحفيظ","المقيت",
+  "الحسيب","الجليل","الكريم","الرقيب","المجيب","الواسع","الحكيم","الودود","المجيد","الباعث",
+  "الشهيد","الحق","الوكيل","القوي","المتين","الولي","الحميد","المحصي","المبدئ","المعيد",
+  "المحيي","المميت","الحي","القيوم","الواجد","الماجد","الواحد","الصمد","القادر","المقتدر",
+  "المقدم","المؤخر","الأول","الآخر","الظاهر","الباطن","الوالي","المتعالي","البر","التواب",
+  "المنتقم","العفو","الرؤوف","مالك الملك","ذو الجلال والإكرام","المقسط","الجامع","الغني","المغني",
+  "المانع","الضار","النافع","النور","الهادي","البديع","الباقي","الوارث","الرشيد","الصبور"
+];
+
+// Maslow clusters (example mapping using representative names)
+const MASLOW = {
+  physiological: ["الرزاق","القوي","القيوم","الفتاح","المتين"],
+  safety: ["السلام","المؤمن","الحفيظ","الوكيل","اللطيف","الرقيب"],
+  love_belonging: ["الودود","الرحيم","الغفور","العفو","الشكور","الرؤوف"],
+  esteem: ["الكريم","العزيز","الجليل","الحكيم","الحميد"],
+  self_actualization: ["الهادي","النور","القادر","المقتدر","البديع","الرشيد"]
+};
+
+const state = {
+  scores: {},   // { name: 0..100 }
+  email: ""
+};
+
+// UI helpers
+function $(sel){ return document.querySelector(sel); }
+function go(hash){ location.hash = hash; }
+function setActiveLink(){
+  const links = [["#/","link-home"],["#/quiz","link-quiz"],["#/results","link-results"]];
+  links.forEach(([h,id]) => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    if(location.hash === h) el.classList.add('active'); else el.classList.remove('active');
+  });
+}
+function route(){
+  const h = location.hash || "#/";
+  setActiveLink();
+  $("#view-home").classList.toggle("hidden", h!=="#/");
+  $("#view-quiz").classList.toggle("hidden", h!=="#/quiz");
+  $("#view-results").classList.toggle("hidden", h!=="#/results");
+  if(h==="#/quiz") renderQuiz();
+  if(h==="#/results") renderResults();
+}
+window.addEventListener("hashchange", route);
+
+// Persistence
+function saveLocal(){
+  localStorage.setItem("zid_imanak_data", JSON.stringify(state));
+}
+function loadLocal(){
+  const raw = localStorage.getItem("zid_imanak_data");
+  if(!raw) return;
+  try{ const s = JSON.parse(raw); if(s && s.scores){ state.scores = s.scores; state.email = s.email || ""; } } catch(e){}
+}
+function exportData(){
+  const data = JSON.stringify(state, null, 2);
+  const blob = new Blob([data], {type:"application/json"});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = "zid-imanak-data.json";
+  a.click();
+}
+
+// Compute overall and maslow
+function computeOverall(scores){
+  const vals = Object.values(scores);
+  if(!vals.length) return 0;
+  return vals.reduce((a,b)=>a+b,0) / vals.length;
+}
+function avg(arr){ return arr.length? arr.reduce((a,b)=>a+b,0)/arr.length : 0; }
+function currentMaslow(scores){
+  const clusters = Object.entries(MASLOW).map(([k,arr])=>{
+    const vals = arr.map(n => scores[n] ?? 0);
+    return [k, avg(vals)];
+  });
+  clusters.sort((a,b)=>a[1]-b[1]); // lowest first => bottleneck
+  return clusters.length? clusters[0][0] : "unknown";
+}
+function maslowLabel(key){
+  return {
+    physiological:"الاحتياجات الفسيولوجية",
+    safety:"الأمان",
+    love_belonging:"الحب والانتماء",
+    esteem:"التقدير",
+    self_actualization:"تحقيق الذات",
+    unknown:"غير محدد"
+  }[key] || "غير محدد";
+}
+function recommendations(scores){
+  const entries = Object.entries(scores).sort((a,b)=>a[1]-b[1]).slice(0,5);
+  return entries.map(([n,s])=> ({
+    title: `تعزيز الإيمان باسم: ${n}`,
+    detail: `مستواك الحالي ${s}/100 — اقضِ هذا الأسبوع في تدبر آثار اسم ${n} في حياتك عبر 3 تطبيقات عملية (تفكر يومي، عمل إحسان مقصود، ذكر مخصوص)، ثم أعد القياس.`
+  }));
+}
+
+// Render quiz
+function renderQuiz(){
+  $("#names").innerHTML = "";
+  const container = $("#names");
+  $("#email").value = state.email || "";
+  NAMES.forEach(name => {
+    const val = state.scores[name] ?? 50;
+    const div = document.createElement("div");
+    div.className = "name-item";
+    div.innerHTML = `
+      <div class="space-between">
+        <strong>${name}</strong>
+        <span class="muted">${val}</span>
+      </div>
+      <input class="range" type="range" min="0" max="100" value="${val}">
+    `;
+    const range = div.querySelector("input");
+    const valueEl = div.querySelector("span");
+    range.addEventListener("input", e=>{
+      const v = Number(e.target.value);
+      state.scores[name] = v;
+      valueEl.textContent = v;
+      saveLocal();
+    });
+    container.appendChild(div);
+  });
+}
+function submitQuiz(){
+  state.email = $("#email").value.trim();
+  saveLocal();
+  go("#/results");
+}
+
+// Render results
+let radarChart = null;
+function renderResults(){
+  const overall = computeOverall(state.scores);
+  const maslow = currentMaslow(state.scores);
+  $("#overall").textContent = `${overall.toFixed(1)} / 100`;
+  $("#maslow").textContent = maslowLabel(maslow);
+
+  const recs = recommendations(state.scores);
+  const recsEl = $("#recs");
+  recsEl.innerHTML = "<h3>توصيات</h3>" + (recs.length? "<ul>"+recs.map(r=>`<li><strong>${r.title}</strong><br>${r.detail}</li>`).join("")+"</ul>":"<p class='muted'>لا توجد توصيات بعد — ابدأ القياس من صفحة التقييم.</p>");
+
+  // Scores list
+  const list = $("#scores-list");
+  const sorted = Object.entries(state.scores).sort((a,b)=>b[1]-a[1]);
+  list.innerHTML = sorted.map(([n,s])=>`<li class="space-between" style="padding:8px 0; border-bottom:1px dashed var(--border)"><span>${n}</span><strong>${s}</strong></li>`).join("");
+
+  // Radar: sample top 6
+  const top6 = sorted.slice(0,6);
+  const labels = top6.map(([n])=>n);
+  const data = top6.map(([,s])=>s);
+
+  const ctx = document.getElementById("radar");
+  if(radarChart){ radarChart.destroy(); }
+  radarChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'درجاتي',
+        data,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: { r: { beginAtZero: true, max: 100 } },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+// Boot
+(function init(){
+  document.getElementById("year").textContent = new Date().getFullYear();
+  loadLocal();
+  route();
+  if(!location.hash) go("#/");
+})();
+</script>
+</body>
+</html>
