@@ -8,10 +8,6 @@
 <meta name="theme-color" content="#0f6781"/>
 <link id="manifestLink" rel="manifest"/>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
-<meta property="og:title" content="منصة زد إيمانك"/>
-<meta property="og:description" content="قيّم إيمانك، اكتشف مستوى وعيك، وابنِ خطة 14 يومًا"/>
-<meta property="og:type" content="website"/>
-<meta name="twitter:card" content="summary"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
 <style>
 :root{--blue:#0f6781;--blue2:#2a7c92;--beige:#efe9dc;--gold:#d4a944;--ink:#0f1a20;--muted:#5c6a7a;--card:#ffffff;--border:#e6ecf2;--badge:#f7fafc;--bg:#ffffff;--bg2:#f7f5ef}
@@ -24,9 +20,10 @@ linear-gradient(180deg,var(--bg2) 0%,var(--bg) 60%,var(--bg2) 100%);}
 .container{max-width:1200px;margin:0 auto;padding:14px}a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
-/* Skip link */
-.skip a{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
-.skip a:focus{left:12px;top:12px;width:auto;height:auto;background:#fff;padding:8px 12px;border-radius:10px;border:1px solid var(--border);z-index:1000}
+/* Loading bar */
+.loading-bar{position:fixed;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,#d4a944,#ffd67a);transform-origin:right;transform:scaleX(0);z-index:60}
+@keyframes loadRun{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.loading-bar.active{animation:loadRun .5s ease}
 
 /* Header */
 .header{position:sticky;top:0;z-index:40;backdrop-filter:blur(10px);background:rgba(255,255,255,.75);border-bottom:1px solid var(--border)}
@@ -88,8 +85,7 @@ main{padding-bottom:90px}.section{margin-top:16px}
 @media (prefers-reduced-motion: reduce){ .reveal>*{opacity:1;transform:none} .anim{animation:none} .nav.open{animation:none} }
 
 /* Transition highlight (title flash) */
-@keyframes goldFlash { 0%{box-shadow:0 0 0 rgba(212,169,68,0)} 100%{box-shadow:0 0 0 rgba(212,169,68,0)} }
-.flash-gold{background:linear-gradient(90deg, rgba(212,169,68,.25), rgba(212,169,68,.05)); border-radius:10px; padding:3px 6px; animation: goldFlash .5s ease;}
+.flash-gold{background:linear-gradient(90deg, rgba(212,169,68,.25), rgba(212,169,68,.05)); border-radius:10px; padding:3px 6px;}
 
 /* Welcome bar */
 .welcome-bar{position:sticky;top:64px;z-index:35;margin:0 14px 8px;border-radius:12px;border:1px solid rgba(212,169,68,.35);
@@ -113,7 +109,7 @@ main{padding-bottom:90px}.section{margin-top:16px}
 
 /* Print (roadmap) */
 @media print {
-  header,.nav,.left-logos,.footer, .breadcrumbs, .btn, .welcome-bar {display:none !important}
+  header,.nav,.left-logos,.footer, .breadcrumbs, .btn, .welcome-bar, .loading-bar {display:none !important}
   main {padding:0} .card {border:none} body {background:#fff;color:#000}
 }
 
@@ -127,6 +123,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
 </style>
 </head>
 <body>
+<div class="loading-bar" id="loadingBar"></div>
 <div class="skip"><a href="#content">تجاوز إلى المحتوى</a></div>
 
 <header class="header" role="banner">
@@ -153,16 +150,14 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
       <button id="themeBtn" class="theme-toggle" title="الوضع الداكن/الفاتح" aria-label="تبديل الوضع">🌓</button>
     </div>
 
-    <!-- LEFT: Vision 2030 + Talbiya (inline SVG placeholders) + audio -->
+    <!-- LEFT: Vision 2030 + Talbiya (SVG placeholders — يمكن استبدالها بصور Base64) + audio -->
     <div class="left-logos">
       <div class="logo" title="Vision 2030">
-        <!-- SVG placeholder for Vision 2030 -->
         <svg viewBox="0 0 180 44" aria-hidden="true"><rect x="0" y="0" width="180" height="44" rx="10" fill="#f7fafc" stroke="#e6ecf2"/>
           <text x="50%" y="60%" text-anchor="middle" font-family="Tajawal" font-weight="700" font-size="18" fill="#0f6781">VISION 2030</text>
         </svg>
       </div>
       <div class="logo" title="Talbiya">
-        <!-- SVG placeholder for Talbiya -->
         <svg viewBox="0 0 120 44" aria-hidden="true"><rect x="0" y="0" width="120" height="44" rx="10" fill="#f7fafc" stroke="#e6ecf2"/>
           <text x="50%" y="60%" text-anchor="middle" font-family="Tajawal" font-weight="700" font-size="16" fill="#2a7c92">Talbiya</text>
         </svg>
@@ -175,12 +170,10 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
 <!-- Welcome bar -->
 <div id="welcomeBar" class="welcome-bar" role="status" aria-live="polite" style="display:none"></div>
 
-<audio id="recitation" loop preload="auto">
-  <!-- ضع ملف تلاوة إن رغبت -->
-  <!-- <source src="abdulbasit.mp3" type="audio/mpeg"/> -->
-</audio>
+<audio id="recitation" loop preload="auto"></audio>
 
 <main id="content" class="container" role="main">
+  <!-- الرئيسية -->
   <section id="page-home" class="page" aria-labelledby="homeTitle">
     <div class="hero shadow reveal">
       <div class="anim anim-1">
@@ -196,7 +189,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
           <div class="kpi anim anim-5"><b id="kpiMaslow">—</b><span>طبقة ماسلو الحالية</span></div>
         </div>
       </div>
-      <div class="verse-box anim anim-2"><div class="ayah">﴿وَلِلَّهِ الأَسْمَاءُ الْحُسْنَى فَادْعُوهُ بِهَا﴾</div><div class="small">الأعراف: 180</div></div>
+      <div class="verse-box anim anim-2" id="dailyAyah"><div class="ayah">﴿وَلِلَّهِ الأَسْمَاءُ الْحُسْنَى فَادْعُوهُ بِهَا﴾</div><div class="small">الأعراف: 180</div></div>
     </div>
 
     <div class="section grid cols-2 reveal">
@@ -216,14 +209,16 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
     </div>
   </section>
 
+  <!-- التقييم -->
   <section id="page-assessment" class="page hide" aria-labelledby="assessTitle">
     <div class="reveal">
-      <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a><span class="dot"></span><b id="assessTitle">التقييم الإيماني</b></nav>
+      <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="assessTitle">التقييم الإيماني</b></nav>
       <div class="grid cols-2">
         <div class="card anim anim-2">
           <h3 class="title-flash-target">١) تقييم الأسماء الحسنى (بحث + ٩٩ اسمًا)</h3>
           <div style="display:flex;gap:8px;align-items:center;margin:6px 0">
-            <input id="searchName" class="input" placeholder="ابحث عن اسم (مثال: الشافي، الحكيم، الرزّاق)" aria-label="ابحث عن اسم من الأسماء الحسنى"/><span class="badge">اختر وقيّم 0–100</span>
+            <input id="searchName" class="input" placeholder="ابحث عن اسم (مثال: الشافي، الحكيم، الرزّاق)" aria-label="ابحث عن اسم من الأسماء الحسنى"/>
+            <span class="badge">اختر وقيّم 0–100</span>
           </div>
           <div id="namesWrap" class="grid cols-2" style="margin-top:8px;max-height:420px;overflow:auto"></div>
           <div class="separator"></div>
@@ -282,9 +277,10 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
     </div>
   </section>
 
+  <!-- خريطة الطريق -->
   <section id="page-roadmap" class="page hide" aria-labelledby="roadTitle">
     <div class="reveal">
-      <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a><span class="dot"></span><b id="roadTitle">خريطة الطريق</b></nav>
+      <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="roadTitle">خريطة الطريق</b></nav>
       <div class="card anim anim-2">
         <h3 class="title-flash-target">خطة شخصية لمدة ١٤ يومًا</h3>
         <p class="small" style="color:var(--muted)">مبنية على نسبة الإيمان، مستوى هاوكنز، طبقة ماسلو، وعجلة الحياة.</p>
@@ -296,9 +292,10 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
     </div>
   </section>
 
+  <!-- الارتباط برؤية 2030 -->
   <section id="page-vision2030" class="page hide" aria-labelledby="vTitle">
     <div class="reveal">
-      <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a><span class="dot"></span><b id="vTitle">الارتباط برؤية 2030</b></nav>
+      <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="vTitle">الارتباط برؤية 2030</b></nav>
       <div class="grid cols-2">
         <div class="card anim anim-2">
           <h3 class="title-flash-target">محاور الانسجام</h3>
@@ -321,9 +318,10 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
     </div>
   </section>
 
+  <!-- شركاؤنا -->
   <section id="page-partners" class="page hide" aria-labelledby="pTitle">
     <div class="reveal">
-      <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a><span class="dot"></span><b id="pTitle">شركاؤنا</b></nav>
+      <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="pTitle">شركاؤنا</b></nav>
       <div class="card anim anim-2" style="text-align:center">
         <h3 class="title-flash-target" style="margin:0 0 8px">دعوة للشراكة</h3>
         <p class="small" style="color:var(--muted);margin:0 0 10px">
@@ -335,7 +333,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
         <h3>الشركاء والداعمون</h3>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:100%">
           <div class="logo" title="مبادرة تلبية">
-            <!-- يمكن استبدال هذا بـ Base64 للشعار الحقيقي -->
+            <!-- استبدل بـ Base64 الحقيقي إن رغبت -->
             <svg viewBox="0 0 120 44"><rect width="120" height="44" rx="10" fill="#f7fafc" stroke="#e6ecf2"/>
               <text x="50%" y="60%" text-anchor="middle" font-family="Tajawal" font-weight="700" font-size="16" fill="#2a7c92">مبادرة تلبية</text>
             </svg>
@@ -351,9 +349,10 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
     </div>
   </section>
 
+  <!-- عن المنصة -->
   <section id="page-about" class="page hide" aria-labelledby="aTitle">
     <div class="reveal">
-      <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a><span class="dot"></span><b id="aTitle">عن المنصة</b></nav>
+      <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="aTitle">عن المنصة</b></nav>
       <div class="card anim anim-2">
         <h3 class="title-flash-target">عن منصة زد إيمانك</h3>
         <p class="small" style="color:var(--muted)">
@@ -369,7 +368,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
           <li>ربط الإيمان بالوعي والسلوك اليومي بصورةٍ علميةٍ وروحيةٍ.</li>
           <li>تعريف المستخدم بمستوى وعيه وفق سُلّم هاوكنز وإضاءاتٍ عمليةٍ.</li>
           <li>تحقيق التوازن عبر طبقات هرم ماسلو وجوانب عجلة الحياة.</li>
-          <li>تقديم خطط ١٤ يومًا قابلةٍ للقياس ومدعومةٍ بآياتٍ وتمارينَ نفسيةٍ.</li>
+          <li>تقديم خطط ١٤ يومًا قابلةٍ للقياس ومدعومةٍ بآيات وتمارينَ نفسيةٍ.</li>
           <li>الإسهام في مستهدفات رؤية 2030: جودة الحياة وتعزيز القيم الإسلامية.</li>
         </ul>
       </div>
@@ -395,8 +394,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
         <label class="card"><span class="small">البريد الإلكتروني</span><input id="pf_email" type="email" class="input" required/></label>
         <label class="card"><span class="small">الهاتف (اختياري)</span><input id="pf_phone" class="input"/></label>
       </div>
-
-      <!-- New dropdown (required) -->
+      <!-- القائمة المنسدلة المطلوبة -->
       <div class="grid" style="margin-top:8px">
         <label class="card">
           <span class="small">نوع الشراكة</span>
@@ -410,7 +408,6 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
           </select>
         </label>
       </div>
-
       <label class="card" style="margin-top:8px"><span class="small">رسالة/اهتمام</span><textarea id="pf_msg" class="input" rows="4" placeholder="عرّف بنا وبمجال الشراكة المرغوب"></textarea></label>
       <div class="notice small" style="margin-top:8px">سيتم إنشاء بريد مسودّة تلقائيًا بالبيانات لإرساله لنا.</div>
     </div>
@@ -462,7 +459,11 @@ routes.forEach(r=>{const a=document.createElement('a');a.href=r.hash;a.textConte
 const menuBtn=document.getElementById('menuBtn');menuBtn.addEventListener('click',()=>{nav.classList.toggle('open');});
 document.addEventListener('click',(e)=>{if(!nav.contains(e.target) && e.target!==menuBtn) nav.classList.remove('open');},{passive:true});
 
-/* Router + page animation trigger + aria-current + welcome bar + title flash */
+/* Loading bar helper */
+const loadingBar=document.getElementById('loadingBar');
+function runLoading(){ loadingBar.classList.add('active'); setTimeout(()=>loadingBar.classList.remove('active'), 500); }
+
+/* Welcome bar + title flash + reveal */
 const welcomeBar=document.getElementById('welcomeBar');
 function showWelcome(text){
   if(!welcomeBar) return;
@@ -481,22 +482,25 @@ function flashTitle(){
   setTimeout(()=>target.classList.remove('flash-gold'), 500);
 }
 function applyReveal(){
-  const page=document.querySelector('.page:not(.hide) .reveal');
-  if(!page) return;
-  [...page.children].forEach((c,i)=>{ if(!c.classList.contains('anim')) c.classList.add('anim'); c.style.animationDelay = (0.06*i)+'s'; });
-  page.classList.remove('reveal'); void page.offsetWidth; page.classList.add('reveal');
-  [...page.querySelectorAll('.anim')].forEach(el=>{ el.style.animation='fadeUp .6s ease both'; });
+  const section=document.querySelector('.page:not(.hide) .reveal');
+  if(!section) return;
+  [...section.children].forEach((c,i)=>{ if(!c.classList.contains('anim')) c.classList.add('anim'); c.style.animationDelay = (0.06*i)+'s'; });
+  section.classList.remove('reveal'); void section.offsetWidth; section.classList.add('reveal');
+  [...section.querySelectorAll('.anim')].forEach(el=>{ el.style.animation='fadeUp .6s ease both'; });
 }
+
+/* Router */
 function route(){
+  runLoading();
   const h=location.hash||"#/";
   document.querySelectorAll('.page').forEach(p=>p.classList.add('hide'));
-  const id=h==="#/"?"page-home":h==="#/assessment"?"page-assessment":h==="#/roadmap"?"page-roadmap":h==="#/vision2030"?"page-vision2030":h==="#/partners"?"page-partners":"page-about";
+  const id=(h==="#/")?"page-home":(h==="#/assessment")?"page-assessment":(h==="#/roadmap")?"page-roadmap":(h==="#/vision2030")?"page-vision2030":(h==="#/partners")?"page-partners":"page-about";
   document.getElementById(id).classList.remove('hide');
   document.querySelectorAll('[data-route]').forEach(a=>{a.classList.toggle('active',a.getAttribute('href')===h); if(a.getAttribute('href')===h) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');});
   nav.classList.remove('open');
   const r=routes.find(x=>x.hash===h)||routes[0];
   showWelcome(r.welcome);
-  if(h==="#/assessment"){buildNames();buildLife();randomAyah();fillHawkinsTable();setTimeout(fillHawkinsBar,0);}
+  if(h==="#/assessment"){buildNames();buildLife();randomAyah();fillHawkinsTable();}
   if(h==="#/roadmap"){renderRoadmap();}
   if(h!=="#/"){audioPauseSoft();}
   window.scrollTo({top:0,behavior:'smooth'});
@@ -577,7 +581,7 @@ function randomAyah(){const a=AYAT[Math.floor(Math.random()*AYAT.length)];const 
 /* Chart */
 let radar;function drawRadar(){const ctx=document.getElementById('radar')?.getContext('2d');if(!ctx)return;const labels=LIFE_AREAS;const data=labels.map(l=>lifeScores[l]);if(radar)radar.destroy();radar=new Chart(ctx,{type:'radar',data:{labels,datasets:[{label:'عجلة الحياة',data,fill:true,borderWidth:2}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{r:{suggestedMin:0,suggestedMax:10,ticks:{stepSize:2}}}}});}
 
-/* Roadmap (deeper mapping) */
+/* Roadmap */
 const NAME_BY_STATE={low:"الرحمن", mid:"اللطيف", high:"الحكيم"};
 const AYAH_BY_STATE={low:"﴿وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ﴾",mid:"﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾",high:"﴿وَقُل رَّبِّ زِدْنِي عِلْمًا﴾"};
 const CBT_LIBRARY={thought:"اكتب فكرة مزعجة، ثم بديلًا واقعيًا رحيمًا، وطبّق سلوكًا نافعًا صغيرًا.",gratitude:"سجل 3 نِعَم اليوم مع سبب الامتنان.",breath:"تنفّس 4-4-6 لدقيقة (شهيق-ثبات-زفير).",tinyHabit:"عادة دقيقة مرتبطة بإشارة ثابتة (بعد صلاة/قبل نوم)."};
@@ -625,7 +629,7 @@ function submitPartnerForm(){
 
 /* Init */
 document.getElementById('year').textContent=new Date().getFullYear();
-route(); drawRadar(); refreshAll(); randomAyah(); fillHawkinsTable(); setTimeout(()=>{try{fillHawkinsBar();}catch(_){}} ,0);
+route(); drawRadar(); refreshAll(); randomAyah(); fillHawkinsTable();
 </script>
 </body>
 </html>
