@@ -2,241 +2,195 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>منصة زد إيمانك | إيماني المعاصر</title>
-<meta name="theme-color" content="#0ea5e9"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>منصة زد إيمانك</title>
+<meta name="theme-color" content="#0f6781"/>
 
-<!-- Manifest inline (data URL) -->
-<link rel="manifest" id="manifestLink"/>
+<!-- Manifest (inline via Blob) -->
+<link id="manifestLink" rel="manifest"/>
 
-<!-- أيقونات PWA البسيطة (SVG Data URI) -->
-<link rel="icon" href="data:image/svg+xml;utf8,
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'>
-  <defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
-    <stop offset='0' stop-color='#60A5FA'/><stop offset='1' stop-color='#FACC15'/>
-  </linearGradient></defs>
-  <rect rx='28' ry='28' width='128' height='128' fill='url(#g)'/>
-  <text x='64' y='84' text-anchor='middle' font-size='84' font-family='Tajawal' fill='#0F172A'>ز</text>
-</svg>"/>
-
-<!-- Chart.js (اعتمدناه في نسخك السابقة) -->
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
 <style>
 :root{
-  --bg:#f8fbff; --card:#ffffff; --border:#e6eef7; --ink:#0a1320; --muted:#4e5d73;
-  --primary:#14b8a6; --accent:#60a5fa; --gold:#facc15; --badge:#f0f7ff;
-  --good:#10b981; --warn:#f59e0b; --danger:#ef4444;
+  --blue:#0f6781; --blue2:#2a7c92; --beige:#efe9dc; --gold:#d4a944; --ink:#0f1a20; --muted:#5c6a7a;
+  --card:#ffffff; --border:#e6ecf2; --badge:#f7fafc;
 }
 *{box-sizing:border-box}
-html,body{height:100%}
+html,body{margin:0;height:100%}
 body{
-  margin:0; font-family:system-ui,-apple-system,"Noto Kufi Arabic","Tajawal",Segoe UI,Roboto,sans-serif;
-  background:var(--bg);
+  font-family: system-ui, -apple-system, "Noto Kufi Arabic", "Cairo", "Tajawal", Segoe UI, Roboto, sans-serif;
   color:var(--ink);
-  background-image:
-    radial-gradient(1200px 400px at 90% -10%, rgba(20,184,166,0.08), transparent),
-    radial-gradient(1000px 400px at 10% -20%, rgba(96,165,250,0.08), transparent);
+  background:
+    radial-gradient(1200px 400px at 90% -10%, rgba(212,169,68,.10), transparent),
+    radial-gradient(900px 500px at 10% -20%, rgba(15,103,129,.12), transparent),
+    linear-gradient(180deg, #f7f5ef 0%, #ffffff 60%, #f7f5ef 100%);
 }
-a{color:inherit; text-decoration:none}
-.container{max-width:1200px; margin:0 auto; padding:14px}
+.container{max-width:1200px;margin:0 auto;padding:14px}
+a{color:inherit;text-decoration:none}
 
-.header{
-  display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0;
-}
-.topnav{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end}
-.topnav a{padding:8px 10px; border-radius:10px; border:1px solid transparent}
-.topnav a.active, .topnav a:hover{background:rgba(0,0,0,0.04); border-color:var(--border)}
+.header{position:sticky;top:0;z-index:40;backdrop-filter:blur(10px);background:rgba(255,255,255,.8);border-bottom:1px solid var(--border)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0}
+.left-logos{display:flex;align-items:center;gap:10px}
+.logo{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:12px;background:var(--badge);padding:6px;height:48px}
+.logo.vision{width:100px}
+.logo img, .logo svg{max-height:100%;max-width:100%}
+.brand{display:flex;align-items:center;gap:10px}
+.app-logo{width:52px;height:52px;border-radius:14px;background:var(--badge);border:1px solid var(--border);display:grid;place-items:center;padding:4px}
+.app-logo svg{width:100%;height:100%}
+.nav{display:flex;gap:6px;flex-wrap:wrap}
+.nav a{padding:8px 12px;border-radius:12px;border:1px solid transparent}
+.nav a:hover,.nav a.active{background:rgba(0,0,0,.04);border-color:var(--border)}
 
-.brand{
-  display:flex; align-items:center; gap:10px;
-}
-.brand .app-logo{
-  width:52px; height:52px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center;
-  background:var(--badge); border:1px solid var(--border); padding:4px
-}
-.brand .app-logo img{width:100%; height:100%; object-fit:contain}
+.audio-btn{border:1px solid var(--border);padding:8px 12px;border-radius:10px;background:#fff}
 
-.left-logos{
-  display:flex; align-items:center; gap:10px;
-}
-.logo{
-  width:48px; height:48px; border-radius:12px; background:var(--badge);
-  border:1px solid var(--border); padding:4px; display:inline-flex; align-items:center; justify-content:center; overflow:hidden
-}
-.logo img{width:100%; height:100%; object-fit:contain}
-.logo.vision{ width:84px; height:48px; padding:6px } /* مساحة أوسع لشعار الرؤية */
 main{padding-bottom:80px}
-
-.hero{
-  display:grid; gap:14px; grid-template-columns:1.2fr 1fr; align-items:center;
-  padding:16px; background:var(--card); border:1px solid var(--border); border-radius:18px;
-}
-.hero h1{margin:0 0 8px; font-size:28px}
-.hero p{margin:0; color:var(--muted)}
-
 .section{margin-top:16px}
-.card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:14px}
-.grid{display:grid; gap:12px}
-.grid.cols-2{grid-template-columns:1fr 1fr}
-.grid.cols-3{grid-template-columns:repeat(3,1fr)}
-.grid.cols-4{grid-template-columns:repeat(4,1fr)}
-@media (max-width:980px){
-  .hero{grid-template-columns:1fr}
-  .grid.cols-2, .grid.cols-3, .grid.cols-4{grid-template-columns:1fr}
-}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px}
+.shadow{box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.grid{display:grid;gap:12px}
+.cols-2{grid-template-columns:1fr 1fr}
+.cols-3{grid-template-columns:repeat(3,1fr)}
+.cols-4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:980px){.cols-2,.cols-3,.cols-4{grid-template-columns:1fr}}
 
-.badge{display:inline-block; padding:2px 8px; border-radius:999px; background:var(--badge); border:1px solid var(--border); color:#0b1220; font-size:12px}
-.btn{
-  background:var(--primary); color:#001018; border:none; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:700;
-}
-.btn.ghost{background:transparent; border:1px dashed var(--border); color:var(--ink)}
-.btn.secondary{background:#eff6ff}
-.input, select, textarea{
-  width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:12px; background:var(--card); color:var(--ink)
-}
+.hero{display:grid;gap:16px;grid-template-columns:1.1fr 1fr;align-items:center;padding:16px;border:1px solid var(--border);border-radius:24px;background:linear-gradient(135deg, #0f6781 0%, #2a7c92 60%, rgba(212,169,68,.45) 100%);color:#fff}
+.hero h1{margin:0 0 10px;font-size:28px}
+.hero p{margin:0;color:#eaf7ff}
+.hero .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{border:none;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}
+.btn-primary{background:var(--gold);color:#1a2228}
+.btn-primary:hover{background:#c79b34}
+.btn-ghost{background:transparent;border:1px dashed var(--border);color:#fff}
+.verse-box{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:18px;padding:16px;text-align:center;font-family:"Amiri","Scheherazade New",serif}
+.verse-box .ayah{font-size:22px;line-height:1.9}
+.kpis{display:flex;gap:10px;flex-wrap:wrap}
+.kpi{flex:1 1 180px;background:#ffffff1a;border:1px solid rgba(255,255,255,.35);border-radius:12px;padding:10px}
+.kpi b{display:block;font-size:18px}
+.kpi span{font-size:12px}
+
+.input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--ink)}
 .range{width:100%}
-.small{font-size:12px; color:var(--muted)}
+.small{font-size:12px;color:var(--muted)}
+.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:var(--badge);border:1px solid var(--border);font-size:12px}
+.separator{height:1px;background:var(--border);margin:8px 0}
+.notice{padding:10px;border:1px solid var(--border);background:#fffdf5;border-radius:12px}
+.radar{padding:10px;background:var(--card);border:1px solid var(--border);border-radius:16px}
 
-.checklist{display:grid; gap:8px}
-.task{display:flex; align-items:center; gap:10px; padding:10px; border:1px dashed var(--border); border-radius:10px; background:var(--card)}
-.task input[type="checkbox"]{width:18px; height:18px}
-
-.footer{
-  text-align:center; color:var(--muted); font-size:12px; padding:24px 0;
-}
-
-.separator{height:1px; background:var(--border); margin:8px 0}
-
-.verse-box{
-  text-align:center; margin: 22px auto; padding:18px; border-radius:18px;
-  background:linear-gradient(135deg, rgba(250,250,255,0.7), rgba(230,250,250,0.4));
-  box-shadow:0 0 20px rgba(20,184,166,0.12);
-  font-family:'Amiri','Scheherazade New',serif; color:#0F172A;
-}
-.verse-box .ayah{font-size:24px; font-weight:600; line-height:1.9}
-.verse-box .ref{font-size:14px; opacity:0.75}
-
-.kpis{display:flex; gap:10px; flex-wrap:wrap}
-.kpi{flex:1 1 160px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:10px}
-.kpi b{display:block; font-size:18px}
-.kpi span{color:var(--muted); font-size:12px}
-
-.radar-wrap{padding:10px; background:var(--card); border:1px solid var(--border); border-radius:16px}
-.muted{color:var(--muted)}
-
-.notice{padding:10px; border:1px solid var(--border); background:#fffdf5; border-radius:12px}
-.gold{color:#8a6a00}
-
-nav.breadcrumbs{font-size:13px; color:var(--muted); display:flex; gap:8px; align-items:center}
-nav.breadcrumbs a{color:var(--muted)}
-nav.breadcrumbs .dot{width:4px; height:4px; background:var(--muted); border-radius:999px; display:inline-block}
-
+.footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 0;border-top:1px solid var(--border);background:rgba(255,255,255,.8)}
 .hide{display:none}
+.breadcrumbs{font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.breadcrumbs .dot{width:4px;height:4px;background:var(--muted);border-radius:50%}
 </style>
 </head>
 <body>
 
-<header class="container header">
-  <!-- يسار: رؤية 2030 + تلبية -->
-  <div class="left-logos">
-    <div class="logo vision" title="Vision 2030">
-      <!-- ضع شعار الرؤية الرسمي عندك (استعنت بتضمين data-uri كما بالنسخ السابقة) -->
-      <img alt="Vision 2030" src="data:image/png;base64,iVBORw0...vision..." />
+<header class="header">
+  <div class="container header-inner">
+    <!-- يسار: الرؤية + تلبية -->
+    <div class="left-logos">
+      <!-- Vision 2030 (SVG خفيف؛ يمكن استبداله بـBase64 الرسمي) -->
+      <div class="logo vision" title="Vision 2030" id="visionLogo">
+        <svg viewBox="0 0 220 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <text x="0" y="40" font-family="Tajawal,Arial" font-size="28" fill="#6b7280" font-weight="700">VISION 2030</text>
+        </svg>
+      </div>
+      <!-- Talbiya -->
+      <div class="logo" title="Talbiya" id="talbiyaLogo">
+        <svg viewBox="0 0 160 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <text x="10" y="38" font-family="Tajawal,Arial" font-size="28" fill="#22a35a" font-weight="800">Talbiya</text>
+        </svg>
+      </div>
+      <button id="audioBtn" class="audio-btn">🔊 تشغيل التلاوة</button>
     </div>
-    <div class="logo" title="Talabiya">
-      <img alt="Talabiya" src="data:image/png;base64,iVBORw0...talabiya..." />
-    </div>
-  </div>
 
-  <!-- يمين: شعار المنصة -->
-  <div class="brand">
-    <div class="app-logo" title="زد إيمانك">
-      <img alt="Zid Imanak Logo" src="data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?>
-      <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'>
-        <defs>
-          <radialGradient id='g' cx='50%' cy='50%' r='60%'>
-            <stop offset='0%' stop-color='#FACC15' stop-opacity='0.95'/>
-            <stop offset='60%' stop-color='#60A5FA' stop-opacity='0.9'/>
-            <stop offset='100%' stop-color='#14B8A6' stop-opacity='0.85'/>
-          </radialGradient>
-        </defs>
-        <rect width='256' height='256' rx='48' ry='48' fill='url(#g)'/>
-        <circle cx='128' cy='128' r='86' fill='rgba(255,255,255,0.15)'/>
-        <text x='50%' y='56%' text-anchor='middle' font-family='Tajawal' font-size='120' fill='#0F172A'>ز</text>
-      </svg>"/>
+    <!-- يمين: شعار المنصة -->
+    <div class="brand">
+      <div class="app-logo" title="منصة زد إيمانك">
+        <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs><radialGradient id="g" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="#FACC15" stop-opacity=".95"/>
+            <stop offset="60%" stop-color="#60A5FA" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#14B8A6" stop-opacity=".85"/>
+          </radialGradient></defs>
+          <rect width="256" height="256" rx="44" ry="44" fill="url(#g)"/>
+          <circle cx="128" cy="128" r="86" fill="rgba(255,255,255,.15)"/>
+          <text x="50%" y="57%" text-anchor="middle" font-family="Tajawal" font-size="120" fill="#0F172A">ز</text>
+        </svg>
+      </div>
+      <nav class="nav" id="nav"></nav>
     </div>
-    <nav class="topnav">
-      <a href="#/" data-route class="active">الصفحة الرئيسية</a>
-      <a href="#/assessment" data-route>التقييم الإيماني</a>
-      <a href="#/roadmap" data-route>خريطة الطريق</a>
-      <a href="#/vision2030" data-route>الارتباط برؤية 2030</a>
-      <a href="#/about" data-route>عن المنصة</a>
-    </nav>
   </div>
 </header>
+
+<!-- الصوت (ضع ملفك الخاص لاحقًا إن أردت) -->
+<audio id="recitation" loop preload="auto">
+  <source src="audio/abdulbasit.mp3" type="audio/mpeg"/>
+</audio>
 
 <main class="container">
 
   <!-- الصفحة الرئيسية -->
   <section id="page-home" class="page">
-    <div class="hero">
+    <div class="hero shadow">
       <div>
         <h1>إيماني المعاصر — زد إيمانك</h1>
-        <p>منصة عملية تعزّز الإيمان عبر الأسماء الحسنى، وتربط تقدّمك بسُلّم هاوكِنز، هرَم ماسلو، وعجلة الحياة — ثم تمنحك خطة عمل يومية مستندة لآيات وحكمة نفسية.</p>
-        <div class="toolbar" style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap">
-          <a class="btn" href="#/assessment">ابدأ التقييم الآن</a>
-          <a class="btn ghost" href="#/vision2030">الارتباط برؤية 2030</a>
+        <p>منصة عملية تعزّز الإيمان عبر الأسماء الحسنى، وتربط تقدّمك بسُلّم هاوكِنز، هرَم ماسلو، وعجلة الحياة — ثم تمنحك خطة 14 يومًا مستندة لآيات وحكمة نفسية.</p>
+        <div class="btns">
+          <a class="btn btn-primary" href="#/assessment">ابدأ التقييم الآن</a>
+          <a class="btn btn-ghost" href="#/vision2030">الارتباط برؤية 2030</a>
         </div>
         <div class="kpis" style="margin-top:12px">
-          <div class="kpi"><b id="kpiFaith">—%</b><span>نسبة الإيمان (متوسط الأسماء المختارة)</span></div>
-          <div class="kpi"><b id="kpiHawkins">—</b><span>مستواك على سُلّم هاوكِنز</span></div>
+          <div class="kpi"><b id="kpiFaith">—%</b><span>نسبة الإيمان (متوسط الأسماء)</span></div>
+          <div class="kpi"><b id="kpiHawkins">—</b><span>مستوى سُلّم هاوكِنز</span></div>
           <div class="kpi"><b id="kpiMaslow">—</b><span>طبقة ماسلو الحالية</span></div>
         </div>
       </div>
       <div class="verse-box">
         <div class="ayah">﴿وَلِلَّهِ الأَسْمَاءُ الْحُسْنَى فَادْعُوهُ بِهَا﴾</div>
-        <div class="ref">الأعراف: 180</div>
+        <div class="small">الأعراف: 180</div>
       </div>
     </div>
 
     <div class="section grid cols-2">
       <div class="card">
         <h3>كيف يعمل؟</h3>
-        <ol class="list" style="margin:0; padding:0 16px; line-height:1.9">
-          <li>اختر مجموعة من <b>الأسماء الحسنى</b> وقيّم عمق إيمانك بكل اسم (0–100%).</li>
-          <li>نحتسب المتوسط ونُسقِطه على <b>سُلّم هاوكِنز</b> ونُحدّد طبقة <b>ماسلو</b> الأسرع مكسبًا لك الآن.</li>
-          <li>املأ عجلة الحياة الثمانية، لنصنع <b>خريطة طريق</b> يومية/أسبوعية مدعومة بآيات وتطبيقات نفسية.</li>
+        <ol class="small" style="line-height:1.9;padding-right:18px">
+          <li>قيّم عمق إيمانك (0–100) في <b>الأسماء الحسنى</b> المختارة.</li>
+          <li>نحتسب المتوسط ونُسقِطه على <b>سلّم هاوكِنز</b> ونحدّد طبقة <b>ماسلو</b>.</li>
+          <li>املأ <b>عجلة الحياة</b> (8 جوانب)، فتُبنى <b>خريطة طريق</b> من 14 يومًا بآيات وتمارين نفسية.</li>
         </ol>
       </div>
       <div class="card">
-        <h3>بوصلة حياتك</h3>
-        <div class="radar-wrap">
-          <canvas id="radar" height="280"></canvas>
+        <h3>عجلة الحياة</h3>
+        <div class="radar">
+          <canvas id="radar" height="260"></canvas>
         </div>
-        <div class="small muted" style="margin-top:6px">عدّل القيم من صفحة “التقييم” لترى التغير مباشرة.</div>
+        <div class="small" style="margin-top:6px;color:var(--muted)">عدّل القيم من صفحة “التقييم” لترى التغيّر فورًا.</div>
       </div>
     </div>
   </section>
 
-  <!-- صفحة التقييم -->
+  <!-- التقييم -->
   <section id="page-assessment" class="page hide">
     <nav class="breadcrumbs"><a href="#/">الرئيسية</a><span class="dot"></span><b>التقييم الإيماني</b></nav>
+
     <div class="grid cols-2">
       <div class="card">
-        <h3>١) تقييم الأسماء الحسنى</h3>
-        <p class="small muted">حدّد عمق إيمانك (0–100) في الأسماء المختارة. يمكن التعديل في أي وقت.</p>
+        <h3>١) تقييم الأسماء الحسنى (99 اسمًا)</h3>
+        <p class="small" style="color:var(--muted)">حدّد عمق إيمانك (0–100) لكل اسم. يمكنك التعديل في أي وقت.</p>
         <div id="namesWrap" class="grid cols-2" style="margin-top:8px"></div>
         <div class="separator"></div>
-        <button class="btn" onclick="saveNames()">حفظ التقييم</button>
+        <button class="btn btn-primary" onclick="saveNames()">حفظ التقييم</button>
       </div>
 
       <div class="card">
-        <h3>٢) عجلة الحياة (٨ مجالات)</h3>
-        <p class="small muted">قيّم رضاك الحالي (0–10) في كل جانب.</p>
+        <h3>٢) عجلة الحياة (8 جوانب)</h3>
+        <p class="small" style="color:var(--muted)">قيّم رضاك الحالي (0–10) في كل جانب.</p>
         <div id="lifeWrap" class="grid cols-2" style="margin-top:8px"></div>
         <div class="separator"></div>
-        <button class="btn" onclick="saveLife()">حفظ العجلة</button>
+        <button class="btn btn-primary" onclick="saveLife()">حفظ العجلة</button>
       </div>
     </div>
 
@@ -248,229 +202,236 @@ nav.breadcrumbs .dot{width:4px; height:4px; background:var(--muted); border-radi
           <div class="kpi"><b id="hawkinsLevel">—</b><span>مستوى هاوكِنز</span></div>
           <div class="kpi"><b id="maslowTier">—</b><span>طبقة ماسلو</span></div>
         </div>
-        <p class="small muted" id="levelBlurb" style="margin-top:8px"></p>
+        <p class="small" id="levelBlurb" style="margin-top:8px;color:var(--muted)"></p>
       </div>
+
       <div class="card">
-        <h3>٤) نص آية مُلهِمة اليوم</h3>
-        <div id="dailyAyah" class="verse-box" style="margin:6px 0 0"></div>
-        <button class="btn secondary" onclick="randomAyah()">آية أخرى</button>
+        <h3>٤) آية مُلهِمة</h3>
+        <div id="dailyAyah" class="verse-box" style="margin-top:6px"></div>
+        <button class="btn" style="margin-top:8px" onclick="randomAyah()">آية أخرى</button>
       </div>
+
       <div class="card">
         <h3>٥) توصيات سريعة</h3>
-        <ul id="quickTips" class="list" style="padding:0 16px; line-height:1.9"></ul>
+        <ul id="quickTips" class="small" style="line-height:1.9;padding-right:18px"></ul>
       </div>
+    </div>
+
+    <div class="section">
+      <a class="btn btn-primary" href="#/roadmap">خريطة الطريق (14 يومًا)</a>
     </div>
   </section>
 
-  <!-- صفحة خريطة الطريق -->
+  <!-- خريطة الطريق -->
   <section id="page-roadmap" class="page hide">
     <nav class="breadcrumbs"><a href="#/">الرئيسية</a><span class="dot"></span><b>خريطة الطريق</b></nav>
     <div class="card">
-      <h3>خطة عمل شخصية (14 يومًا)</h3>
-      <p class="small muted">مستندة لنتيجتك الإيمانية، مستوى هاوكِنز، طبقة ماسلو، وعجلة الحياة.</p>
-      <div id="roadmapPlan" class="checklist" style="margin-top:10px"></div>
+      <h3>خطة شخصية لمدة 14 يومًا</h3>
+      <p class="small" style="color:var(--muted)">مبنية على نسبة الإيمان، مستوى هاوكِنز، طبقة ماسلو، وعجلة الحياة.</p>
+      <div id="roadmapPlan" class="grid" style="margin-top:8px"></div>
       <div class="separator"></div>
-      <button class="btn" onclick="downloadPlan()">حفظ كملف HTML</button>
-      <button class="btn ghost" onclick="window.print()">طباعة</button>
+      <button class="btn btn-primary" onclick="downloadPlan()">حفظ كملف HTML (اطبع إلى PDF)</button>
+      <button class="btn btn-ghost" onclick="window.print()">طباعة</button>
     </div>
   </section>
 
-  <!-- صفحة رؤية 2030 -->
-  <section id="page-vision" class="page hide">
+  <!-- رؤية 2030 -->
+  <section id="page-vision2030" class="page hide">
     <nav class="breadcrumbs"><a href="#/">الرئيسية</a><span class="dot"></span><b>الارتباط برؤية 2030</b></nav>
     <div class="grid cols-2">
       <div class="card">
-        <h3>كيف ننسجم مع الرؤية؟</h3>
-        <p>تُسهم المنصة في تعزيز <b>مجتمع حيوي</b> عبر الارتقاء بالرفاه الروحي والنفسي، وتمكين الأفراد بخطط قابلة للتنفيذ تدعم الإنتاجية وجودة الحياة.</p>
-        <ul class="list" style="padding:0 16px; line-height:1.9">
-          <li><b>المستوى الإستراتيجي:</b> الرفاه والجودة، رأس المال البشري، القطاع غير الربحي.</li>
-          <li><b>المستوى التشغيلي:</b> ممارسات وقائية، تمكين التطوع، تعزيز الصحة النفسية المجتمعية.</li>
-          <li><b>المستوى الفردي:</b> خطط 14 يومًا قابلة للقياس، مؤشرات التزام يومية.</li>
+        <h3>محاور الانسجام</h3>
+        <ul class="small" style="line-height:1.9;padding-right:18px">
+          <li><b>تعزيز القيم الإسلامية والهوية الوطنية</b> — الوسطية/التسامح/الإتقان/العدالة/المثابرة.</li>
+          <li><b>تمكين حياة عامرة وصحية</b> — نمط صحي، جودة الحياة، الوقاية، ثقافة وترفيه هادف.</li>
+          <li><b>تمكين المسؤولية الاجتماعية</b> — أثر غير ربحي وتمكين للفرد والمنظمة.</li>
         </ul>
       </div>
       <div class="card">
         <h3>مؤشرات قابلة للقياس</h3>
-        <ul class="list" style="padding:0 16px; line-height:1.9">
-          <li>تحسن نسبة الرضا في 3 جوانب من عجلة الحياة على الأقل.</li>
-          <li>ارتفاع “نسبة الإيمان” العامة ≥ 10 نقاط خلال دورة واحدة.</li>
+        <ul class="small" style="line-height:1.9;padding-right:18px">
+          <li>تحسن 3 جوانب على الأقل في عجلة الحياة.</li>
+          <li>ارتفاع “نسبة الإيمان” ≥ 10 نقاط خلال دورة.</li>
           <li>الانتقال مستوى واحد على الأقل على سُلّم هاوكِنز.</li>
         </ul>
-        <div class="notice gold">
-          ملاحظة: يمكن ربط المؤشرات ببرامج التطوع ودوائر جودة الحياة محليًا.
-        </div>
+        <div class="notice small">إمكانية ربط المؤشرات ببرامج التطوع وجودة الحياة محليًا.</div>
       </div>
     </div>
   </section>
 
-  <!-- صفحة عن المنصة -->
+  <!-- عن المنصة -->
   <section id="page-about" class="page hide">
     <nav class="breadcrumbs"><a href="#/">الرئيسية</a><span class="dot"></span><b>عن المنصة</b></nav>
     <div class="card">
       <h3>عن “زد إيمانك”</h3>
-      <p>تصوّر يُزاوج بين الجمال الروحاني والفعالية العملية. الواجهة والألوان والتخطيط مستلهَمة من نسخك السابقة (الهيدر، الشعارات المضمّنة كـdata-uri، واعتماد Chart.js) ثم تم تطويرها وإتمام ميزات التقييم والتوصيات وخريطة الطريق وPWA. :contentReference[oaicite:2]{index=2} :contentReference[oaicite:3]{index=3}</p>
+      <p class="small" style="color:var(--muted)">تصميم هادئ حديث، مع تقييم إيماني متصل بسلّم هاوكِنز وهرم ماسلو وعجلة الحياة، وخريطة طريق عملية قابلة للطباعة والحفظ، وتجهيز PWA للتثبيت على الجوال وسطح المكتب.</p>
     </div>
   </section>
 
 </main>
 
 <footer class="footer">
-  جميع الحقوق محفوظة لشركة <b>تلبية للبحث والتطوير</b> © <span id="year"></span>
+  © جميع الحقوق محفوظة لشركة <b>تلبية للبحث والتطوير</b> — <span id="year"></span>
 </footer>
 
 <script>
-/* ========== Manifest + Service Worker (Single-file PWA) ========== */
+/* ====== PWA: Manifest & Service Worker (inline) ====== */
 const manifest = {
-  "name": "منصة زد إيمانك",
-  "short_name": "زد إيمانك",
-  "start_url": "./?pwa=true",
-  "display": "standalone",
-  "lang": "ar",
-  "dir": "rtl",
-  "theme_color": "#0ea5e9",
-  "background_color": "#f8fbff",
-  "icons": [
-    {"src":"favicon.svg","sizes":"128x128","type":"image/svg+xml"},
-    {"src":"data:image/png;base64,iVBORw0...icon...", "sizes":"192x192", "type":"image/png"},
-    {"src":"data:image/png;base64,iVBORw0...icon512...", "sizes":"512x512", "type":"image/png"}
+  name: "منصة زد إيمانك",
+  short_name: "زد إيمانك",
+  start_url: "./?pwa=true",
+  display: "standalone",
+  lang: "ar",
+  dir: "rtl",
+  theme_color: "#0f6781",
+  background_color: "#ffffff",
+  icons: [
+    {src:"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><rect rx='28' ry='28' width='128' height='128' fill='%230f6781'/><text x='64' y='84' text-anchor='middle' font-size='84' fill='white'>ز</text></svg>", sizes:"128x128", type:"image/svg+xml"},
+    {src:"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect rx='80' ry='80' width='512' height='512' fill='%230f6781'/><text x='256' y='320' text-anchor='middle' font-size='300' fill='white'>ز</text></svg>", sizes:"512x512", type:"image/svg+xml", purpose:"maskable any"}
   ]
 };
 (function attachManifest(){
   const link = document.getElementById('manifestLink');
-  const blob = new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'});
-  const url = URL.createObjectURL(blob);
-  link.setAttribute('href', url);
+  const url = URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'}));
+  link.href = url;
 })();
-
-// Register SW from an inline string
-(async function registerSW(){
+(function registerSW(){
   if('serviceWorker' in navigator){
     const swCode = `
-      self.addEventListener('install', e=>{
-        e.waitUntil(caches.open('iman-pwa-v1').then(c=>c.addAll(['./'])));
-        self.skipWaiting();
-      });
-      self.addEventListener('activate', e=> self.clients.claim());
-      self.addEventListener('fetch', e=>{
-        e.respondWith(
-          caches.match(e.request).then(r=> r || fetch(e.request).then(res=>{
-            const copy = res.clone();
-            caches.open('iman-pwa-v1').then(c=> c.put(e.request, copy));
-            return res;
-          }).catch(()=>caches.match('./')))
-        );
-      });
+      const CACHE='iman-cache-v1';
+      self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./'])));self.skipWaiting();});
+      self.addEventListener('activate',e=>self.clients.claim());
+      self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{const cp=res.clone();caches.open(CACHE).then(c=>c.put(e.request,cp));return res;}).catch(()=>caches.match('./'))))});
     `;
-    const blob = new Blob([swCode], {type:'text/javascript'});
-    const url = URL.createObjectURL(blob);
-    try{ await navigator.serviceWorker.register(url); }catch(err){console.warn('SW failed', err)}
+    const url = URL.createObjectURL(new Blob([swCode],{type:'text/javascript'}));
+    navigator.serviceWorker.register(url).catch(()=>{});
   }
 })();
 
-/* ========== State & Storage ========== */
-const NAMES = [
-  "الرحمن","الرحيم","القدوس","السلام","المؤمن","العزيز","الجبار","الحكيم","الرزاق","اللطيف"
+/* ====== Navbar & Routing ====== */
+const routes = [
+  {hash:"#/", label:"الرئيسية"},
+  {hash:"#/assessment", label:"التقييم"},
+  {hash:"#/roadmap", label:"خريطة الطريق"},
+  {hash:"#/vision2030", label:"الارتباط برؤية 2030"},
+  {hash:"#/about", label:"عن المنصة"}
 ];
-const LIFE_AREAS = [
-  "الإيمان/الروح","الصحة","العائلة","العلاقات","المال/العمل","العلم/التعلم","العطاء/الأثر","المتعة/الهوايات"
-];
-const SCALES = {
-  // تبسيط عملي لسُلّم هاوكِنز وربطه بنسبة الإيمان
-  // 0-100 → خرائط شعورية
-  hawkins(pct){
-    if(pct < 20) return {level:"خجل/عار", code:20, tone:"انكماش", tip:"البدء برحمة الله (الرحمن/الرحيم) وتمارين قبول الذات."};
-    if(pct < 35) return {level:"ذنب/أسى", code:75, tone:"ذبذبة منخفضة", tip:"توبة + كتابة امتنان يومي وآية: (قل يا عبادي الذين أسرفوا...)."};
-    if(pct < 50) return {level:"خوف/قلق", code:100, tone:"تذبذب", tip:"توكّل عملي وآية: (ومن يتوكل على الله فهو حسبه)."};
-    if(pct < 60) return {level:"غضب/شجاعة", code:200, tone:"نقطة تحوّل", tip:"تحويل الدافع إلى التزام سلوكي صغير مستمر."};
-    if(pct < 70) return {level:"حياد/قبول", code:300, tone:"اتزان", tip:"تثبيت روتين ذكر وامتنان + عمل نافع يومي."};
-    if(pct < 80) return {level:"محبة/بهجة", code:500, tone:"اتساع", tip:"تكثير العطاء واللطف الخفي + صحبة صالحة."};
-    if(pct < 90) return {level:"سلام", code:600, tone:"سكينة", tip:"خلوة يومية قصيرة مع تدبر."};
-    return {level:"نور/سكون", code:700, tone:"صفاء", tip:"تثبيت الخلوة وخدمة الآخرين بإخلاص."};
-  },
-  // ربط تقريبي مع ماسلو بحسب متوسط العجلة ونسبة الإيمان
-  maslow(avgLife, pct){
-    // نعطي وزناً للإيمان عند تساوي المتوسط
-    const s = avgLife;
-    if(s < 3) return "الاحتياجات الفسيولوجية/الأمان";
-    if(s < 5) return "الانتماء/العلاقات";
-    if(s < 7) return "التقدير/الإنجاز";
-    return "تحقيق الذات (مع تعزيز الت transcendence عبر الإيمان)";
-  }
-};
+const nav = document.getElementById('nav');
+routes.forEach(r=>{
+  const a = document.createElement('a');
+  a.href = r.hash; a.textContent = r.label; a.setAttribute('data-route','');
+  nav.appendChild(a);
+});
+function route(){
+  const h = location.hash || "#/";
+  document.querySelectorAll('.page').forEach(p=>p.classList.add('hide'));
+  const id = h==="#/"?"page-home":
+             h==="#/assessment"?"page-assessment":
+             h==="#/roadmap"?"page-roadmap":
+             h==="#/vision2030"?"page-vision2030":"page-about";
+  document.getElementById(id).classList.remove('hide');
+  document.querySelectorAll('[data-route]').forEach(a=>a.classList.toggle('active', a.getAttribute('href')===h));
+  if(h==="#/assessment"){ buildNames(); buildLife(); randomAyah(); }
+  if(h==="#/roadmap"){ renderRoadmap(); }
+  if(h!=="#/"){ audioPauseSoft(); }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+window.addEventListener('hashchange', route);
 
-// Local storage keys
+/* ====== Audio control ====== */
+const audio = document.getElementById('recitation');
+const audioBtn = document.getElementById('audioBtn');
+let audioOn=false;
+function audioPauseSoft(){ if(!audio.paused){ audio.pause(); audioOn=false; audioBtn.textContent='🔊 تشغيل التلاوة'; } }
+audioBtn.addEventListener('click', async ()=>{
+  try{
+    if(!audioOn){ await audio.play(); audioOn=true; audioBtn.textContent='🔇 إيقاف التلاوة'; }
+    else{ audio.pause(); audioOn=false; audioBtn.textContent='🔊 تشغيل التلاوة'; }
+  }catch(e){ alert('ضع ملف التلاوة في audio/abdulbasit.mp3 أو اسمح بالتشغيل من المتصفح.'); }
+});
+
+/* ====== Data ====== */
+const NAMES_99 = ["الرحمن","الرحيم","الملك","القدوس","السلام","المؤمن","المهيمن","العزيز","الجبار","المتكبر","الخالق","البارئ","المصور","الغفار","القهار","الوهاب","الرزاق","الفتاح","العليم","القابض","الباسط","الخافض","الرافع","المعز","المذل","السميع","البصير","الحكم","العدل","اللطيف","الخبير","الحليم","العظيم","الغفور","الشكور","العلي","الكبير","الحفيظ","المقيت","الحسيب","الجليل","الكريم","الرقيب","المجيب","الواسع","الحكيم","الودود","المجيد","الباعث","الشهيد","الحق","الوكيل","القوي","المتين","الولي","الحميد","المحصي","المبدئ","المعيد","المحيي","المميت","الحي","القيوم","الواجد","الماجد","الواحد","الاحد","الصمد","القادر","المقتدر","المقدم","المؤخر","الأول","الأخر","الظاهر","الباطن","الوالي","المتعالي","البر","التواب","المنتقم","العفو","الرؤوف","مالك الملك","ذو الجلال والإكرام","المقسط","الجامع","الغني","المغني","المانع","الضار","النافع","النور","الهادي","البديع","الباقي","الوارث","الرشيد","الصبور"];
+const LIFE_AREAS = ["الإيمان/الروح","الصحة","العائلة","العلاقات","العمل/المال","العلم/التعلم","العطاء/الأثر","الهوايات/المتعة"];
+
 const K = {names:"iman_names", life:"iman_life"};
-
-// Default state
-let namesScores = load(K.names) || Object.fromEntries(NAMES.map(n=>[n,50]));
-let lifeScores  = load(K.life)  || Object.fromEntries(LIFE_AREAS.map(n=>[n,5]));
 function load(k){ try{return JSON.parse(localStorage.getItem(k))}catch{return null} }
 function save(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
 
-/* ========== UI Builders ========== */
+let namesScores = load(K.names) || Object.fromEntries(NAMES_99.map(n=>[n,50]));
+let lifeScores  = load(K.life)  || Object.fromEntries(LIFE_AREAS.map(n=>[n,5]));
+
+/* ====== Helpers ====== */
+function byId(id){ return document.getElementById(id) }
 function el(tag, attrs={}, children=[]){
   const e = document.createElement(tag);
   Object.entries(attrs).forEach(([k,v])=>{
-    if(k==="class") e.className=v;
-    else if(k==="html") e.innerHTML=v;
-    else e.setAttribute(k,v);
+    if(k==="class") e.className=v; else if(k==="html") e.innerHTML=v; else e.setAttribute(k,v);
   });
   (Array.isArray(children)?children:[children]).filter(Boolean).forEach(c=> e.appendChild(c));
   return e;
 }
+function avg(vals){ return vals.reduce((a,b)=>a+b,0)/Math.max(vals.length,1); }
 
+/* ====== Build UI ====== */
 function buildNames(){
-  const wrap = document.getElementById('namesWrap'); wrap.innerHTML="";
-  NAMES.forEach(name=>{
+  const wrap = byId('namesWrap'); wrap.innerHTML="";
+  NAMES_99.forEach(name=>{
     const val = namesScores[name] ?? 50;
     wrap.appendChild(el("div",{class:"card"},[
-      el("div",{class:"row"},[
-        el("b",{html:name}),
-        el("span",{class:"badge", html:val+"%"})
-      ]),
+      el("div",{class:"row",html:`<b>${name}</b> <span class="badge" style="float:left">${val}%</span>`}),
       el("input",{type:"range",min:"0",max:"100",value:String(val),class:"range",oninput:`updateName('${name}', this.value, this.previousElementSibling.querySelector('.badge'))`})
     ]));
   });
 }
-function updateName(name,val,badge){
-  namesScores[name]=Number(val);
-  badge.textContent=val+"%";
+function updateName(name,val,b){
+  namesScores[name]=Number(val); b.textContent=val+"%";
 }
-function saveNames(){ save(K.names, namesScores); refreshResults(); alert("تم حفظ تقييم الأسماء."); }
+function saveNames(){ save(K.names, namesScores); refreshAll(); alert("تم حفظ تقييم الأسماء."); }
 
 function buildLife(){
-  const wrap = document.getElementById('lifeWrap'); wrap.innerHTML="";
+  const wrap = byId('lifeWrap'); wrap.innerHTML="";
   LIFE_AREAS.forEach(area=>{
     const val = lifeScores[area] ?? 5;
     wrap.appendChild(el("div",{class:"card"},[
-      el("div",{class:"row"},[
-        el("b",{html:area}),
-        el("span",{class:"badge", html:val+"/10"})
-      ]),
+      el("div",{class:"row",html:`<b>${area}</b> <span class="badge" style="float:left">${val}/10</span>`}),
       el("input",{type:"range",min:"0",max:"10",value:String(val),class:"range",oninput:`updateLife('${area}', this.value, this.previousElementSibling.querySelector('.badge'))`})
     ]));
   });
 }
-function updateLife(area,val,badge){
-  lifeScores[area]=Number(val);
-  badge.textContent=val+"/10";
+function updateLife(area,val,b){
+  lifeScores[area]=Number(val); b.textContent=val+"/10";
 }
-function saveLife(){ save(K.life, lifeScores); drawRadar(); refreshResults(); alert("تم حفظ عجلة الحياة."); }
+function saveLife(){ save(K.life, lifeScores); drawRadar(); refreshAll(); alert("تم حفظ عجلة الحياة."); }
 
-/* ========== Calculations & Mappings ========== */
-function avg(vals){ return vals.reduce((a,b)=>a+b,0)/Math.max(vals.length,1); }
-function sum(vals){ return vals.reduce((a,b)=>a+b,0); }
+/* ====== Hawkins & Maslow Mapping ====== */
+const SCALES = {
+  hawkins(pct){
+    if(pct < 20) return {level:"خجل/عار", code:20, tone:"انكماش", tip:"ابدأ برحمة الله (الرحمن/الرحيم) وتمارين قبول الذات."};
+    if(pct < 35) return {level:"ذنب/أسى", code:75, tone:"منخفض", tip:"توبة + امتنان يومي + (قُل يا عبادي الذين أسرفوا...)."};
+    if(pct < 50) return {level:"خوف/قلق", code:100, tone:"متذبذب", tip:"توكّل عملي: (ومن يتوكل على الله فهو حسبه)."};
+    if(pct < 60) return {level:"شجاعة", code:200, tone:"تحول", tip:"عادة صغيرة مستمرة + متابعة أسبوعية."};
+    if(pct < 70) return {level:"قبول/حياد", code:300, tone:"اتزان", tip:"روتين ذكر وامتنان + عمل نافع يومي."};
+    if(pct < 80) return {level:"محبة/بهجة", code:500, tone:"اتساع", tip:"تكثير العطاء واللطف الخفي + صحبة صالحة."};
+    if(pct < 90) return {level:"سلام", code:600, tone:"سكينة", tip:"خلوة يومية قصيرة مع تدبر."};
+    return {level:"نور/سكون", code:700, tone:"صفاء", tip:"تثبيت الخلوة وخدمة الآخرين بإخلاص."};
+  },
+  maslow(avgLife, pct){
+    if(avgLife < 3) return "فسيولوجي/أمان";
+    if(avgLife < 5) return "انتماء/علاقات";
+    if(avgLife < 7) return "تقدير/إنجاز";
+    return "تحقيق الذات (+ سمو بالإيمان)";
+  }
+};
 
-function computeFaithPct(){
-  return Math.round(avg(Object.values(namesScores)));
-}
-function computeLifeAvg10(){
-  return avg(Object.values(lifeScores));
-}
+/* ====== KPIs & Tips ====== */
+function computeFaithPct(){ return Math.round(avg(Object.values(namesScores))); }
+function computeLifeAvg(){ return avg(Object.values(lifeScores)); }
 
-function refreshResults(){
+function refreshAll(){
   const pct = computeFaithPct();
   const haw = SCALES.hawkins(pct);
-  const lifeAvg = computeLifeAvg10();
+  const lifeAvg = computeLifeAvg();
   const mas = SCALES.maslow(lifeAvg, pct);
 
   // Home KPIs
@@ -484,39 +445,39 @@ function refreshResults(){
   byId('maslowTier').textContent = mas;
   byId('levelBlurb').textContent = "نبرة الوعي: "+haw.tone+" — توصية: "+haw.tip;
 
-  // Quick tips
+  // Tips
   buildQuickTips(pct, haw, lifeScores);
 }
+
 function buildQuickTips(pct, haw, life){
   const ul = byId('quickTips'); ul.innerHTML="";
   const worst = Object.entries(life).sort((a,b)=>a[1]-b[1]).slice(0,2).map(x=>x[0]);
+  const anchorName = pct<60 ? "الرحمن" : (pct<75 ? "اللطيف" : "الحكيم");
   const tips = [
-    "اذكر اليوم: “يا "+ (pct<60?"رحمن":"لطيف") +"” 100 مرة بخشوع.",
-    "جلسة امتنان 3 أشياء قبل النوم.",
-    "خدمة خفية لشخص واحد اليوم.",
-    "قراءة 10 دقائق تدبر (قصار السور مع تفسير).",
+    `ذكر يومي: "يا ${anchorName}" 100 مرة بخشوع.`,
+    "جلسة امتنان: 3 أشياء قبل النوم.",
+    "لطف خفي لشخص واحد اليوم.",
+    "تدبر 10 دقائق (قصار السور مع تفسير).",
     "تنفّس 4-4-6 خمس مرات عند التوتر."
   ];
-  worst.forEach(w=> tips.unshift("تركيز هذا الأسبوع على: <b>"+w+"</b> بخطوة صغيرة يومية."));
-  tips.slice(0,5).forEach(t=>{
-    const li = document.createElement('li'); li.innerHTML=t; ul.appendChild(li);
-  });
+  worst.forEach(w=> tips.unshift(`تركيز هذا الأسبوع على: <b>${w}</b> بخطوة صغيرة يومية.`));
+  tips.slice(0,5).forEach(t=>{const li=document.createElement('li'); li.innerHTML=t; ul.appendChild(li);});
 }
 
-/* ========== Ayat (short curated set) ========== */
+/* ====== Ayat ====== */
 const AYAT = [
   {text:"﴿وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ﴾", ref:"الطلاق: 3"},
   {text:"﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾", ref:"الشرح: 6"},
-  {text:"﴿قُلْ يَا عِبَادِيَ الَّذِينَ أَسْرَفُوا عَلَىٰ أَنفُسِهِمْ...﴾", ref:"الزمر: 53"},
+  {text:"﴿قُلْ يَا عِبَادِيَ الَّذِينَ أَسْرَفُوا...﴾", ref:"الزمر: 53"},
   {text:"﴿ادْعُونِي أَسْتَجِبْ لَكُمْ﴾", ref:"غافر: 60"},
   {text:"﴿وَقُل رَّبِّ زِدْنِي عِلْمًا﴾", ref:"طه: 114"}
 ];
 function randomAyah(){
   const a = AYAT[Math.floor(Math.random()*AYAT.length)];
-  byId('dailyAyah').innerHTML = `<div class="ayah">${a.text}</div><div class="ref">${a.ref}</div>`;
+  byId('dailyAyah').innerHTML = `<div class="ayah">${a.text}</div><div class="small">${a.ref}</div>`;
 }
 
-/* ========== Radar (life wheel) ========== */
+/* ====== Radar ====== */
 let radar;
 function drawRadar(){
   const ctx = byId('radar').getContext('2d');
@@ -525,61 +486,37 @@ function drawRadar(){
   if(radar) radar.destroy();
   radar = new Chart(ctx, {
     type:'radar',
-    data:{
-      labels,
-      datasets:[{
-        label:'عجلة الحياة',
-        data,
-        fill:true,
-        borderWidth:2
-      }]
-    },
-    options:{
-      responsive:true,
-      plugins:{legend:{display:false}},
-      scales:{ r:{ suggestedMin:0, suggestedMax:10, ticks:{stepSize:2} } }
-    }
+    data:{ labels, datasets:[{label:'عجلة الحياة', data, fill:true, borderWidth:2}] },
+    options:{ responsive:true, plugins:{legend:{display:false}}, scales:{r:{suggestedMin:0,suggestedMax:10,ticks:{stepSize:2}}}}
   });
 }
 
-/* ========== Roadmap generator (14 days) ========== */
+/* ====== Roadmap (14 يومًا) ====== */
 function roadmapBlocks(pct, haw, life){
   const lowAreas = Object.entries(life).sort((a,b)=>a[1]-b[1]).slice(0,3).map(x=>x[0]);
   const anchorName = pct<60 ? "الرحمن" : (pct<75 ? "اللطيف" : "الحكيم");
   const anchorZikr = `ذكر يومي: "يا ${anchorName}" 100 مرة`;
   const anchorAyah = pct<50 ? "﴿ومن يتوكل على الله فهو حسبه﴾" : "﴿وقل رب زدني علما﴾";
-
-  const daily = (title,desc)=>({title,desc});
-  const list = [];
+  const items=[];
   for(let d=1; d<=14; d++){
     const area = lowAreas[d % lowAreas.length];
-    list.push(daily(
-      `اليوم ${d}: ${area}`,
-      [
-        `${anchorZikr}`,
-        `آية اليوم: ${anchorAyah}`,
-        `خطوة صغيرة في ${area}: 10–20 دقيقة فقط.`,
-        `تمرين نفس-إدراكي: كتابة 3 أفكار مزعجة وتحويلها إلى بدائل واقعية.`,
-        `لطف خفي مع شخص واحد.`
-      ].join(" — ")
-    ));
+    items.push({
+      title:`اليوم ${d}: ${area}`,
+      desc:[anchorZikr, `آية: ${anchorAyah}`, `خطوة ${area}: 10–20 دقيقة`, "تحويل فكرة مزعجة لبديل واقعي", "لطف خفي لشخص واحد"].join(" — ")
+    });
   }
-  // إضافة يومَي مراجعة
-  list.push(daily("مراجعة خفيفة","تقييم التزامك (0–10) وتعديل الخطة لليومين التاليين."));
-  list.push(daily("تثبيت عادة","اختيار عادة واحدة للاستمرار 30 يومًا."));
-  return list;
+  items.push({title:"مراجعة خفيفة",desc:"قيّم التزامك (0–10) وعدّل الخطة."});
+  items.push({title:"تثبيت عادة",desc:"اختر عادة واحدة للاستمرار 30 يومًا."});
+  return items;
 }
 function renderRoadmap(){
   const pct = computeFaithPct();
   const haw = SCALES.hawkins(pct);
-  const list = roadmapBlocks(pct, haw, lifeScores);
   const host = byId('roadmapPlan'); host.innerHTML="";
-  list.forEach(item=>{
-    const row = el("label",{class:"task"},[
-      el("input",{type:"checkbox"}),
-      el("div",{html:`<b>${item.title}</b><br><span class="small muted">${item.desc}</span>`})
-    ]);
-    host.appendChild(row);
+  roadmapBlocks(pct, haw, lifeScores).forEach(it=>{
+    host.appendChild(el("label",{class:"card",html:`<div style="display:flex;gap:10px;align-items:flex-start">
+      <input type="checkbox" style="margin-top:6px"/>
+      <div><b>${it.title}</b><div class="small" style="color:var(--muted)">${it.desc}</div></div></div>`}));
   });
 }
 function downloadPlan(){
@@ -591,37 +528,39 @@ ${byId('roadmapPlan').innerHTML}
 <footer style="margin-top:16px;color:#777;font-size:12px">© شركة تلبية للبحث والتطوير</footer>`;
   const blob = new Blob([html], {type:"text/html"});
   const url = URL.createObjectURL(blob);
-  const a = el("a",{href:url, download:"iman-roadmap.html"}); a.click();
+  const a = document.createElement('a'); a.href = url; a.download = "iman-roadmap.html"; a.click();
 }
 
-/* ========== Routing ========== */
-const pages = {
-  "#/": "page-home",
-  "#/assessment":"page-assessment",
-  "#/roadmap":"page-roadmap",
-  "#/vision2030":"page-vision",
-  "#/about":"page-about"
-};
-function route(){
+/* ====== Init ====== */
+function initNav(){
+  const links = [
+    {hash:"#/", label:"الرئيسية"},
+    {hash:"#/assessment", label:"التقييم"},
+    {hash:"#/roadmap", label:"خريطة الطريق"},
+    {hash:"#/vision2030", label:"الارتباط برؤية 2030"},
+    {hash:"#/about", label:"عن المنصة"}
+  ];
+  // (تم بناءها أعلى الصفحة)
+}
+function go(h){ location.hash = h; }
+function routeInit(){
   const h = location.hash || "#/";
-  document.querySelectorAll('.page').forEach(p=> p.classList.add('hide'));
-  document.getElementById(pages[h] || "page-home").classList.remove('hide');
-  document.querySelectorAll('[data-route]').forEach(a=> a.classList.toggle('active', a.getAttribute('href')===h));
+  document.querySelectorAll('.page').forEach(p=>p.classList.add('hide'));
+  document.getElementById(h==="#/"?"page-home":h==="#/assessment"?"page-assessment":h==="#/roadmap"?"page-roadmap":h==="#/vision2030"?"page-vision2030":"page-about").classList.remove('hide');
+  document.querySelectorAll('[data-route]').forEach(a=>a.classList.toggle('active', a.getAttribute('href')=== (location.hash||"#/")));
   if(h==="#/assessment"){ buildNames(); buildLife(); randomAyah(); }
   if(h==="#/roadmap"){ renderRoadmap(); }
 }
 window.addEventListener('hashchange', route);
+function route(){ routeInit(); }
+document.getElementById('year').textContent = new Date().getFullYear();
+drawRadar(); refreshAll(); routeInit(); randomAyah();
 
-/* ========== Helpers & Init ========== */
-function byId(id){ return document.getElementById(id) }
-
-function init(){
-  byId('year').textContent = new Date().getFullYear();
-  drawRadar(); refreshResults(); route();
-  // أول آية على الصفحة الرئيسية (تعرض ضمن “التقييم” أيضًا)
-  randomAyah();
-}
-init();
+/* ====== (اختياري) استبدال شعاري الرؤية/تلبية بصور Base64 الرسمية ======
+ضع سطرين مثل الآتي بعد توفير الـBase64 لديك:
+document.getElementById('visionLogo').innerHTML = '<img alt="Vision 2030" src="data:image/png;base64,PUT_YOUR_VISION2030_BASE64_HERE" />';
+document.getElementById('talbiyaLogo').innerHTML = '<img alt="Talbiya" src="data:image/png;base64,PUT_TALBIYA_BASE64_HERE" />';
+======================================================================= */
 </script>
 
 </body>
