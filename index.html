@@ -3,25 +3,50 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<title>منصة زد إيمانك — تطبيق تأمّلي تفاعلي</title>
+<title>منصّة زد إيمانك — تطبيق تأمّلي تفاعلي</title>
 <meta name="description" content="منصّة هادئة لتعزيز الإيمان عبر الأسماء الحسنى، ربط التقدّم بسُلّم هاوكنز وهرم ماسلو، وبناء خطة 14 يومًا مدعومة بآيات وتمارين نفسية."/>
 <meta name="theme-color" content="#0f6781"/>
-<link id="manifestLink" rel="manifest"/>
+
+<!-- iOS PWA meta -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+
+<!-- Charts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+
+<!-- Manifest (يتم حقنه ديناميكيًا) -->
+<link id="manifestLink" rel="manifest"/>
+
 <style>
-:root{--blue:#0f6781;--blue2:#2a7c92;--beige:#efe9dc;--gold:#d4a944;--ink:#0f1a20;--muted:#5c6a7a;--card:#ffffff;--border:#e6ecf2;--badge:#f7fafc;--bg:#ffffff;--bg2:#f7f5ef}
-@media (prefers-color-scheme: dark){:root{--bg:#0b1216;--bg2:#0e161b;--card:#101a20;--ink:#e9eef2;--muted:#a7b3bf;--border:#1f2a33;--badge:#0f1a21}}
-*{box-sizing:border-box}html,body{margin:0;height:100%}
-body{font-family:system-ui,-apple-system,"Tajawal","Noto Kufi Arabic",Segoe UI,Roboto,sans-serif;color:var(--ink);background:
-radial-gradient(1200px 400px at 90% -10%, rgba(212,169,68,.10), transparent),
-radial-gradient(900px 500px at 10% -20%, rgba(15,103,129,.12), transparent),
-linear-gradient(180deg,var(--bg2) 0%,var(--bg) 60%,var(--bg2) 100%);}
-.container{max-width:1200px;margin:0 auto;padding:14px}a{color:inherit;text-decoration:none}
+:root{
+  --blue:#0f6781; --blue2:#2a7c92; --beige:#efe9dc; --gold:#e6c469; /* ذهبي فاتح */
+  --ink:#0f1a20; --muted:#5c6a7a; --card:#ffffff; --border:#e6ecf2; --badge:#f7fafc;
+  --bg:#ffffff; --bg2:#f7f5ef;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0b1216; --bg2:#0e161b; --card:#101a20; --ink:#e9eef2; --muted:#a7b3bf; --border:#1f2a33; --badge:#0f1a21}
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  font-family:system-ui,-apple-system,"Tajawal","Noto Kufi Arabic",Segoe UI,Roboto,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 400px at 90% -10%, rgba(230,196,105,.10), transparent),
+    radial-gradient(900px 500px at 10% -20%, rgba(15,103,129,.12), transparent),
+    linear-gradient(180deg,var(--bg2) 0%,var(--bg) 60%,var(--bg2) 100%);
+}
+.container{max-width:1200px;margin:0 auto;padding:14px}
+a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 /* Loading bar */
-.loading-bar{position:fixed;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,#d4a944,#ffd67a);transform-origin:right;transform:scaleX(0);z-index:60}
+.loading-bar{position:fixed;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,#e6c469,#ffe6a3);transform-origin:right;transform:scaleX(0);z-index:60}
 @keyframes loadRun{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 .loading-bar.active{animation:loadRun .5s ease}
 
@@ -29,69 +54,85 @@ linear-gradient(180deg,var(--bg2) 0%,var(--bg) 60%,var(--bg2) 100%);}
 .header{position:sticky;top:0;z-index:40;backdrop-filter:blur(10px);background:rgba(255,255,255,.75);border-bottom:1px solid var(--border)}
 @media (prefers-color-scheme: dark){.header{background:rgba(16,26,32,.6)}}
 .header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0}
+
 /* RIGHT: brand + nav */
 .brand{display:flex;align-items:center;gap:12px;min-width:0}
 .app-logo-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}
-.app-logo{width:56px;height:56px;border-radius:14px;background:var(--badge);border:1px solid var(--border);display:grid;place-items:center;padding:6px}
+.app-logo{width:56px;height:56px;border-radius:18px;background:var(--badge);border:1px solid var(--border);display:grid;place-items:center;padding:6px; box-shadow:0 10px 30px rgba(0,0,0,.06)}
 .app-logo svg{width:100%;height:100%}
-.app-name{font-weight:800;font-size:12px;color:var(--ink);letter-spacing:.5px}
+.app-name{font:700 12px/1 "Amiri",serif;color:var(--ink);letter-spacing:.3px}
 .nav{display:flex;gap:6px;flex-wrap:wrap}
-.nav a{padding:10px 12px;border-radius:12px;border:1px solid transparent}
+.nav a{padding:12px 14px;border-radius:14px;border:1px solid transparent;min-height:44px;display:inline-flex;align-items:center}
 .nav a:hover,.nav a.active{background:rgba(0,0,0,.05);border-color:var(--border)}
-.theme-toggle{border:1px solid var(--border);background:var(--card);border-radius:10px;padding:8px 10px;line-height:0}
-.hamburger{display:none;border:1px solid var(--border);background:var(--card);border-radius:10px;padding:10px;line-height:0}
-/* LEFT: Vision + Talbiya + audio */
+.theme-toggle,.hamburger{border:1px solid var(--border);background:var(--card);border-radius:12px;padding:12px 12px;line-height:0;min-height:44px}
+.hamburger{display:none}
+
+/* LEFT: Vision 2030 + Talbiya + audio */
 .left-logos{display:flex;align-items:center;gap:10px;min-width:0}
-.logo{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:12px;background:var(--badge);padding:6px;height:38px}
-.logo img,.logo svg{max-height:100%;max-width:100%;object-fit:contain}
-.audio-btn{border:1px solid var(--border);padding:8px 12px;border-radius:10px;background:var(--card)}
+.logo{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:12px;background:var(--badge);padding:6px;height:36px}
+.logo img{max-height:100%;max-width:100%;object-fit:contain;display:block}
+.audio-btn{border:1px solid var(--border);padding:10px 12px;border-radius:12px;background:var(--card);min-height:44px}
 
 /* Layout */
 main{padding-bottom:90px}.section{margin-top:16px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px}
-.shadow{box-shadow:0 10px 30px rgba(0,0,0,.06)}
-.grid{display:grid;gap:12px}.cols-2{grid-template-columns:1fr 1fr}.cols-3{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:16px;box-shadow:0 30px 80px rgba(0,0,0,.04)}
+.shadow{box-shadow:0 20px 60px rgba(0,0,0,.06)}
+.grid{display:grid;gap:12px}
+.cols-2{grid-template-columns:1fr 1fr}.cols-3{grid-template-columns:repeat(3,1fr)}
 @media(max-width:980px){.cols-2,.cols-3{grid-template-columns:1fr}}
 
 /* Hero */
-.hero{display:grid;gap:16px;grid-template-columns:1.1fr 1fr;align-items:center;padding:16px;border:1px solid var(--border);border-radius:24px;background:linear-gradient(135deg,#0f6781 0%,#2a7c92 60%,rgba(212,169,68,.45) 100%);color:#fff}
-.hero h1{margin:0 0 10px;font-size:28px}.hero p{margin:0;color:#eaf7ff}
+.hero{display:grid;gap:16px;grid-template-columns:1.1fr 1fr;align-items:center;padding:16px;border:1px solid var(--border);border-radius:28px;background:linear-gradient(135deg,#0f6781 0%,#2a7c92 60%,rgba(230,196,105,.40) 100%);color:#fff; box-shadow:0 20px 80px rgba(15,103,129,.15)}
+.hero h1{margin:0 0 10px;font:700 28px/1.3 "Amiri",serif}
+.hero p{margin:0;color:#eaf7ff}
 .hero .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.btn{border:none;border-radius:12px;padding:12px 14px;font-weight:800;cursor:pointer}
-.btn-primary{background:var(--gold);color:#1a2228}.btn-primary:hover{background:#c79b34}
+.btn{border:none;border-radius:14px;padding:12px 16px;font-weight:800;cursor:pointer;min-height:44px}
+.btn-primary{background:var(--gold);color:#1a2228;box-shadow:0 12px 30px rgba(230,196,105,.35)}
+.btn-primary:hover{background:#dbb651}
 .btn-ghost{background:transparent;border:1px dashed var(--border);color:#fff}
 .verse-box{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:18px;padding:16px;text-align:center;font-family:"Amiri","Scheherazade New",serif}
 .verse-box .ayah{font-size:22px;line-height:1.9}
 .kpis{display:flex;gap:10px;flex-wrap:wrap}
-.kpi{flex:1 1 180px;background:#ffffff1a;border:1px solid rgba(255,255,255,.35);border-radius:12px;padding:10px}.kpi b{display:block;font-size:18px}.kpi span{font-size:12px}
+.kpi{flex:1 1 180px;background:#ffffff1a;border:1px solid rgba(255,255,255,.35);border-radius:14px;padding:10px}
+.kpi b{display:block;font-size:18px}.kpi span{font-size:12px}
+
+/* Inputs */
 .input,select,textarea{width:100%;padding:14px 12px;border:1px solid var(--border);border-radius:14px;background:var(--card);color:var(--ink)}
 .range{width:100%;height:34px}
 .range::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:var(--blue2);border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2)}
 .range::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:var(--blue2);border:none}
-.small{font-size:12px;color:var(--muted)}.badge{display:inline-block;padding:4px 10px;border-radius:999px;background:var(--badge);border:1px solid var(--border);font-size:12px}
-.separator{height:1px;background:var(--border);margin:8px 0}.notice{padding:10px;border:1px solid var(--border);background:#fffdf5;border-radius:12px}
-.radar{padding:10px;background:var(--card);border:1px solid var(--border);border-radius:16px}.table-wrap{overflow:auto;-webkit-overflow-scrolling:touch}
-.table{width:100%;border-collapse:separate;border-spacing:0;min-width:520px}.table th,.table td{border:1px solid var(--border);padding:10px;border-left:none;border-top:none}
-.table th:first-child,.table td:first-child{border-right:1px solid var(--border)}.table tr:last-child td{border-bottom:1px solid var(--border)}.table th{background:#f8fafc}
+
+/* Small bits */
+.small{font-size:12px;color:var(--muted)}
+.badge{display:inline-block;padding:4px 10px;border-radius:999px;background:var(--badge);border:1px solid var(--border);font-size:12px}
+.separator{height:1px;background:var(--border);margin:8px 0}
+.notice{padding:10px;border:1px solid var(--border);background:#fffdf5;border-radius:12px}
+.radar{padding:10px;background:var(--card);border:1px solid var(--border);border-radius:16px}
+.table-wrap{overflow:auto;-webkit-overflow-scrolling:touch}
+.table{width:100%;border-collapse:separate;border-spacing:0;min-width:520px}
+.table th,.table td{border:1px solid var(--border);padding:10px;border-left:none;border-top:none}
+.table th:first-child,.table td:first-child{border-right:1px solid var(--border)}
+.table tr:last-child td{border-bottom:1px solid var(--border)}
+.table th{background:#f8fafc}
 
 /* Animations */
 @keyframes fadeUp { from{opacity:0; transform: translateY(12px);} to{opacity:1; transform: translateY(0);} }
 .reveal>*{opacity:0; transform:translateY(12px)}
 .reveal>.anim{animation: fadeUp .6s ease both}
 .reveal .anim-1{animation-delay:.05s}.reveal .anim-2{animation-delay:.12s}.reveal .anim-3{animation-delay:.18s}.reveal .anim-4{animation-delay:.24s}.reveal .anim-5{animation-delay:.30s}
+
 /* Drawer slide-in */
 @keyframes slideIn { from{transform:translateX(12px);opacity:0} to{transform:translateX(0);opacity:1} }
 .nav.open{animation:slideIn .25s ease both}
 @media (prefers-reduced-motion: reduce){ .reveal>*{opacity:1;transform:none} .anim{animation:none} .nav.open{animation:none} }
 
 /* Title flash */
-.flash-gold{background:linear-gradient(90deg, rgba(212,169,68,.25), rgba(212,169,68,.05)); border-radius:10px; padding:3px 6px;}
+.flash-gold{background:linear-gradient(90deg, rgba(230,196,105,.25), rgba(230,196,105,.05)); border-radius:10px; padding:3px 6px;}
 
 /* Welcome bar */
-.welcome-bar{position:sticky;top:64px;z-index:35;margin:0 14px 8px;border-radius:12px;border:1px solid rgba(212,169,68,.35);
- background:linear-gradient(90deg,rgba(212,169,68,.65),rgba(212,169,68,.45)); color:#fff; font-family:"Amiri",serif;
- text-align:center; padding:8px 12px; opacity:0; transform:translateY(-6px); pointer-events:none;
- text-shadow:0 1px 2px rgba(0,0,0,.25);}
+.welcome-bar{position:sticky;top:64px;z-index:35;margin:0 14px 8px;border-radius:12px;border:1px solid rgba(230,196,105,.35);
+ background:linear-gradient(90deg,rgba(230,196,105,.70),rgba(230,196,105,.45)); color:#fff; font-family:"Amiri",serif;
+ text-align:center; padding:8px 12px; opacity:0; transform:translateY(-6px); pointer-events:none; text-shadow:0 1px 2px rgba(0,0,0,.22)}
 .welcome-bar.show{opacity:1; transform:translateY(0); transition:opacity .25s ease, transform .25s ease;}
 .welcome-bar.hide{opacity:0; transform:translateY(-6px); transition:opacity .3s ease, transform .3s ease;}
 
@@ -100,8 +141,8 @@ main{padding-bottom:90px}.section{margin-top:16px}
 
 /* Mobile header/menu */
 @media(max-width:840px){
-  .app-logo{width:48px;height:48px;border-radius:12px}
-  .logo{height:34px}
+  .app-logo{width:48px;height:48px;border-radius:14px}
+  .logo{height:32px}
   .hamburger{display:inline-flex}
   .nav{display:none;position:fixed;right:12px;left:12px;top:68px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:8px;flex-direction:column;box-shadow:0 14px 40px rgba(0,0,0,.12)}
   .nav.open{display:flex}
@@ -119,7 +160,8 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
 .modal-head{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .modal-body{padding:16px}
 .modal-actions{display:flex;gap:8px;justify-content:flex-start;padding:12px 16px;border-top:1px solid var(--border)}
-.close-btn{border:1px solid var(--border);background:var(--card);border-radius:10px;padding:8px 12px}
+.close-btn{border:1px solid var(--border);background:var(--card);border-radius:12px;padding:8px 12px}
+.hide{display:none}
 </style>
 </head>
 <body>
@@ -128,13 +170,15 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
 
 <header class="header" role="banner">
   <div class="container header-inner">
+
     <!-- RIGHT: brand (app logo + nav) -->
     <div class="brand">
       <div class="app-logo-wrap">
         <div class="app-logo" title="منصة زد إيمانك" aria-label="شعار المنصة">
+          <!-- شعار المنصّة (رمز حرف ز داخل تدرّج) -->
           <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs><radialGradient id="g" cx="50%" cy="50%" r="60%">
-              <stop offset="0%" stop-color="#FACC15" stop-opacity=".95"/>
+              <stop offset="0%" stop-color="#FDE68A" stop-opacity=".95"/>
               <stop offset="60%" stop-color="#60A5FA" stop-opacity=".9"/>
               <stop offset="100%" stop-color="#14B8A6" stop-opacity=".85"/>
             </radialGradient></defs>
@@ -145,27 +189,28 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
         </div>
         <div class="app-name">زد إيمانك</div>
       </div>
+
       <button id="menuBtn" class="hamburger" aria-label="القائمة">☰</button>
+
+      <!-- Nav (قائمة يمين الصفحة) -->
       <nav class="nav" id="nav" role="navigation" aria-label="القائمة الرئيسية"></nav>
+
       <button id="themeBtn" class="theme-toggle" title="الوضع الداكن/الفاتح" aria-label="تبديل الوضع">🌓</button>
     </div>
 
-    <!-- LEFT: Vision 2030 + Talbiya logos + audio -->
+    <!-- LEFT: Vision 2030 + Talbiya logos + audio (يسار الصفحة وبحجم أصغر قليلاً) -->
     <div class="left-logos">
       <div class="logo" title="Vision 2030">
-        <!-- ضع Base64 هنا: استبدل الـ <svg> بعنصر <img src="data:image/png;base64,...."> -->
-        <svg viewBox="0 0 180 44" aria-hidden="true"><rect x="0" y="0" width="180" height="44" rx="10" fill="#f7fafc" stroke="#e6ecf2"/>
-          <text x="50%" y="60%" text-anchor="middle" font-family="Tajawal" font-weight="700" font-size="18" fill="#0f6781">VISION 2030</text>
-        </svg>
+        <!-- استبدل النص التالي بسلسلة Base64 الحقيقية لشعار الرؤية -->
+        <img alt="Vision 2030" src="data:image/png;base64,VISION2030_BASE64" width="120" height="32" loading="lazy">
       </div>
-      <div class="logo" title="Talbiya">
-        <!-- ضع Base64 هنا: استبدل الـ <svg> بعنصر <img src="data:image/png;base64,...."> -->
-        <svg viewBox="0 0 120 44" aria-hidden="true"><rect x="0" y="0" width="120" height="44" rx="10" fill="#f7fafc" stroke="#e6ecf2"/>
-          <text x="50%" y="60%" text-anchor="middle" font-family="Tajawal" font-weight="700" font-size="16" fill="#2a7c92">Talbiya</text>
-        </svg>
+      <div class="logo" title="Talbiya Initiative">
+        <!-- استبدل النص التالي بسلسلة Base64 الحقيقية لشعار مبادرة تلبية -->
+        <img alt="Talbiya Initiative" src="data:image/png;base64,TALBIYA_BASE64" width="120" height="32" loading="lazy">
       </div>
       <button id="audioBtn" class="audio-btn" aria-label="تشغيل التلاوة">🔊</button>
     </div>
+
   </div>
 </header>
 
@@ -179,7 +224,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
   <section id="page-home" class="page" aria-labelledby="homeTitle">
     <div class="hero shadow reveal">
       <div class="anim anim-1">
-        <h1 id="homeTitle">إيماني المعاصر — زد إيمانك</h1>
+        <h1 id="homeTitle" style="font-family:'Amiri',serif">إيماني المعاصر — زد إيمانك</h1>
         <p>منصّة عملية تعزّز الإيمان عبر الأسماء الحسنى، وتربط تقدّمك بسُلّم هاوكنز، هرَم ماسلو، وعجلة الحياة — ثم تمنحك خطة 14 يومًا مستندة إلى آيات وحكمة نفسية.</p>
         <div class="btns anim anim-2">
           <a class="btn btn-primary" href="#/assessment">ابدأ التقييم الآن</a>
@@ -191,12 +236,15 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
           <div class="kpi anim anim-5"><b id="kpiMaslow">—</b><span>طبقة ماسلو الحالية</span></div>
         </div>
       </div>
-      <div class="verse-box anim anim-2" id="dailyAyah"><div class="ayah">﴿وَلِلَّهِ الأَسْمَاءُ الْحُسْنَى فَادْعُوهُ بِهَا﴾</div><div class="small">الأعراف: 180</div></div>
+      <div class="verse-box anim anim-2" id="dailyAyah">
+        <div class="ayah" style="font-family:'Amiri',serif">﴿وَلِلَّهِ الأَسْمَاءُ الْحُسْنَى فَادْعُوهُ بِهَا﴾</div>
+        <div class="small">الأعراف: 180</div>
+      </div>
     </div>
 
     <div class="section grid cols-2 reveal">
       <div class="card anim anim-1">
-        <h3>كيف يعمل؟</h3>
+        <h3 style="font-family:'Amiri',serif">كيف يعمل؟</h3>
         <ol class="small" style="line-height:1.9;padding-right:18px">
           <li>قيّم عمق إيمانك (0–100) في <b>الأسماء الحسنى</b> المختارة.</li>
           <li>نحتسب المتوسط ونُسقِطه على <b>سُلّم هاوكنز</b> ونحدّد طبقة <b>ماسلو</b>.</li>
@@ -204,7 +252,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
         </ol>
       </div>
       <div class="card anim anim-2">
-        <h3>عجلة الحياة</h3>
+        <h3 style="font-family:'Amiri',serif">عجلة الحياة</h3>
         <div class="radar"><canvas id="radar" height="260" aria-label="رسم راداري لعجلة الحياة" role="img"></canvas></div>
         <div class="small" style="margin-top:6px;color:var(--muted)">عدّل القيم من صفحة “التقييم” لترى التغيّر فورًا.</div>
       </div>
@@ -217,7 +265,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
       <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="assessTitle">التقييم الإيماني</b></nav>
       <div class="grid cols-2">
         <div class="card anim anim-2">
-          <h3 class="title-flash-target">١) تقييم الأسماء الحسنى (بحث + ٩٩ اسمًا)</h3>
+          <h3 class="title-flash-target" style="font-family:'Amiri',serif">١) تقييم الأسماء الحسنى (بحث + ٩٩ اسمًا)</h3>
           <div style="display:flex;gap:8px;align-items:center;margin:6px 0">
             <input id="searchName" class="input" placeholder="ابحث عن اسم (مثال: الشافي، الحكيم، الرزّاق)" aria-label="ابحث عن اسم من الأسماء الحسنى"/>
             <span class="badge">اختر وقيّم 0–100</span>
@@ -230,7 +278,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
           <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importData(event)"/>
         </div>
         <div class="card anim anim-3">
-          <h3>٢) عجلة الحياة (٨ جوانب)</h3>
+          <h3 style="font-family:'Amiri',serif">٢) عجلة الحياة (٨ جوانب)</h3>
           <p class="small" style="color:var(--muted)">قيّم رضاك الحالي (0–10) في كل جانب.</p>
           <div id="lifeWrap" class="grid cols-2" style="margin-top:8px"></div>
           <div class="separator"></div>
@@ -241,7 +289,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
 
       <div class="section grid cols-3">
         <div class="card anim anim-1">
-          <h3>٣) النتائج الفورية</h3>
+          <h3 style="font-family:'Amiri',serif">٣) النتائج الفورية</h3>
           <div class="kpis">
             <div class="kpi"><b id="faithPct">—%</b><span>نسبة الإيمان العامة</span></div>
             <div class="kpi"><b id="hawkinsLevel">—</b><span>مستوى هاوكنز</span></div>
@@ -251,19 +299,19 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
         </div>
 
         <div class="card anim anim-2">
-          <h3>٤) سُلّم هاوكنز (توضيح)</h3>
+          <h3 style="font-family:'Amiri',serif">٤) سُلّم هاوكنز (توضيح)</h3>
           <div class="table-wrap">
             <table class="table small"><thead><tr><th>النطاق</th><th>الشعور السائد</th><th>القيمة</th><th>وصف وتوصية</th></tr></thead><tbody id="hawkinsTable"></tbody></table>
           </div>
         </div>
 
         <div class="card anim anim-3">
-          <h3>٥) هرم ماسلو (توضيح)</h3>
+          <h3 style="font-family:'Amiri',serif">٥) هرم ماسلو (توضيح)</h3>
           <div class="table-wrap">
             <table class="table small">
               <thead><tr><th>الطبقة</th><th>الوصف</th><th>تطبيق عملي</th></tr></thead>
               <tbody id="maslowTable">
-                <tr><td>فسيولوجي</td><td>طعام، نوم، صحة</td><td>تنظيم النوم والغذاء</td></tr>
+                <tr><td>فسيولوجي</td><td>طعام، نوم، صحّة</td><td>تنظيم النوم والغذاء</td></tr>
                 <tr><td>أمان</td><td>استقرار، مال، سكن</td><td>ميزانية أسبوعية وروتين</td></tr>
                 <tr><td>انتماء</td><td>علاقات، محبّة</td><td>صلة رحم وصحبة صالحة</td></tr>
                 <tr><td>تقدير</td><td>إنجاز، ثقة</td><td>هدف صغير متحقق يوميًا</td></tr>
@@ -284,7 +332,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
     <div class="reveal">
       <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="roadTitle">خريطة الطريق</b></nav>
       <div class="card anim anim-2">
-        <h3 class="title-flash-target">خطة شخصية لمدة ١٤ يومًا</h3>
+        <h3 class="title-flash-target" style="font-family:'Amiri',serif">خطة شخصية لمدة ١٤ يومًا</h3>
         <p class="small" style="color:var(--muted)">مبنية على نسبة الإيمان، مستوى هاوكنز، طبقة ماسلو، وعجلة الحياة.</p>
         <div id="roadmapPlan" class="grid" style="margin-top:8px"></div>
         <div class="separator"></div>
@@ -300,7 +348,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
       <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="vTitle">الارتباط برؤية 2030</b></nav>
       <div class="grid cols-2">
         <div class="card anim anim-2">
-          <h3 class="title-flash-target">محاور الانسجام</h3>
+          <h3 class="title-flash-target" style="font-family:'Amiri',serif">محاور الانسجام</h3>
           <ul class="small" style="line-height:1.9;padding-right:18px">
             <li><b>تعزيز القيم الإسلامية والهوية الوطنية</b> — الوسطية/التسامح/الإتقان/العدالة/المثابرة.</li>
             <li><b>تمكين حياة عامرة وصحية</b> — نمط صحي، جودة الحياة، الوقاية، ثقافة وترفيه هادف.</li>
@@ -308,7 +356,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
           </ul>
         </div>
         <div class="card anim anim-3">
-          <h3>مؤشرات قابلة للقياس</h3>
+          <h3 style="font-family:'Amiri',serif">مؤشرات قابلة للقياس</h3>
           <ul class="small" style="line-height:1.9;padding-right:18px">
             <li>تحسّن ثلاثة جوانب على الأقل في عجلة الحياة.</li>
             <li>ارتفاع “نسبة الإيمان” ≥ عشر نقاط خلال دورة.</li>
@@ -324,52 +372,58 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
   <section id="page-partners" class="page hide" aria-labelledby="pTitle">
     <div class="reveal">
       <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="pTitle">شركاؤنا</b></nav>
+
       <div class="card anim anim-2" style="text-align:center">
-        <h3 class="title-flash-target" style="margin:0 0 8px">دعوة للشراكة</h3>
+        <h3 class="title-flash-target" style="margin:0 0 8px; font-family:'Amiri',serif">دعوة للشراكة</h3>
         <p class="small" style="color:var(--muted);margin:0 0 10px">
           انضمّ إلى شركاء الإيمان والتنمية؛ كن جزءًا من أثرٍ مستدام يدعم مشاريع المنصّة ويُمكّن الوعي الروحي والمجتمعي.
         </p>
         <button class="btn btn-primary" onclick="openPartnerForm()">انضمّ كشريك</button>
       </div>
+
       <div class="card anim anim-3">
-        <h3>الشركاء والداعمون</h3>
+        <h3 style="font-family:'Amiri',serif">الشركاء والداعمون</h3>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:100%">
           <div class="logo" title="مبادرة تلبية">
-            <svg viewBox="0 0 120 44"><rect width="120" height="44" rx="10" fill="#f7fafc" stroke="#e6ecf2"/>
-              <text x="50%" y="60%" text-anchor="middle" font-family="Tajawal" font-weight="700" font-size="16" fill="#2a7c92">مبادرة تلبية</text>
-            </svg>
+            <img alt="مبادرة تلبية" src="data:image/png;base64,TALBIYA_BASE64" width="120" height="32" loading="lazy">
           </div>
           <div class="logo" title="شركة تلبية">
-            <svg viewBox="0 0 120 44"><rect width="120" height="44" rx="10" fill="#f7fafc" stroke="#e6ecf2"/>
-              <text x="50%" y="60%" text-anchor="middle" font-family="Tajawal" font-weight="700" font-size="16" fill="#0f6781">شركة تلبية</text>
-            </svg>
+            <!-- يمكن استبداله لاحقًا بشعار الشركة إن رغبت -->
+            <span style="font-weight:700;color:#0f6781">شركة تلبية</span>
           </div>
-          <div class="logo"><span style="color:#64748b;font-weight:700">Partner</span></div>
+          <div class="logo" title="Vision 2030">
+            <img alt="Vision 2030" src="data:image/png;base64,VISION2030_BASE64" width="120" height="32" loading="lazy">
+          </div>
         </div>
       </div>
+
+      <!-- زر عائم للجوال (اختياري، مفعل افتراضيًا) -->
+      <a href="javascript:void(0)" onclick="openPartnerForm()" id="floatPartnerBtn"
+         style="position:fixed;inset:auto 16px 16px auto;background:var(--gold);color:#1a2228;padding:12px 16px;border-radius:999px;
+                box-shadow:0 16px 40px rgba(230,196,105,.35);z-index:45;font-weight:800;display:none">انضمّ كشريك</a>
     </div>
   </section>
 
   <!-- عن المنصة -->
   <section id="page-about" class="page hide" aria-labelledby="aTitle">
     <div class="reveal">
-      <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="aTitle">عن المنصة</b></nav>
+      <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="aTitle">عن المنصّة</b></nav>
       <div class="card anim anim-2">
-        <h3 class="title-flash-target">عن منصة زد إيمانك</h3>
+        <h3 class="title-flash-target" style="font-family:'Amiri',serif">عن منصّة زد إيمانك</h3>
         <p class="small" style="color:var(--muted)">
-          منصّة رقمية تأمّلية وتنموية تعزّز الإيمان بالله عبر التفاعل مع الأسماء الحسنى وتطبيقاتها العملية، مستندةً إلى مبادئ علم النفس الإيجابي،
+          منصّة رقمية تأمّلية وتنموية تُعزّز الإيمان بالله عبر التفاعل مع الأسماء الحسنى وتطبيقاتها العملية، مستندةً إلى مبادئ علم النفس الإيجابي،
           وسُلّم هاوكنز لمستويات الوعي، وهرم ماسلو للاحتياجات؛ لتزويدك بخريطة طريق عملية تُحسّن جودة حياتك روحانيًا ونفسيًا وسلوكيًا.
         </p>
-        <h4>الرؤية</h4>
+        <h4 style="font-family:'Amiri',serif">الرؤية</h4>
         <p class="small">أن تكون المنصّة المرجع الرقمي الأوّل لتطوير الإيمان الواعي في العالم العربي.</p>
-        <h4>الرسالة</h4>
+        <h4 style="font-family:'Amiri',serif">الرسالة</h4>
         <p class="small">تمكين الأفراد من بناء توازن روحاني ونفسي وسلوكي عبر تقييمٍ وتأمّلٍ وخططٍ تنمويةٍ تستند إلى القيم القرآنية والعلمية.</p>
-        <h4>الأهداف</h4>
+        <h4 style="font-family:'Amiri',serif">الأهداف</h4>
         <ul class="small" style="line-height:1.9;padding-right:18px">
           <li>ربط الإيمان بالوعي والسلوك اليومي بصورةٍ علميةٍ وروحيةٍ.</li>
           <li>تعريف المستخدم بمستوى وعيه وفق سُلّم هاوكنز وإضاءاتٍ عمليةٍ.</li>
           <li>تحقيق التوازن عبر طبقات هرم ماسلو وجوانب عجلة الحياة.</li>
-          <li>تقديم خطط ١٤ يومًا قابلةٍ للقياس ومدعومةٍ بآيات وتمارينَ نفسيةٍ.</li>
+          <li>تقديم خطط ١٤ يومًا قابلةٍ للقياس ومدعومةٍ بآيات وتمارين نفسية.</li>
           <li>الإسهام في مستهدفات رؤية 2030: جودة الحياة وتعزيز القيم الإسلامية.</li>
         </ul>
       </div>
@@ -419,12 +473,23 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
 </dialog>
 
 <script>
-/* Manifest + SW with offline fallback */
-const OFFLINE_HTML = `<!doctype html><meta charset="utf-8"><title>وضع عدم الاتصال</title><style>body{font-family:system-ui,"Tajawal";direction:rtl;padding:20px}</style><h2>أنت غير متصل</h2><p>يمكنك استخدام الأجزاء المحفوظة مسبقًا من المنصة، وسيتم تحديثها عند عودة الاتصال.</p>`;
-const manifest={"name":"منصة زد إيمانك","short_name":"زد إيمانك","start_url":"./?pwa=true","display":"standalone","lang":"ar","dir":"rtl","theme_color":"#0f6781","background_color":"#ffffff","icons":[
-  {"src":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><rect rx='28' ry='28' width='128' height='128' fill='%230f6781'/><text x='64' y='84' text-anchor='middle' font-size='84' fill='white'>ز</text></svg>","sizes":"128x128","type":"image/svg+xml"},
-  {"src":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect rx='80' ry='80' width='512' height='512' fill='%230f6781'/><text x='256' y='320' text-anchor='middle' font-size='300' fill='white'>ز</text></svg>","sizes":"512x512","type":"image/svg+xml","purpose":"maskable any"}
-]};
+/* ====== PWA: Manifest + Service Worker (inline) ====== */
+const OFFLINE_HTML = `<!doctype html><meta charset="utf-8"><title>وضع عدم الاتصال</title><style>body{font-family:system-ui,"Tajawal";direction:rtl;padding:20px}</style><h2>أنت غير متصل</h2><p>يمكنك استخدام الأجزاء المحفوظة مسبقًا من المنصّة، وسيتم تحديثها عند عودة الاتصال.</p>`;
+const manifest={
+  "name":"منصّة زد إيمانك",
+  "short_name":"زد إيمانك",
+  "start_url":"./?pwa=true",
+  "display":"standalone",
+  "lang":"ar","dir":"rtl",
+  "theme_color":"#0f6781","background_color":"#ffffff",
+  "icons":[
+    {"src":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><rect rx='28' ry='28' width='128' height='128' fill='%230f6781'/><text x='64' y='84' text-anchor='middle' font-size='84' fill='white'>ز</text></svg>","sizes":"128x128","type":"image/svg+xml"},
+    {"src":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect rx='80' ry='80' width='512' height='512' fill='%230f6781'/><text x='256' y='320' text-anchor='middle' font-size='300' fill='white'>ز</text></svg>","sizes":"512x512","type":"image/svg+xml","purpose":"maskable any"}
+  ],
+  "shortcuts":[
+    {"name":"ابدأ التقييم","url":"#/assessment","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><circle cx='64' cy='64' r='60' fill='%23e6c469'/><text x='64' y='84' text-anchor='middle' font-size='72' fill='%230f1a20'>✓</text></svg>","sizes":"128x128","type":"image/svg+xml"}]}
+  ]
+};
 (function attachManifest(){
   const link=document.getElementById('manifestLink');
   const url=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'}));
@@ -432,18 +497,34 @@ const manifest={"name":"منصة زد إيمانك","short_name":"زد إيما�
 })();
 (function registerSW(){
   if('serviceWorker' in navigator){
-    const sw = `const CACHE='iman-v3';let OFFLINE_URL='offline.html';self.addEventListener('install',e=>{e.waitUntil((async()=>{const c=await caches.open(CACHE);await c.addAll(['./',OFFLINE_URL]);})());self.skipWaiting();});self.addEventListener('activate',e=>self.clients.claim());self.addEventListener('fetch',e=>{e.respondWith((async()=>{try{const r=await fetch(e.request);const c=await caches.open(CACHE);c.put(e.request,r.clone());return r;}catch(err){const m=await caches.match(e.request);return m||caches.match(OFFLINE_URL);}})());});`;
+    const sw = `const CACHE='iman-v4';let OFFLINE_URL='offline.html';
+      self.addEventListener('install',e=>{e.waitUntil((async()=>{const c=await caches.open(CACHE);await c.addAll(['./',OFFLINE_URL]);})());self.skipWaiting();});
+      self.addEventListener('activate',e=>self.clients.claim());
+      self.addEventListener('fetch',e=>{e.respondWith((async()=>{try{
+        const net=await fetch(e.request); const c=await caches.open(CACHE); c.put(e.request,net.clone()); return net;
+      }catch(err){
+        const m=await caches.match(e.request); return m||caches.match(OFFLINE_URL);
+      }})());});`;
     const offlineUrl = URL.createObjectURL(new Blob([OFFLINE_HTML],{type:'text/html'}));
     const swUrl = URL.createObjectURL(new Blob([sw.replace("OFFLINE_URL='offline.html'","OFFLINE_URL='"+offlineUrl+"'")],{type:'text/javascript'}));
     navigator.serviceWorker.register(swUrl);
   }
 })();
 
-/* Install prompt */
-let deferredPrompt;window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;const install=document.createElement('button');install.textContent='📲 تثبيت التطبيق';install.className='btn';install.style.marginRight='8px';document.querySelector('.btns')?.prepend(install);install.addEventListener('click',async()=>{install.disabled=true;try{await deferredPrompt.prompt();}catch{}});});
+/* Install prompt button داخل الهيرو */
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;
+  const install=document.createElement('button');install.textContent='📲 تثبيت التطبيق';install.className='btn';install.style.marginRight='8px';
+  document.querySelector('.btns')?.prepend(install);
+  install.addEventListener('click',async()=>{install.disabled=true;try{await deferredPrompt.prompt();}catch{}});
+});
 
 /* Theme toggle */
-const themeBtn=document.getElementById('themeBtn');themeBtn.addEventListener('click',()=>{document.documentElement.classList.toggle('force-dark');if(document.documentElement.classList.contains('force-dark')){document.documentElement.style.colorScheme='dark';}else{document.documentElement.style.colorScheme='light';}});
+const themeBtn=document.getElementById('themeBtn');
+themeBtn.addEventListener('click',()=>{
+  document.documentElement.classList.toggle('force-dark');
+  document.documentElement.style.colorScheme = document.documentElement.classList.contains('force-dark')?'dark':'light';
+});
 
 /* Build navigation (جميع القوائم مفعّلة) */
 const routes=[
@@ -452,14 +533,14 @@ const routes=[
   {hash:"#/roadmap",label:"خريطة الطريق", welcome:"مرحبًا بك في صفحة خريطة الطريق"},
   {hash:"#/vision2030",label:"الارتباط برؤية 2030", welcome:"مرحبًا بك في صفحة رؤية 2030"},
   {hash:"#/partners",label:"شركاؤنا", welcome:"مرحبًا بك في صفحة الشركاء"},
-  {hash:"#/about",label:"عن المنصة", welcome:"مرحبًا بك في صفحة عن المنصة"}
+  {hash:"#/about",label:"عن المنصّة", welcome:"مرحبًا بك في صفحة عن المنصّة"}
 ];
 const nav=document.getElementById('nav');
 routes.forEach(r=>{const a=document.createElement('a');a.href=r.hash;a.textContent=r.label;a.setAttribute('data-route','');nav.appendChild(a);});
 const menuBtn=document.getElementById('menuBtn');menuBtn.addEventListener('click',()=>{nav.classList.toggle('open');});
 document.addEventListener('click',(e)=>{if(!nav.contains(e.target) && e.target!==menuBtn) nav.classList.remove('open');},{passive:true});
 
-/* Loading bar helper */
+/* Loading bar */
 const loadingBar=document.getElementById('loadingBar');
 function runLoading(){ loadingBar.classList.add('active'); setTimeout(()=>loadingBar.classList.remove('active'), 500); }
 
@@ -471,15 +552,15 @@ function showWelcome(text){
   welcomeBar.style.display='block';
   welcomeBar.classList.remove('hide');
   requestAnimationFrame(()=>welcomeBar.classList.add('show'));
-  setTimeout(()=>{welcomeBar.classList.remove('show');welcomeBar.classList.add('hide');}, 2000);
-  setTimeout(()=>{welcomeBar.style.display='none';welcomeBar.classList.remove('hide');}, 2400);
+  setTimeout(()=>{welcomeBar.classList.remove('show');welcomeBar.classList.add('hide');}, 1800);
+  setTimeout(()=>{welcomeBar.style.display='none';welcomeBar.classList.remove('hide');}, 2200);
 }
 function flashTitle(){
   const page=document.querySelector('.page:not(.hide)');
   const target=page?.querySelector('.title-flash-target') || page?.querySelector('h1, h3');
   if(!target) return;
   target.classList.add('flash-gold');
-  setTimeout(()=>target.classList.remove('flash-gold'), 500);
+  setTimeout(()=>target.classList.remove('flash-gold'), 520);
 }
 function applyReveal(){
   const section=document.querySelector('.page:not(.hide) .reveal');
@@ -502,6 +583,7 @@ function route(){
   showWelcome(r.welcome);
   if(h==="#/assessment"){buildNames();buildLife();randomAyah();fillHawkinsTable();}
   if(h==="#/roadmap"){renderRoadmap();}
+  if(h==="#/partners"){toggleFloatPartner(true);} else {toggleFloatPartner(false);}
   if(h!=="#/"){audioPauseSoft();}
   window.scrollTo({top:0,behavior:'smooth'});
   applyReveal();
@@ -528,15 +610,29 @@ function uiPing(){
 
 /* Data + helpers */
 const NAMES_99=["الله","الرحمن","الرحيم","الملك","القدوس","السلام","المؤمن","المهيمن","العزيز","الجبار","المتكبر","الخالق","البارئ","المصور","الغفار","القهار","الوهاب","الرزاق","الفتاح","العليم","القابض","الباسط","الخافض","الرافع","المعز","المذل","السميع","البصير","الحكم","العدل","اللطيف","الخبير","الحليم","العظيم","الغفور","الشكور","العلي","الكبير","الحفيظ","المقيت","الحسيب","الجليل","الكريم","الرقيب","المجيب","الواسع","الحكيم","الودود","المجيد","الباعث","الشهيد","الحق","الوكيل","القوي","المتين","الولي","الحميد","المحصي","المبدئ","المعيد","المحيي","المميت","الحي","القيوم","الواجد","الماجد","الواحد","الأحد","الصمد","القادر","المقتدر","المقدم","المؤخر","الأول","الآخر","الظاهر","الباطن","الوالي","المتعالي","البر","التواب","المنتقم","العفو","الرؤوف","مالك الملك","ذو الجلال والإكرام","المقسط","الجامع","الغني","المغني","المانع","الضار","النافع","النور","الهادي","البديع","الباقي","الوارث","الرشيد","الصبور","الشافي"];
-const LIFE_AREAS=["الإيمان/الروح","الصحة","العائلة","العلاقات","العمل/المال","العلم/التعلم","العطاء/الأثر","الهوايات/المتعة"];
-const K={names:"iman_names",life:"iman_life"};function load(k){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}
+const LIFE_AREAS=["الإيمان/الروح","الصحّة","العائلة","العلاقات","العمل/المال","العِلم/التعلّم","العطاء/الأثر","الهوايات/المتعة"];
+const K={names:"iman_names",life:"iman_life"};
+function load(k){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}
 function save(k,v){localStorage.setItem(k,JSON.stringify(v));}
-let namesScores=load(K.names)||Object.fromEntries(NAMES_99.map(n=>[n,50]));let lifeScores=load(K.life)||Object.fromEntries(LIFE_AREAS.map(n=>[n,5]));
-function byId(id){return document.getElementById(id)}function el(tag,attrs={},children=[]){const e=document.createElement(tag);Object.entries(attrs).forEach(([k,v])=>{if(k==="class")e.className=v;else if(k==="html")e.innerHTML=v;else e.setAttribute(k,v);});(Array.isArray(children)?children:[children]).filter(Boolean).forEach(c=>e.appendChild(c));return e;}
+let namesScores=load(K.names)||Object.fromEntries(NAMES_99.map(n=>[n,50]));
+let lifeScores=load(K.life)||Object.fromEntries(LIFE_AREAS.map(n=>[n,5]));
+function byId(id){return document.getElementById(id)}
+function el(tag,attrs={},children=[]){const e=document.createElement(tag);Object.entries(attrs).forEach(([k,v])=>{if(k==="class")e.className=v;else if(k==="html")e.innerHTML=v;else e.setAttribute(k,v);});(Array.isArray(children)?children:[children]).filter(Boolean).forEach(c=>e.appendChild(c));return e;}
 function avg(vals){return vals.reduce((a,b)=>a+b,0)/Math.max(vals.length,1);}
 
 /* Names UI */
-function buildNames(){const wrap=byId('namesWrap');wrap.innerHTML="";const q=(byId('searchName').value||"").trim();const list=q?NAMES_99.filter(n=>n.includes(q)):NAMES_99;list.forEach(name=>{const val=namesScores[name]??50;wrap.appendChild(el("div",{class:"card anim"},[el("div",{html:`<b>${name}</b> <span class='badge' style='float:left'>${val}%</span>`}),el("input",{type:"range",min:"0",max:"100",value:String(val),class:"range",oninput:`updateName('${name}', this.value, this.previousElementSibling.querySelector('.badge'))`})]));});}
+function buildNames(){
+  const wrap=byId('namesWrap');wrap.innerHTML="";
+  const q=(byId('searchName').value||"").trim();
+  const list=q?NAMES_99.filter(n=>n.includes(q)):NAMES_99;
+  list.forEach(name=>{
+    const val=namesScores[name]??50;
+    wrap.appendChild(el("div",{class:"card anim"},[
+      el("div",{html:`<b>${name}</b> <span class='badge' style='float:left'>${val}%</span>`}),
+      el("input",{type:"range",min:"0",max:"100",value:String(val),class:"range",oninput:`updateName('${name}', this.value, this.previousElementSibling.querySelector('.badge'))`})
+    ]));
+  });
+}
 document.getElementById('searchName')?.addEventListener('input',buildNames,{passive:true});
 function updateName(name,val,b){namesScores[name]=Number(val);b.textContent=val+"%";}
 function saveNames(){save(K.names,namesScores);refreshAll();uiPing();alert("تم حفظ تقييم الأسماء.");}
@@ -546,7 +642,16 @@ function exportData(){const data={names:namesScores,life:lifeScores};const blob=
 function importData(e){const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const obj=JSON.parse(r.result);if(obj.names)namesScores=obj.names;if(obj.life)lifeScores=obj.life;save(K.names,namesScores);save(K.life,lifeScores);buildNames();buildLife();drawRadar();refreshAll();alert("تم الاستيراد بنجاح.");}catch{alert("ملف غير صالح.");}};r.readAsText(f);}
 
 /* Life Wheel */
-function buildLife(){const wrap=byId('lifeWrap');wrap.innerHTML="";LIFE_AREAS.forEach(area=>{const val=lifeScores[area]??5;wrap.appendChild(el("div",{class:"card anim"},[el("div",{html:`<b>${area}</b> <span class='badge' style='float:left'>${val}/10</span>`}),el("input",{type:"range",min:"0",max:"10",value:String(val),class:"range",oninput:`updateLife('${area}', this.value, this.previousElementSibling.querySelector('.badge'))`})]));});}
+function buildLife(){
+  const wrap=byId('lifeWrap');wrap.innerHTML="";
+  LIFE_AREAS.forEach(area=>{
+    const val=lifeScores[area]??5;
+    wrap.appendChild(el("div",{class:"card anim"},[
+      el("div",{html:`<b>${area}</b> <span class='badge' style='float:left'>${val}/10</span>`}),
+      el("input",{type:"range",min:"0",max:"10",value:String(val),class:"range",oninput:`updateLife('${area}', this.value, this.previousElementSibling.querySelector('.badge'))`})
+    ]));
+  });
+}
 function updateLife(area,val,b){lifeScores[area]=Number(val);b.textContent=val+"/10";}
 function saveLife(){save(K.life,lifeScores);drawRadar();refreshAll();uiPing();alert("تم حفظ عجلة الحياة.");}
 
@@ -561,12 +666,31 @@ const HAWK_MAP=[
   {range:"80–90",label:"سلام",code:600,note:"خلوة وتدبر",color:"#06b6d4"},
   {range:"90–100",label:"نور/سكون",code:700,note:"صفاء وخدمة بإخلاص",color:"#6366f1"}
 ];
-function fillHawkinsTable(){const tbody=byId('hawkinsTable');tbody.innerHTML="";HAWK_MAP.forEach(row=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${row.range}</td><td>${row.label}</td><td>${row.code}</td><td>${row.note}</td>`;tbody.appendChild(tr);});}
+function fillHawkinsTable(){
+  const tbody=byId('hawkinsTable');tbody.innerHTML="";
+  HAWK_MAP.forEach(row=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${row.range}</td><td>${row.label}</td><td>${row.code}</td><td>${row.note}</td>`;
+    tbody.appendChild(tr);
+  });
+}
 function computeFaithPct(){return Math.round(avg(Object.values(namesScores)));}
 function computeLifeAvg(){return avg(Object.values(lifeScores));}
 function mapHawkins(pct){if(pct<20)return HAWK_MAP[0];if(pct<35)return HAWK_MAP[1];if(pct<50)return HAWK_MAP[2];if(pct<60)return HAWK_MAP[3];if(pct<70)return HAWK_MAP[4];if(pct<80)return HAWK_MAP[5];if(pct<90)return HAWK_MAP[6];return HAWK_MAP[7];}
 function mapMaslow(avg10){if(avg10<3)return "فسيولوجي/أمان";if(avg10<5)return "انتماء/علاقات";if(avg10<7)return "تقدير/إنجاز";return "تحقيق الذات (+ السموّ بالإيمان)";}
-function refreshAll(){const pct=computeFaithPct();const haw=mapHawkins(pct);const lifeAvg=computeLifeAvg();const mas=mapMaslow(lifeAvg);document.getElementById('kpiFaith').textContent=pct+"%";document.getElementById('kpiHawkins').textContent=`${haw.label} (${haw.code})`;document.getElementById('kpiMaslow').textContent=mas;document.getElementById('faithPct').textContent=pct+"%";document.getElementById('hawkinsLevel').textContent=`${haw.label} (${haw.code})`;document.getElementById('maslowTier').textContent=mas;document.getElementById('levelBlurb').textContent=`نبرة الوعي: ${haw.label} — توصية: ${haw.note}`; }
+function refreshAll(){
+  const pct=computeFaithPct();
+  const haw=mapHawkins(pct);
+  const lifeAvg=computeLifeAvg();
+  const mas=mapMaslow(lifeAvg);
+  byId('kpiFaith').textContent=pct+"%";
+  byId('kpiHawkins').textContent=`${haw.label} (${haw.code})`;
+  byId('kpiMaslow').textContent=mas;
+  byId('faithPct').textContent=pct+"%";
+  byId('hawkinsLevel').textContent=`${haw.label} (${haw.code})`;
+  byId('maslowTier').textContent=mas;
+  byId('levelBlurb').textContent=`نبرة الوعي: ${haw.label} — توصية: ${haw.note}`;
+}
 
 /* Ayat */
 const AYAT=[
@@ -576,15 +700,25 @@ const AYAT=[
   {text:"﴿ادْعُونِي أَسْتَجِبْ لَكُمْ﴾",ref:"غافر: 60"},
   {text:"﴿وَقُل رَّبِّ زِدْنِي عِلْمًا﴾",ref:"طه: 114"}
 ];
-function randomAyah(){const a=AYAT[Math.floor(Math.random()*AYAT.length)];const el=document.getElementById('dailyAyah');if(el)el.innerHTML=`<div class="ayah">${a.text}</div><div class="small">${a.ref}</div>`;}
+function randomAyah(){
+  const a=AYAT[Math.floor(Math.random()*AYAT.length)];
+  const el=document.getElementById('dailyAyah');
+  if(el)el.innerHTML=`<div class="ayah" style="font-family:'Amiri',serif">${a.text}</div><div class="small">${a.ref}</div>`;
+}
 
 /* Chart */
-let radar;function drawRadar(){const ctx=document.getElementById('radar')?.getContext('2d');if(!ctx)return;const labels=LIFE_AREAS;const data=labels.map(l=>lifeScores[l]);if(radar)radar.destroy();radar=new Chart(ctx,{type:'radar',data:{labels,datasets:[{label:'عجلة الحياة',data,fill:true,borderWidth:2}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{r:{suggestedMin:0,suggestedMax:10,ticks:{stepSize:2}}}}});}
+let radar;
+function drawRadar(){
+  const ctx=document.getElementById('radar')?.getContext('2d');if(!ctx)return;
+  const labels=LIFE_AREAS;const data=labels.map(l=>lifeScores[l]);
+  if(radar)radar.destroy();
+  radar=new Chart(ctx,{type:'radar',data:{labels,datasets:[{label:'عجلة الحياة',data,fill:true,borderWidth:2}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{r:{suggestedMin:0,suggestedMax:10,ticks:{stepSize:2}}}}});
+}
 
-/* Roadmap */
+/* Roadmap (14 days) */
 const NAME_BY_STATE={low:"الرحمن", mid:"اللطيف", high:"الحكيم"};
 const AYAH_BY_STATE={low:"﴿وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ﴾",mid:"﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾",high:"﴿وَقُل رَّبِّ زِدْنِي عِلْمًا﴾"};
-const CBT_LIBRARY={thought:"اكتب فكرة مزعجة، ثم بديلًا واقعيًا رحيمًا، وطبّق سلوكًا نافعًا صغيرًا.",gratitude:"سجل 3 نِعَم اليوم مع سبب الامتنان.",breath:"تنفّس 4-4-6 لدقيقة (شهيق-ثبات-زفير).",tinyHabit:"عادة دقيقة مرتبطة بإشارة ثابتة (بعد صلاة/قبل نوم)."};
+const CBT_LIBRARY={thought:"اكتب فكرة مزعجة، ثم بديلًا واقعيًا رحيمًا، وطبّق سلوكًا نافعًا صغيرًا.",gratitude:"سجّل 3 نِعَم اليوم مع سبب الامتنان.",breath:"تنفّس 4-4-6 لدقيقة (شهيق-ثبات-زفير).",tinyHabit:"عادة دقيقة مرتبطة بإشارة ثابتة (بعد صلاة/قبل نوم)."};
 function stateBand(p){return p<60?'low':(p<80?'mid':'high');}
 function roadmapBlocks(pct,haw,life){
   const lowAreas=Object.entries(life).sort((a,b)=>a[1]-b[1]).slice(0,3).map(x=>x[0]);
@@ -597,17 +731,29 @@ function roadmapBlocks(pct,haw,life){
   for(let d=1;d<=14;d++){
     const area=lowAreas[d%lowAreas.length];
     const practice=(d%3===1)?psych:((d%3===2)?CBT_LIBRARY.breath:CBT_LIBRARY.tinyHabit);
-    items.push({title:`اليوم ${d}: ${area}`,desc:[...anchors,`خطوة ${area}: 10–20 دقيقة`,practice,"لطف خفي لشخص واحد"].join(" — ")});
+    items.push({title:`اليوم ${d}: ${area}`,desc:[...anchors,`خطوة ${area}: 10–20 دقيقة`,practice,"لُطف خفي لشخص واحد"].join(" — ")});
   }
   items.push({title:"مراجعة خفيفة",desc:"قيّم التزامك (0–10) وعدّل الخطة."});
   items.push({title:"تثبيت عادة",desc:"اختر عادة واحدة للاستمرار 30 يومًا."});
   return items;
 }
-function renderRoadmap(){const pct=computeFaithPct();const haw=mapHawkins(pct);const host=document.getElementById('roadmapPlan');if(!host)return;host.innerHTML="";roadmapBlocks(pct,haw,lifeScores).forEach(it=>{host.appendChild(el("label",{class:"card anim",html:`<div style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" style="margin-top:6px"/><div><b>${it.title}</b><div class="small" style="color:var(--muted)">${it.desc}</div></div></div>`}));});}
-function downloadPlan(){const html=`<!doctype html><meta charset="utf-8"><title>خطة زد إيمانك (14 يومًا)</title><style>body{font-family:system-ui,"Tajawal";direction:rtl;padding:20px} .task{margin:8px 0;padding:10px;border:1px solid #ddd;border-radius:10px}</style><h2>خطة زد إيمانك (14 يومًا)</h2>${document.getElementById('roadmapPlan').innerHTML}<footer style="margin-top:16px;color:#777;font-size:12px">© شركة تلبية للبحث والتطوير</footer>`;const blob=new Blob([html],{type:"text/html"});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="iman-roadmap.html";a.click();}
+function renderRoadmap(){
+  const pct=computeFaithPct();const haw=mapHawkins(pct);const host=document.getElementById('roadmapPlan');if(!host)return;host.innerHTML="";
+  roadmapBlocks(pct,haw,lifeScores).forEach(it=>{
+    host.appendChild(el("label",{class:"card anim",html:`<div style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" style="margin-top:6px"/><div><b>${it.title}</b><div class="small" style="color:var(--muted)">${it.desc}</div></div></div>`}));
+  });
+}
+function downloadPlan(){
+  const html=`<!doctype html><meta charset="utf-8"><title>خطة زد إيمانك (14 يومًا)</title><style>body{font-family:system-ui,"Tajawal";direction:rtl;padding:20px} .task{margin:8px 0;padding:10px;border:1px solid #ddd;border-radius:10px}</style><h2>خطة زد إيمانك (14 يومًا)</h2>${document.getElementById('roadmapPlan').innerHTML}<footer style="margin-top:16px;color:#777;font-size:12px">© شركة تلبية للبحث والتطوير</footer>`;
+  const blob=new Blob([html],{type:"text/html"});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="iman-roadmap.html";a.click();
+}
 
 /* Share */
-async function shareProgress(){const pct=computeFaithPct();const haw=mapHawkins(pct);const mas=mapMaslow(computeLifeAvg());const text=`نتيجتي في "زد إيمانك": إيمان ${pct}% — هاوكنز: ${haw.label} (${haw.code}) — ماسلو: ${mas}`;if(navigator.share){try{await navigator.share({title:'زد إيمانك',text});}catch(_){}} else {navigator.clipboard?.writeText(text);alert('تم نسخ النتائج للمشاركة.');}}
+async function shareProgress(){
+  const pct=computeFaithPct();const haw=mapHawkins(pct);const mas=mapMaslow(computeLifeAvg());
+  const text=`نتيجتي في "زد إيمانك": إيمان ${pct}% — هاوكنز: ${haw.label} (${haw.code}) — ماسلو: ${mas}`;
+  if(navigator.share){try{await navigator.share({title:'زد إيمانك',text});}catch(_){}} else {navigator.clipboard?.writeText(text);alert('تم نسخ النتائج للمشاركة.');}
+}
 
 /* Partner form flow */
 function openPartnerForm(){partnerModal.showModal();}
@@ -619,12 +765,18 @@ function submitPartnerForm(){
   const type=document.getElementById('pf_type').value.trim();
   const msg=document.getElementById('pf_msg').value.trim();
   if(!name || !email || !type){alert('فضلاً أدخل الاسم والبريد ونوع الشراكة.');return;}
-  const body = `مرحباً،\nأرغب بالانضمام كشريك في (زد إيمانك).\n\nالاسم: ${name}\nالمنظمة: ${org||'-'}\nالبريد: ${email}\nالهاتف: ${phone||'-'}\nنوع الشراكة: ${type}\n\nالرسالة:\n${msg||'-'}\n`;
-  const mailto = `mailto:partnerships@example.com?subject=${encodeURIComponent('انضمام كشريك - منصة زد إيمانك')}&body=${encodeURIComponent(body)}`;
+  const body = `مرحبًا،\nأرغب بالانضمام كشريك في (زد إيمانك).\n\nالاسم: ${name}\nالمنظمة: ${org||'-'}\nالبريد: ${email}\nالهاتف: ${phone||'-'}\nنوع الشراكة: ${type}\n\nالرسالة:\n${msg||'-'}\n`;
+  const mailto = `mailto:partnerships@example.com?subject=${encodeURIComponent('انضمام كشريك - منصّة زد إيمانك')}&body=${encodeURIComponent(body)}`;
   window.location.href = mailto;
-  uiPing();
-  partnerModal.close();
+  uiPing(); partnerModal.close();
   alert('تم إعداد رسالة البريد. يمكنك إرسالها الآن.');
+}
+
+/* Floating partner button (mobile only) */
+function toggleFloatPartner(show){
+  const btn=document.getElementById('floatPartnerBtn');
+  if(window.matchMedia('(max-width: 840px)').matches){ btn.style.display = show ? 'inline-flex' : 'none'; }
+  else btn.style.display='none';
 }
 
 /* Init */
