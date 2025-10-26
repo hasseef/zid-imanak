@@ -84,7 +84,7 @@ main{padding-bottom:90px}.section{margin-top:16px}
 .nav.open{animation:slideIn .25s ease both}
 @media (prefers-reduced-motion: reduce){ .reveal>*{opacity:1;transform:none} .anim{animation:none} .nav.open{animation:none} }
 
-/* Transition highlight (title flash) */
+/* Title flash */
 .flash-gold{background:linear-gradient(90deg, rgba(212,169,68,.25), rgba(212,169,68,.05)); border-radius:10px; padding:3px 6px;}
 
 /* Welcome bar */
@@ -107,13 +107,13 @@ main{padding-bottom:90px}.section{margin-top:16px}
   .nav.open{display:flex}
 }
 
-/* Print (roadmap) */
+/* Print */
 @media print {
   header,.nav,.left-logos,.footer, .breadcrumbs, .btn, .welcome-bar, .loading-bar {display:none !important}
   main {padding:0} .card {border:none} body {background:#fff;color:#000}
 }
 
-/* Modal (partners) */
+/* Modal */
 dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;background:var(--card);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.25);padding:0}
 .partner-modal::backdrop{background:rgba(0,0,0,.35)}
 .modal-head{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
@@ -150,14 +150,16 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
       <button id="themeBtn" class="theme-toggle" title="الوضع الداكن/الفاتح" aria-label="تبديل الوضع">🌓</button>
     </div>
 
-    <!-- LEFT: Vision 2030 + Talbiya (SVG placeholders — يمكن استبدالها بصور Base64) + audio -->
+    <!-- LEFT: Vision 2030 + Talbiya logos + audio -->
     <div class="left-logos">
       <div class="logo" title="Vision 2030">
+        <!-- ضع Base64 هنا: استبدل الـ <svg> بعنصر <img src="data:image/png;base64,...."> -->
         <svg viewBox="0 0 180 44" aria-hidden="true"><rect x="0" y="0" width="180" height="44" rx="10" fill="#f7fafc" stroke="#e6ecf2"/>
           <text x="50%" y="60%" text-anchor="middle" font-family="Tajawal" font-weight="700" font-size="18" fill="#0f6781">VISION 2030</text>
         </svg>
       </div>
       <div class="logo" title="Talbiya">
+        <!-- ضع Base64 هنا: استبدل الـ <svg> بعنصر <img src="data:image/png;base64,...."> -->
         <svg viewBox="0 0 120 44" aria-hidden="true"><rect x="0" y="0" width="120" height="44" rx="10" fill="#f7fafc" stroke="#e6ecf2"/>
           <text x="50%" y="60%" text-anchor="middle" font-family="Tajawal" font-weight="700" font-size="16" fill="#2a7c92">Talbiya</text>
         </svg>
@@ -333,7 +335,6 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
         <h3>الشركاء والداعمون</h3>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:100%">
           <div class="logo" title="مبادرة تلبية">
-            <!-- استبدل بـ Base64 الحقيقي إن رغبت -->
             <svg viewBox="0 0 120 44"><rect width="120" height="44" rx="10" fill="#f7fafc" stroke="#e6ecf2"/>
               <text x="50%" y="60%" text-anchor="middle" font-family="Tajawal" font-weight="700" font-size="16" fill="#2a7c92">مبادرة تلبية</text>
             </svg>
@@ -394,7 +395,6 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
         <label class="card"><span class="small">البريد الإلكتروني</span><input id="pf_email" type="email" class="input" required/></label>
         <label class="card"><span class="small">الهاتف (اختياري)</span><input id="pf_phone" class="input"/></label>
       </div>
-      <!-- القائمة المنسدلة المطلوبة -->
       <div class="grid" style="margin-top:8px">
         <label class="card">
           <span class="small">نوع الشراكة</span>
@@ -445,7 +445,7 @@ let deferredPrompt;window.addEventListener('beforeinstallprompt',(e)=>{e.prevent
 /* Theme toggle */
 const themeBtn=document.getElementById('themeBtn');themeBtn.addEventListener('click',()=>{document.documentElement.classList.toggle('force-dark');if(document.documentElement.classList.contains('force-dark')){document.documentElement.style.colorScheme='dark';}else{document.documentElement.style.colorScheme='light';}});
 
-/* Build navigation */
+/* Build navigation (جميع القوائم مفعّلة) */
 const routes=[
   {hash:"#/",label:"الرئيسية", welcome:"مرحبًا بك في الصفحة الرئيسية"},
   {hash:"#/assessment",label:"التقييم", welcome:"مرحبًا بك في صفحة التقييم"},
@@ -529,7 +529,7 @@ function uiPing(){
 /* Data + helpers */
 const NAMES_99=["الله","الرحمن","الرحيم","الملك","القدوس","السلام","المؤمن","المهيمن","العزيز","الجبار","المتكبر","الخالق","البارئ","المصور","الغفار","القهار","الوهاب","الرزاق","الفتاح","العليم","القابض","الباسط","الخافض","الرافع","المعز","المذل","السميع","البصير","الحكم","العدل","اللطيف","الخبير","الحليم","العظيم","الغفور","الشكور","العلي","الكبير","الحفيظ","المقيت","الحسيب","الجليل","الكريم","الرقيب","المجيب","الواسع","الحكيم","الودود","المجيد","الباعث","الشهيد","الحق","الوكيل","القوي","المتين","الولي","الحميد","المحصي","المبدئ","المعيد","المحيي","المميت","الحي","القيوم","الواجد","الماجد","الواحد","الأحد","الصمد","القادر","المقتدر","المقدم","المؤخر","الأول","الآخر","الظاهر","الباطن","الوالي","المتعالي","البر","التواب","المنتقم","العفو","الرؤوف","مالك الملك","ذو الجلال والإكرام","المقسط","الجامع","الغني","المغني","المانع","الضار","النافع","النور","الهادي","البديع","الباقي","الوارث","الرشيد","الصبور","الشافي"];
 const LIFE_AREAS=["الإيمان/الروح","الصحة","العائلة","العلاقات","العمل/المال","العلم/التعلم","العطاء/الأثر","الهوايات/المتعة"];
-const K={names:"iman_names",life:"iman_life"};function load(k){try{return JSON.parse(localStorage.getItem(k))}catch{return null)}
+const K={names:"iman_names",life:"iman_life"};function load(k){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}
 function save(k,v){localStorage.setItem(k,JSON.stringify(v));}
 let namesScores=load(K.names)||Object.fromEntries(NAMES_99.map(n=>[n,50]));let lifeScores=load(K.life)||Object.fromEntries(LIFE_AREAS.map(n=>[n,5]));
 function byId(id){return document.getElementById(id)}function el(tag,attrs={},children=[]){const e=document.createElement(tag);Object.entries(attrs).forEach(([k,v])=>{if(k==="class")e.className=v;else if(k==="html")e.innerHTML=v;else e.setAttribute(k,v);});(Array.isArray(children)?children:[children]).filter(Boolean).forEach(c=>e.appendChild(c));return e;}
@@ -566,7 +566,7 @@ function computeFaithPct(){return Math.round(avg(Object.values(namesScores)));}
 function computeLifeAvg(){return avg(Object.values(lifeScores));}
 function mapHawkins(pct){if(pct<20)return HAWK_MAP[0];if(pct<35)return HAWK_MAP[1];if(pct<50)return HAWK_MAP[2];if(pct<60)return HAWK_MAP[3];if(pct<70)return HAWK_MAP[4];if(pct<80)return HAWK_MAP[5];if(pct<90)return HAWK_MAP[6];return HAWK_MAP[7];}
 function mapMaslow(avg10){if(avg10<3)return "فسيولوجي/أمان";if(avg10<5)return "انتماء/علاقات";if(avg10<7)return "تقدير/إنجاز";return "تحقيق الذات (+ السموّ بالإيمان)";}
-function refreshAll(){const pct=computeFaithPct();const haw=mapHawkins(pct);const lifeAvg=computeLifeAvg();const mas=mapMaslow(lifeAvg);byId('kpiFaith').textContent=pct+"%";byId('kpiHawkins').textContent=`${haw.label} (${haw.code})`;byId('kpiMaslow').textContent=mas;byId('faithPct').textContent=pct+"%";byId('hawkinsLevel').textContent=`${haw.label} (${haw.code})`;byId('maslowTier').textContent=mas;byId('levelBlurb').textContent=`نبرة الوعي: ${haw.label} — توصية: ${haw.note}`; }
+function refreshAll(){const pct=computeFaithPct();const haw=mapHawkins(pct);const lifeAvg=computeLifeAvg();const mas=mapMaslow(lifeAvg);document.getElementById('kpiFaith').textContent=pct+"%";document.getElementById('kpiHawkins').textContent=`${haw.label} (${haw.code})`;document.getElementById('kpiMaslow').textContent=mas;document.getElementById('faithPct').textContent=pct+"%";document.getElementById('hawkinsLevel').textContent=`${haw.label} (${haw.code})`;document.getElementById('maslowTier').textContent=mas;document.getElementById('levelBlurb').textContent=`نبرة الوعي: ${haw.label} — توصية: ${haw.note}`; }
 
 /* Ayat */
 const AYAT=[
@@ -603,7 +603,7 @@ function roadmapBlocks(pct,haw,life){
   items.push({title:"تثبيت عادة",desc:"اختر عادة واحدة للاستمرار 30 يومًا."});
   return items;
 }
-function renderRoadmap(){const pct=computeFaithPct();const haw=mapHawkins(pct);const host=byId('roadmapPlan');if(!host)return;host.innerHTML="";roadmapBlocks(pct,haw,lifeScores).forEach(it=>{host.appendChild(el("label",{class:"card anim",html:`<div style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" style="margin-top:6px"/><div><b>${it.title}</b><div class="small" style="color:var(--muted)">${it.desc}</div></div></div>`}));});}
+function renderRoadmap(){const pct=computeFaithPct();const haw=mapHawkins(pct);const host=document.getElementById('roadmapPlan');if(!host)return;host.innerHTML="";roadmapBlocks(pct,haw,lifeScores).forEach(it=>{host.appendChild(el("label",{class:"card anim",html:`<div style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" style="margin-top:6px"/><div><b>${it.title}</b><div class="small" style="color:var(--muted)">${it.desc}</div></div></div>`}));});}
 function downloadPlan(){const html=`<!doctype html><meta charset="utf-8"><title>خطة زد إيمانك (14 يومًا)</title><style>body{font-family:system-ui,"Tajawal";direction:rtl;padding:20px} .task{margin:8px 0;padding:10px;border:1px solid #ddd;border-radius:10px}</style><h2>خطة زد إيمانك (14 يومًا)</h2>${document.getElementById('roadmapPlan').innerHTML}<footer style="margin-top:16px;color:#777;font-size:12px">© شركة تلبية للبحث والتطوير</footer>`;const blob=new Blob([html],{type:"text/html"});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="iman-roadmap.html";a.click();}
 
 /* Share */
