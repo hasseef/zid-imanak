@@ -4,7 +4,6 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <title>منصّة زد إيمانك — تطبيق تأمّلي تفاعلي</title>
-<meta name="description" content="منصّة هادئة لتعزيز الإيمان عبر الأسماء الحسنى، ربط التقدّم بسُلّم هاوكنز وهرم ماسلو، وبناء خطة 14 يومًا مدعومة بآيات وتمارين نفسية."/>
 <meta name="theme-color" content="#0f6781"/>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -20,19 +19,20 @@ body{font-family:system-ui,-apple-system,"Tajawal","Noto Kufi Arabic",Segoe UI,R
 background:radial-gradient(1200px 400px at 90% -10%, rgba(230,196,105,.10), transparent),
 radial-gradient(900px 500px at 10% -20%, rgba(15,103,129,.12), transparent),
 linear-gradient(180deg,var(--bg2) 0%,var(--bg) 60%,var(--bg2) 100%);}
-.container{max-width:1200px;margin:0 auto;padding:14px}a{color:inherit;text-decoration:none}
+.container{max-width:1200px;margin:0 auto;padding:14px}
+a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .loading-bar{position:fixed;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,#e6c469,#ffe6a3);transform-origin:right;transform:scaleX(0);z-index:60}
 @keyframes loadRun{from{transform:scaleX(0)}to{transform:scaleX(1)}}.loading-bar.active{animation:loadRun .5s ease}
 
-/* Header */
+/* HEADER */
 .header{position:sticky;top:0;z-index:40;backdrop-filter:blur(10px);background:rgba(255,255,255,.75);border-bottom:1px solid var(--border)}
 @media (prefers-color-scheme: dark){.header{background:rgba(16,26,32,.6)}}
 .header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0}
 .brand{display:flex;align-items:center;gap:12px}
 .app-logo-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}
 .app-logo{width:56px;height:56px;border-radius:18px;background:var(--badge);border:1px solid var(--border);display:grid;place-items:center;padding:6px;box-shadow:0 10px 30px rgba(0,0,0,.06)}
-.app-logo svg{width:100%;height:100%}.app-name{font:700 12px/1 "Amiri",serif}
+.app-logo svg{width:100%;height:100%}.app-name{font:700 12px/1 "Amiri",serif;letter-spacing:.3px}
 .nav{display:flex;gap:6px;flex-wrap:wrap}
 .nav a{padding:12px 14px;border-radius:14px;border:1px solid transparent;min-height:44px;display:inline-flex;align-items:center}
 .nav a:hover,.nav a.active{background:rgba(0,0,0,.05);border-color:var(--border)}
@@ -69,7 +69,7 @@ main{padding-bottom:90px}.section{margin-top:16px}
 .range::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:var(--blue2);border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2)}
 .range::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:var(--blue2);border:none}
 
-/* Small bits */
+/* Bits */
 .small{font-size:12px;color:var(--muted)}.badge{display:inline-block;padding:4px 10px;border-radius:999px;background:var(--badge);border:1px solid var(--border);font-size:12px}
 .separator{height:1px;background:var(--border);margin:8px 0}.notice{padding:10px;border:1px solid var(--border);background:#fffdf5;border-radius:12px}
 .radar{padding:10px;background:var(--card);border:1px solid var(--border);border-radius:16px}
@@ -80,19 +80,10 @@ main{padding-bottom:90px}.section{margin-top:16px}
 .table tr:last-child td{border-bottom:1px solid var(--border)}.table th{background:#f8fafc}
 
 /* Animations */
-@keyframes fadeUp { from{opacity:0; transform: translateY(12px);} to{opacity:1; transform: translateY(0);} }
-.reveal>*{opacity:0; transform:translateY(12px)}.reveal>.anim{animation: fadeUp .6s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.reveal>*{opacity:0;transform:translateY(12px)}.reveal>.anim{animation:fadeUp .6s ease both}
 .reveal .anim-1{animation-delay:.05s}.reveal .anim-2{animation-delay:.12s}.reveal .anim-3{animation-delay:.18s}.reveal .anim-4{animation-delay:.24s}.reveal .anim-5{animation-delay:.30s}
-@keyframes slideIn { from{transform:translateX(12px);opacity:0} to{transform:translateX(0);opacity:1} }
-.nav.open{animation:slideIn .25s ease both}
-@media (prefers-reduced-motion: reduce){ .reveal>*{opacity:1;transform:none} .anim{animation:none} .nav.open{animation:none} }
-.flash-gold{background:linear-gradient(90deg, rgba(230,196,105,.25), rgba(230,196,105,.05)); border-radius:10px; padding:3px 6px;}
-.welcome-bar{position:sticky;top:64px;z-index:35;margin:0 14px 8px;border-radius:12px;border:1px solid rgba(230,196,105,.35);
- background:linear-gradient(90deg,rgba(230,196,105,.70),rgba(230,196,105,.45)); color:#fff; font-family:"Amiri",serif;
- text-align:center; padding:8px 12px; opacity:0; transform:translateY(-6px); pointer-events:none; text-shadow:0 1px 2px rgba(0,0,0,.22)}
-.welcome-bar.show{opacity:1; transform:translateY(0); transition:opacity .25s ease, transform .25s ease;}
-.welcome-bar.hide{opacity:0; transform:translateY(-6px); transition:opacity .3s ease, transform .3s ease;}
-.footer{text-align:center;color:var(--muted);font-size:12px;padding:20px 0;border-top:1px solid var(--border);background:rgba(255,255,255,.6)}
+@media (prefers-reduced-motion:reduce){.reveal>*{opacity:1;transform:none}.anim{animation:none}}
 
 /* Mobile */
 @media(max-width:840px){
@@ -103,7 +94,7 @@ main{padding-bottom:90px}.section{margin-top:16px}
 }
 
 /* Print */
-@media print { header,.nav,.left-logos,.footer,.breadcrumbs,.btn,.welcome-bar,.loading-bar{display:none!important} main{padding:0} .card{border:none} body{background:#fff;color:#000}}
+@media print{header,.nav,.left-logos,.footer,.breadcrumbs,.btn,.welcome-bar,.loading-bar{display:none!important}main{padding:0}.card{border:none}body{background:#fff;color:#000}}
 
 /* Modal */
 dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;background:var(--card);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.25);padding:0}
@@ -131,23 +122,20 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
         </div>
         <div class="app-name">زد إيمانك</div>
       </div>
-
       <button id="menuBtn" class="hamburger" aria-label="القائمة">☰</button>
-      <nav class="nav" id="nav" role="navigation" aria-label="القائمة الرئيسية"></nav>
+      <nav class="nav" id="nav" aria-label="القائمة الرئيسية"></nav>
       <button id="themeBtn" class="theme-toggle" title="الوضع الداكن/الفاتح" aria-label="تبديل الوضع">🌓</button>
     </div>
 
-    <!-- LEFT: شعارات (Vision 2030 + Talbiya) -->
+    <!-- LEFT: شعارات -->
     <div class="left-logos">
-      <div class="logo" title="Vision 2030"><img id="visionImg" alt="Vision 2030" width="120" height="32" loading="lazy"></div>
-      <div class="logo" title="Talbiya"><img id="talbiyaImg" alt="Talbiya" width="120" height="32" loading="lazy"></div>
+      <div class="logo" title="Vision 2030"><img alt="Vision 2030" src="./Vision2030.png" width="120" height="32" loading="lazy"></div>
+      <div class="logo" title="Talbiya"><img alt="Talbiya" src="./talbiya.png" width="120" height="32" loading="lazy"></div>
       <button id="audioBtn" class="audio-btn" aria-label="تشغيل التلاوة">🔊</button>
-      <button id="embedLogosBtn" class="audio-btn" aria-label="تضمين الشعارات" title="تضمين الشعارات">🖼️</button>
     </div>
   </div>
 </header>
 
-<!-- شريط ترحيب صغير -->
 <div id="welcomeBar" class="welcome-bar" role="status" aria-live="polite" style="display:none"></div>
 
 <main id="content" class="container" role="main">
@@ -177,7 +165,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
       <div class="card anim anim-1">
         <h3 style="font-family:'Amiri',serif">كيف يعمل؟</h3>
         <ol class="small" style="line-height:1.9;padding-right:18px">
-          <li>قيّم عمق إيمانك (0–100) في <b>الأسماء الحسنى</b>.</li>
+          <li>قيّم عمق إيمانك (0–100) في <b>الأسماء الحسنى</b> (تضمّ الشافي).</li>
           <li>نُسقط المتوسط على <b>هاوكنز</b> ونحدّد طبقة <b>ماسلو</b>.</li>
           <li>املأ <b>عجلة الحياة</b> (8 جوانب) فتُبنى <b>خريطة طريق</b> 14 يومًا.</li>
         </ol>
@@ -196,7 +184,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
       <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="assessTitle">التقييم الإيماني</b></nav>
       <div class="grid cols-2">
         <div class="card anim anim-2">
-          <h3 class="title-flash-target" style="font-family:'Amiri',serif">١) تقييم الأسماء الحسنى (يتضمّن: الشافي)</h3>
+          <h3 class="title-flash-target" style="font-family:'Amiri',serif">١) تقييم الأسماء الحسنى (بحث + ٩٩ اسمًا)</h3>
           <div style="display:flex;gap:8px;align-items:center;margin:6px 0">
             <input id="searchName" class="input" placeholder="ابحث عن اسم (مثال: الشافي، الحكيم، الرزّاق)" aria-label="ابحث"/>
             <span class="badge">0–100</span>
@@ -303,15 +291,13 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
         </p>
         <button class="btn btn-primary" onclick="openPartnerForm()">انضمّ كشريك</button>
       </div>
-
       <div class="card anim anim-3">
         <h3 style="font-family:'Amiri',serif">الشركاء والداعمون</h3>
         <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
-          <div class="logo" title="مبادرة تلبية"><img id="talbiyaCard" alt="مبادرة تلبية" width="120" height="32" loading="lazy"></div>
+          <div class="logo" title="مبادرة تلبية"><img alt="مبادرة تلبية" src="./talbiya.png" width="120" height="32" loading="lazy"></div>
           <div class="logo" title="شركة تلبية"><span style="font-weight:700;color:#0f6781">شركة تلبية</span></div>
         </div>
       </div>
-
       <a href="javascript:void(0)" onclick="openPartnerForm()" id="floatPartnerBtn"
          style="position:fixed;inset:auto 16px 16px auto;background:var(--gold);color:#1a2228;padding:12px 16px;border-radius:999px;
                 box-shadow:0 16px 40px rgba(230,196,105,.35);z-index:45;font-weight:800;display:none">انضمّ كشريك</a>
@@ -343,7 +329,7 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
 
 <footer class="footer" role="contentinfo">© جميع الحقوق محفوظة لشركة <b>تلبية للبحث والتطوير</b> — <span id="year"></span></footer>
 
-<!-- حوار الشراكة -->
+<!-- نموذج الشراكة -->
 <dialog class="partner-modal" id="partnerModal">
   <form method="dialog">
     <div class="modal-head"><b>نموذج انضمام الشركاء</b><button class="close-btn" onclick="partnerModal.close()">إغلاق</button></div>
@@ -372,14 +358,14 @@ dialog.partner-modal{border:none;border-radius:18px;max-width:560px;width:92vw;b
 </dialog>
 
 <script>
-/* ====== إعداد PWA (manifest + SW) ====== */
+/* ====== Manifest + Service Worker (PWA) ====== */
 const OFFLINE_HTML=`<!doctype html><meta charset="utf-8"><title>وضع عدم الاتصال</title><style>body{font-family:system-ui,"Tajawal";direction:rtl;padding:20px}</style><h2>أنت غير متصل</h2><p>ستعمل الأجزاء المحفوظة مسبقًا، وتُحدّث عند عودة الشبكة.</p>`;
 const manifest={"name":"منصّة زد إيمانك","short_name":"زد إيمانك","start_url":"./?pwa=true","display":"standalone","lang":"ar","dir":"rtl","theme_color":"#0f6781","background_color":"#ffffff","icons":[
  {"src":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><rect rx='28' ry='28' width='128' height='128' fill='%230f6781'/><text x='64' y='84' text-anchor='middle' font-size='84' fill='white'>ز</text></svg>","sizes":"128x128","type":"image/svg+xml"},
  {"src":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect rx='80' ry='80' width='512' height='512' fill='%230f6781'/><text x='256' y='320' text-anchor='middle' font-size='300' fill='white'>ز</text></svg>","sizes":"512x512","type":"image/svg+xml","purpose":"maskable any"}
 ],"shortcuts":[{"name":"ابدأ التقييم","url":"#/assessment","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><circle cx='64' cy='64' r='60' fill='%23e6c469'/><text x='64' y='84' text-anchor='middle' font-size='72' fill='%230f1a20'>✓</text></svg>","sizes":"128x128","type":"image/svg+xml"}]}]};
-(function attachManifest(){const link=document.getElementById('manifestLink');const url=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'}));link.href=url;})();
-(function registerSW(){if('serviceWorker' in navigator){const sw=`const CACHE='iman-v4';let OFFLINE_URL='offline.html';
+(function(){const link=document.getElementById('manifestLink');const url=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'}));link.href=url;})();
+(function(){if('serviceWorker' in navigator){const sw=`const CACHE='iman-v4';let OFFLINE_URL='offline.html';
 self.addEventListener('install',e=>{e.waitUntil((async()=>{const c=await caches.open(CACHE);await c.addAll(['./',OFFLINE_URL]);})());self.skipWaiting();});
 self.addEventListener('activate',e=>self.clients.claim());
 self.addEventListener('fetch',e=>{e.respondWith((async()=>{try{const net=await fetch(e.request);const c=await caches.open(CACHE);c.put(e.request,net.clone());return net;}catch(err){const m=await caches.match(e.request);return m||caches.match(OFFLINE_URL);}})());});`;
@@ -387,98 +373,40 @@ const offlineUrl=URL.createObjectURL(new Blob([OFFLINE_HTML],{type:'text/html'})
 const swUrl=URL.createObjectURL(new Blob([sw.replace("OFFLINE_URL='offline.html'","OFFLINE_URL='"+offlineUrl+"'")],{type:'text/javascript'}));
 navigator.serviceWorker.register(swUrl);}})();
 
-/* شريط ترحيب + تحميل */
-const loadingBar=document.getElementById('loadingBar');function runLoading(){loadingBar.classList.add('active');setTimeout(()=>loadingBar.classList.remove('active'),500);}
-const welcomeBar=document.getElementById('welcomeBar');function showWelcome(t){welcomeBar.textContent=t;welcomeBar.style.display='block';welcomeBar.classList.remove('hide');requestAnimationFrame(()=>welcomeBar.classList.add('show'));setTimeout(()=>{welcomeBar.classList.remove('show');welcomeBar.classList.add('hide');},1800);setTimeout(()=>{welcomeBar.style.display='none';welcomeBar.classList.remove('hide');},2200);}
-
-/* تنقّل */
+/* التنقّل والواجهة */
 const routes=[{hash:"#/",label:"الرئيسية",welcome:"مرحبًا بك في الصفحة الرئيسية"},{hash:"#/assessment",label:"التقييم",welcome:"مرحبًا بك في صفحة التقييم"},{hash:"#/roadmap",label:"خريطة الطريق",welcome:"مرحبًا بك في صفحة خريطة الطريق"},{hash:"#/vision2030",label:"الارتباط برؤية 2030",welcome:"مرحبًا بك في صفحة رؤية 2030"},{hash:"#/partners",label:"شركاؤنا",welcome:"مرحبًا بك في صفحة الشركاء"},{hash:"#/about",label:"عن المنصّة",welcome:"مرحبًا بك في صفحة عن المنصّة"}];
 const nav=document.getElementById('nav');routes.forEach(r=>{const a=document.createElement('a');a.href=r.hash;a.textContent=r.label;a.setAttribute('data-route','');nav.appendChild(a);});
 const menuBtn=document.getElementById('menuBtn');menuBtn.addEventListener('click',()=>nav.classList.toggle('open'));
 document.addEventListener('click',e=>{if(!nav.contains(e.target)&&e.target!==menuBtn)nav.classList.remove('open');},{passive:true});
-function flashTitle(){const page=document.querySelector('.page:not(.hide)');const t=page?.querySelector('.title-flash-target')||page?.querySelector('h1,h3');if(!t)return;t.classList.add('flash-gold');setTimeout(()=>t.classList.remove('flash-gold'),520);}
+const loadingBar=document.getElementById('loadingBar');function runLoading(){loadingBar.classList.add('active');setTimeout(()=>loadingBar.classList.remove('active'),500);}
+const welcomeBar=document.getElementById('welcomeBar');function showWelcome(t){welcomeBar.textContent=t;welcomeBar.style.display='block';requestAnimationFrame(()=>welcomeBar.classList.add('show'));setTimeout(()=>{welcomeBar.classList.remove('show');welcomeBar.classList.add('hide');},1800);setTimeout(()=>{welcomeBar.style.display='none';welcomeBar.classList.remove('hide');},2200);}
+function flashTitle(){const p=document.querySelector('.page:not(.hide)');const t=p?.querySelector('.title-flash-target')||p?.querySelector('h1,h3');if(!t)return;t.classList.add('flash-gold');setTimeout(()=>t.classList.remove('flash-gold'),520);}
 function applyReveal(){const s=document.querySelector('.page:not(.hide) .reveal');if(!s)return;[...s.children].forEach((c,i)=>{if(!c.classList.contains('anim'))c.classList.add('anim');c.style.animationDelay=(0.06*i)+'s';});s.classList.remove('reveal');void s.offsetWidth;s.classList.add('reveal');[...s.querySelectorAll('.anim')].forEach(el=>el.style.animation='fadeUp .6s ease both');}
 function route(){runLoading();const h=location.hash||"#/";document.querySelectorAll('.page').forEach(p=>p.classList.add('hide'));const id=(h==="#/")?"page-home":(h==="#/assessment")?"page-assessment":(h==="#/roadmap")?"page-roadmap":(h==="#/vision2030")?"page-vision2030":(h==="#/partners")?"page-partners":"page-about";document.getElementById(id).classList.remove('hide');document.querySelectorAll('[data-route]').forEach(a=>{a.classList.toggle('active',a.getAttribute('href')===h);if(a.getAttribute('href')===h)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});nav.classList.remove('open');const r=routes.find(x=>x.hash===h)||routes[0];showWelcome(r.welcome);if(h==="#/assessment"){buildNames();buildLife();randomAyah();fillHawkinsTable();}if(h==="#/roadmap"){renderRoadmap();}if(h==="#/partners"){toggleFloatPartner(true);}else{toggleFloatPartner(false);}if(h!=="#/"){audioPauseSoft();}window.scrollTo({top:0,behavior:'smooth'});applyReveal();flashTitle();}
 window.addEventListener('hashchange',route);
 
-/* صوت لطيف */
+/* صوت */
 const audio=new Audio();audio.loop=true;const audioBtn=document.getElementById('audioBtn');let audioOn=false;
 function audioPauseSoft(){if(!audio.paused){audio.pause();audioOn=false;audioBtn.textContent='🔊';}}
 audioBtn.addEventListener('click',async()=>{try{if(!audioOn){await audio.play();audioOn=true;audioBtn.textContent='⏸';}else{audio.pause();audioOn=false;audioBtn.textContent='🔊';}}catch(e){}});
-function uiPing(){try{const c=new (window.AudioContext||window.webkitAudioContext)();const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=660;g.gain.value=0.0001;o.connect(g);g.connect(c.destination);o.start();g.gain.exponentialRampToValueAtTime(0.06,c.currentTime+0.12);setTimeout(()=>{o.stop();c.close();},160);}catch(_){}} 
 
-/* البيانات */
+/* بيانات */
 const NAMES_99=["الله","الرحمن","الرحيم","الملك","القدوس","السلام","المؤمن","المهيمن","العزيز","الجبار","المتكبر","الخالق","البارئ","المصور","الغفار","القهار","الوهاب","الرزاق","الفتاح","العليم","القابض","الباسط","الخافض","الرافع","المعز","المذل","السميع","البصير","الحكم","العدل","اللطيف","الخبير","الحليم","العظيم","الغفور","الشكور","العلي","الكبير","الحفيظ","المقيت","الحسيب","الجليل","الكريم","الرقيب","المجيب","الواسع","الحكيم","الودود","المجيد","الباعث","الشهيد","الحق","الوكيل","القوي","المتين","الولي","الحميد","المحصي","المبدئ","المعيد","المحيي","المميت","الحي","القيوم","الواجد","الماجد","الواحد","الأحد","الصمد","القادر","المقتدر","المقدم","المؤخر","الأول","الآخر","الظاهر","الباطن","الوالي","المتعالي","البر","التواب","المنتقم","العفو","الرؤوف","مالك الملك","ذو الجلال والإكرام","المقسط","الجامع","الغني","المغني","المانع","الضار","النافع","النور","الهادي","البديع","الباقي","الوارث","الرشيد","الصبور","الشافي"];
 const LIFE_AREAS=["الإيمان/الروح","الصحّة","العائلة","العلاقات","العمل/المال","العِلم/التعلّم","العطاء/الأثر","الهوايات/المتعة"];
-const K={names:"iman_names",life:"iman_life",vision:"logo_vision_b64",talbiya:"logo_talbiya_b64"};
-
-/* تحميل/حفظ */
+function avg(a){return a.reduce((x,y)=>x+y,0)/Math.max(a.length,1);}
+const K={names:"iman_names",life:"iman_life"};
 function load(k){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}
 function save(k,v){localStorage.setItem(k,JSON.stringify(v));}
 let namesScores=load(K.names)||Object.fromEntries(NAMES_99.map(n=>[n,50]));
 let lifeScores=load(K.life)||Object.fromEntries(LIFE_AREAS.map(n=>[n,5]));
 
-/* شعارات (Base64 مرة واحدة) */
-function applyLogos(){
-  const v=load(K.vision), t=load(K.talbiya);
-  const vision=document.getElementById('visionImg'), tal=document.getElementById('talbiyaImg'), talCard=document.getElementById('talbiyaCard');
-  if(v) vision.src = "data:image/png;base64,"+v; else vision.alt="Vision 2030 (أدرج الشعار)";
-  if(t) { tal.src = "data:image/png;base64,"+t; talCard.src = "data:image/png;base64,"+t; }
-  else { tal.alt="Talbiya (أدرج الشعار)"; if(talCard) talCard.alt="Talbiya (أدرج الشعار)"; }
-}
-document.getElementById('embedLogosBtn').addEventListener('click', ()=>openLogosDialog());
-
-function openLogosDialog(){
-  const v=load(K.vision)||"", t=load(K.talbiya)||"";
-  const html=`<style>
-    .dlg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;z-index:99}
-    .box{background:#fff;color:#111;max-width:720px;width:92vw;border-radius:14px;overflow:hidden}
-    .hd{padding:10px 12px;border-bottom:1px solid #eee;display:flex;justify-content:space-between}
-    .bd{padding:12px}
-    .row{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:10px}
-    textarea{width:100%;min-height:120px;border:1px solid #e5e7eb;border-radius:10px;padding:8px}
-    .ft{padding:10px 12px;border-top:1px solid #eee;display:flex;gap:8px}
-    .btnx{padding:10px 14px;border-radius:10px;border:1px solid #e5e7eb;background:#f8fafc;cursor:pointer}
-    .btnp{padding:10px 14px;border-radius:10px;border:1px solid #d4af37;background:#e6c469;color:#222;font-weight:800}
-  </style>
-  <div class="dlg" id="logosDlg" role="dialog" aria-label="تضمين الشعارات">
-    <div class="box">
-      <div class="hd"><b>تضمين الشعارات كـBase64 (مرة واحدة)</b><button class="btnx" onclick="document.getElementById('logosDlg').remove()">إغلاق</button></div>
-      <div class="bd">
-        <div class="row">
-          <label>لسلسلة Vision2030 (Base64 فقط بدون بادئة data:)</label>
-          <textarea id="visionB64">${v||""}</textarea>
-        </div>
-        <div class="row">
-          <label>لسلسلة Talbiya (Base64 فقط بدون بادئة data:)</label>
-          <textarea id="talbiyaB64">${t||""}</textarea>
-        </div>
-        <div class="notice">ألصق النصّين كما هما؛ سيُحفَظان محلّيًا ويُستخدَمان تلقائيًا.</div>
-      </div>
-      <div class="ft">
-        <button class="btnp" onclick="saveLogos()">حفظ</button>
-        <button class="btnx" onclick="clearLogos()">مسح</button>
-      </div>
-    </div>
-  </div>`;
-  document.body.insertAdjacentHTML('beforeend', html);
-}
-function saveLogos(){
-  const v=document.getElementById('visionB64').value.trim();
-  const t=document.getElementById('talbiyaB64').value.trim();
-  if(v) save(K.vision, v); if(t) save(K.talbiya, t);
-  applyLogos(); document.getElementById('logosDlg').remove(); alert('تم حفظ الشعارات.');
-}
-function clearLogos(){localStorage.removeItem(K.vision);localStorage.removeItem(K.talbiya);applyLogos();alert('تم مسح الشعارات.');}
-
-/* أسماء حسنى */
+/* أسماء */
 function byId(id){return document.getElementById(id)}
 function el(tag,attrs={},children=[]){const e=document.createElement(tag);Object.entries(attrs).forEach(([k,v])=>{if(k==="class")e.className=v;else if(k==="html")e.innerHTML=v;else e.setAttribute(k,v);});(Array.isArray(children)?children:[children]).filter(Boolean).forEach(c=>e.appendChild(c));return e;}
-function avg(a){return a.reduce((x,y)=>x+y,0)/Math.max(a.length,1);}
 function buildNames(){const wrap=byId('namesWrap');wrap.innerHTML="";const q=(byId('searchName').value||"").trim();const list=q?NAMES_99.filter(n=>n.includes(q)):NAMES_99;list.forEach(name=>{const val=namesScores[name]??50;wrap.appendChild(el("div",{class:"card anim"},[el("div",{html:`<b>${name}</b> <span class='badge' style='float:left'>${val}%</span>`}),el("input",{type:"range",min:"0",max:"100",value:String(val),class:"range",oninput:`updateName('${name}', this.value, this.previousElementSibling.querySelector('.badge'))`})]));});}
 byId('searchName')?.addEventListener('input',buildNames,{passive:true});
 function updateName(n,v,b){namesScores[n]=Number(v);b.textContent=v+"%";}
-function saveNames(){save(K.names,namesScores);refreshAll();uiPing();alert("تم حفظ تقييم الأسماء.");}
+function saveNames(){save(K.names,namesScores);refreshAll();alert("تم حفظ تقييم الأسماء.");}
 
 /* تصدير/استيراد */
 function exportData(){const data={names:namesScores,life:lifeScores};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='iman-data.json';a.click();}
@@ -487,10 +415,10 @@ function importData(e){const f=e.target.files?.[0];if(!f)return;const r=new File
 /* عجلة الحياة */
 function buildLife(){const wrap=byId('lifeWrap');wrap.innerHTML="";LIFE_AREAS.forEach(a=>{const v=lifeScores[a]??5;wrap.appendChild(el("div",{class:"card anim"},[el("div",{html:`<b>${a}</b> <span class='badge' style='float:left'>${v}/10</span>`}),el("input",{type:"range",min:"0",max:"10",value:String(v),class:"range",oninput:`updateLife('${a}', this.value, this.previousElementSibling.querySelector('.badge'))`})]));});}
 function updateLife(a,v,b){lifeScores[a]=Number(v);b.textContent=v+"/10";}
-function saveLife(){save(K.life,lifeScores);drawRadar();refreshAll();uiPing();alert("تم حفظ عجلة الحياة.");}
+function saveLife(){save(K.life,lifeScores);drawRadar();refreshAll();alert("تم حفظ عجلة الحياة.");}
 
 /* هاوكنز/ماسلو */
-const HAWK_MAP=[{range:"0–20",label:"خزي/عار",code:20,note:"بدء قبول الذات والرحمة",color:"#ef4444"},{range:"20–35",label:"ذنب/أسى",code:75,note:"توبة + امتنان يومي",color:"#f97316"},{range:"35–50",label:"خوف/قلق",code:100,note:"توكّل عملي",color:"#f59e0b"},{range:"50–60",label:"شجاعة",code:200,note:"عادة صغيرة مستمرة",color:"#84cc16"},{range:"60–70",label:"قبول/حياد",code:300,note:"اتزان وروتين ذكر",color:"#22c55e"},{range:"70–80",label:"محبّة/بهجة",code:500,note:"تكثير العطاء",color:"#10b981"},{range:"80–90",label:"سلام",code:600,note:"خلوة وتدبّر",color:"#06b6d4"},{range:"90–100",label:"نور/سكون",code:700,note:"صفاء وخدمة بإخلاص",color:"#6366f1"}];
+const HAWK_MAP=[{range:"0–20",label:"خزي/عار",code:20,note:"بدء قبول الذات والرحمة"},{range:"20–35",label:"ذنب/أسى",code:75,note:"توبة + امتنان يومي"},{range:"35–50",label:"خوف/قلق",code:100,note:"توكّل عملي"},{range:"50–60",label:"شجاعة",code:200,note:"عادة صغيرة مستمرة"},{range:"60–70",label:"قبول/حياد",code:300,note:"اتزان وروتين ذكر"},{range:"70–80",label:"محبّة/بهجة",code:500,note:"تكثير العطاء"},{range:"80–90",label:"سلام",code:600,note:"خلوة وتدبّر"},{range:"90–100",label:"نور/سكون",code:700,note:"صفاء وخدمة بإخلاص"}];
 function fillHawkinsTable(){const tb=byId('hawkinsTable');tb.innerHTML="";HAWK_MAP.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${r.range}</td><td>${r.label}</td><td>${r.code}</td><td>${r.note}</td>`;tb.appendChild(tr);});}
 function computeFaithPct(){return Math.round(avg(Object.values(namesScores)));}
 function computeLifeAvg(){return avg(Object.values(lifeScores));}
@@ -502,39 +430,29 @@ function refreshAll(){const p=computeFaithPct(),h=mapHawkins(p),la=computeLifeAv
 const AYAT=[{text:"﴿وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ﴾",ref:"الطلاق: 3"},{text:"﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾",ref:"الشرح: 6"},{text:"﴿قُلْ يَا عِبَادِيَ الَّذِينَ أَسْرَفُوا...﴾",ref:"الزمر: 53"},{text:"﴿ادْعُونِي أَسْتَجِبْ لَكُمْ﴾",ref:"غافر: 60"},{text:"﴿وَقُل رَّبِّ زِدْنِي عِلْمًا﴾",ref:"طه: 114"}];
 function randomAyah(){const a=AYAT[Math.floor(Math.random()*AYAT.length)];const el=document.getElementById('dailyAyah');if(el)el.innerHTML=`<div class="ayah" style="font-family:'Amiri',serif">${a.text}</div><div class="small">${a.ref}</div>`;}
 
-/* رادار */
+/* Radar */
 let radar;function drawRadar(){const ctx=document.getElementById('radar')?.getContext('2d');if(!ctx)return;const labels=LIFE_AREAS;const data=labels.map(l=>lifeScores[l]);if(radar)radar.destroy();radar=new Chart(ctx,{type:'radar',data:{labels,datasets:[{label:'عجلة الحياة',data,fill:true,borderWidth:2}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{r:{suggestedMin:0,suggestedMax:10,ticks:{stepSize:2}}}}});}
 
 /* Roadmap */
 const NAME_BY_STATE={low:"الرحمن",mid:"اللطيف",high:"الحكيم"};
 const AYAH_BY_STATE={low:"﴿وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ﴾",mid:"﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾",high:"﴿وَقُل رَّبِّ زِدْنِي عِلْمًا﴾"};
-const CBT_LIBRARY={thought:"اكتب فكرة مزعجة، ثم بديلًا واقعيًا رحيمًا، وطبّق سلوكًا نافعًا صغيرًا.",gratitude:"سجّل 3 نِعَم اليوم.",breath:"تنفّس 4-4-6 لدقيقة.",tinyHabit:"عادة دقيقة مرتبطة بإشارة ثابتة."};
+const CBT_LIBRARY={thought:"اكتب فكرة مزعجة، ثم بديلًا واقعيًا رحيمًا، وطبّق سلوكًا نافعًا صغيرًا.",gratitude:"سجّل 3 نِعَم.",breath:"تنفّس 4-4-6 لدقيقة.",tinyHabit:"عادة دقيقة مرتبطة بإشارة ثابتة."};
 function stateBand(p){return p<60?'low':(p<80?'mid':'high');}
-function roadmapBlocks(pct,haw,life){const lowAreas=Object.entries(life).sort((a,b)=>a[1]-b[1]).slice(0,3).map(x=>x[0]);const band=stateBand(pct);const anchorName=NAME_BY_STATE[band];const anchorAyah=AYAH_BY_STATE[band];const anchors=[`ذكر: "يا ${anchorName}" 100 مرة`, `آية: ${anchorAyah}`];const psych=(band==='low')?CBT_LIBRARY.thought:(band==='mid')?CBT_LIBRARY.gratitude:CBT_LIBRARY.tinyHabit;const items=[];for(let d=1;d<=14;d++){const area=lowAreas[d%lowAreas.length];const practice=(d%3===1)?psych:((d%3===2)?CBT_LIBRARY.breath:CBT_LIBRARY.tinyHabit);items.push({title:`اليوم ${d}: ${area}`,desc:[...anchors,`خطوة ${area}: 10–20 دقيقة`,practice,"لُطف خفي لشخص"].join(" — ")});}items.push({title:"مراجعة خفيفة",desc:"قيّم التزامك وعدّل الخطة."});items.push({title:"تثبيت عادة",desc:"اختر عادة للاستمرار 30 يومًا."});return items;}
-function renderRoadmap(){const pct=computeFaithPct();const haw=mapHawkins(pct);const host=document.getElementById('roadmapPlan');if(!host)return;host.innerHTML="";roadmapBlocks(pct,haw,lifeScores).forEach(it=>{host.appendChild(el("label",{class:"card anim",html:`<div style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" style="margin-top:6px"/><div><b>${it.title}</b><div class="small" style="color:var(--muted)">${it.desc}</div></div></div>`}));});}
+function roadmapBlocks(pct,haw,life){const lowAreas=Object.entries(life).sort((a,b)=>a[1]-b[1]).slice(0,3).map(x=>x[0]);const band=stateBand(pct);const anchorName=NAME_BY_STATE[band];const anchorAyah=AYAH_BY_STATE[band];const anchors=[`ذكر: "يا ${anchorName}" 100 مرة`,`آية: ${anchorAyah}`];const psych=(band==='low')?CBT_LIBRARY.thought:(band==='mid')?CBT_LIBRARY.gratitude:CBT_LIBRARY.tinyHabit;const items=[];for(let d=1;d<=14;d++){const area=lowAreas[d%lowAreas.length];const practice=(d%3===1)?psych:((d%3===2)?CBT_LIBRARY.breath:CBT_LIBRARY.tinyHabit);items.push({title:`اليوم ${d}: ${area}`,desc:[...anchors,`خطوة ${area}: 10–20 دقيقة`,practice,"لُطف خفي لشخص"].join(" — ")});}items.push({title:"مراجعة خفيفة",desc:"قيّم التزامك وعدّل الخطة."});items.push({title:"تثبيت عادة",desc:"اختر عادة للاستمرار 30 يومًا."});return items;}
+function renderRoadmap(){const pct=computeFaithPct();const haw=mapHawkins(pct);const host=document.getElementById('roadmapPlan');if(!host)return;host.innerHTML="";roadmapBlocks(pct,haw,lifeScores).forEach(it=>{host.appendChild(el("label",{class:"card anim",html:`<div style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" style="margin-top:6px"/><div><b>${it.title}</b><div class="small" style="color:#64748b">${it.desc}</div></div></div>`}));});}
 function downloadPlan(){const html=`<!doctype html><meta charset="utf-8"><title>خطة زد إيمانك (14 يومًا)</title><style>body{font-family:system-ui,"Tajawal";direction:rtl;padding:20px} .task{margin:8px 0;padding:10px;border:1px solid #ddd;border-radius:10px}</style><h2>خطة زد إيمانك (14 يومًا)</h2>${document.getElementById('roadmapPlan').innerHTML}<footer style="margin-top:16px;color:#777;font-size:12px">© شركة تلبية للبحث والتطوير</footer>`;const blob=new Blob([html],{type:"text/html"});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="iman-roadmap.html";a.click();}
-
-/* مشاركة */
-async function shareProgress(){const p=computeFaithPct(),h=mapHawkins(p),m=mapMaslow(computeLifeAvg());const text=`نتيجتي: إيمان ${p}% — هاوكنز: ${h.label} (${h.code}) — ماسلو: ${m}`;if(navigator.share){try{await navigator.share({title:'زد إيمانك',text});}catch(_){}}else{navigator.clipboard?.writeText(text);alert('نُسخت النتيجة.');}}
 
 /* شراكات */
 function openPartnerForm(){partnerModal.showModal();}
-function submitPartnerForm(){const name=document.getElementById('pf_name').value.trim(),org=document.getElementById('pf_org').value.trim(),email=document.getElementById('pf_email').value.trim(),phone=document.getElementById('pf_phone').value.trim(),type=document.getElementById('pf_type').value.trim(),msg=document.getElementById('pf_msg').value.trim();if(!name||!email||!type){alert('فضلاً أدخل الاسم والبريد ونوع الشراكة.');return;}const body=`مرحبًا،\nأرغب بالانضمام كشريك في (زد إيمانك).\n\nالاسم: ${name}\nالمنظمة: ${org||'-'}\nالبريد: ${email}\nالهاتف: ${phone||'-'}\nنوع الشراكة: ${type}\n\nالرسالة:\n${msg||'-'}\n`;const mailto=`mailto:partnerships@example.com?subject=${encodeURIComponent('انضمام كشريك - منصّة زد إيمانك')}&body=${encodeURIComponent(body)}`;window.location.href=mailto;uiPing();partnerModal.close();alert('تم إعداد رسالة البريد.');}
+function submitPartnerForm(){const name=document.getElementById('pf_name').value.trim(),org=document.getElementById('pf_org').value.trim(),email=document.getElementById('pf_email').value.trim(),phone=document.getElementById('pf_phone').value.trim(),type=document.getElementById('pf_type').value.trim(),msg=document.getElementById('pf_msg').value.trim();if(!name||!email||!type){alert('فضلاً أدخل الاسم والبريد ونوع الشراكة.');return;}const body=`مرحبًا،\nأرغب بالانضمام كشريك في (زد إيمانك).\n\nالاسم: ${name}\nالمنظمة: ${org||'-'}\nالبريد: ${email}\nالهاتف: ${phone||'-'}\nنوع الشراكة: ${type}\n\nالرسالة:\n${msg||'-'}\n`;const mailto=`mailto:partnerships@example.com?subject=${encodeURIComponent('انضمام كشريك - منصّة زد إيمانك')}&body=${encodeURIComponent(body)}`;window.location.href=mailto;partnerModal.close();alert('تم إعداد رسالة البريد.');}
 function toggleFloatPartner(show){const b=document.getElementById('floatPartnerBtn');b.style.display=window.matchMedia('(max-width: 840px)').matches&&(show)?'inline-flex':'none';}
-
-/* رسم */
-let radarRef;function redraw(){drawRadar();refreshAll();}
-function fillHawkinsTable(){const tb=document.getElementById('hawkinsTable');tb.innerHTML="";HAWK_MAP.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${r.range}</td><td>${r.label}</td><td>${r.code}</td><td>${r.note}</td>`;tb.appendChild(tr);});}
-
-/* آية */
-function randomAyah(){const A=AYAT[Math.floor(Math.random()*AYAT.length)];const el=document.getElementById('dailyAyah');if(el)el.innerHTML=`<div class="ayah" style="font-family:'Amiri',serif">${A.text}</div><div class="small">${A.ref}</div>`;}
 
 /* تثبيت */
 let deferredPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;const btn=document.createElement('button');btn.textContent='📲 تثبيت التطبيق';btn.className='btn';btn.style.marginRight='8px';document.querySelector('.btns')?.prepend(btn);btn.addEventListener('click',async()=>{btn.disabled=true;try{await deferredPrompt.prompt();}catch{}});});
 
-/* بداية */
+/* Init */
 document.getElementById('year').textContent=new Date().getFullYear();
-route(); drawRadar(); refreshAll(); randomAyah(); fillHawkinsTable(); applyLogos();
+route(); drawRadar(); refreshAll(); randomAyah(); fillHawkinsTable();
 </script>
 </body>
 </html>
