@@ -12,7 +12,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
 <link id="manifestLink" rel="manifest"/>
-
 <style>
 :root{
   --blue:#0f6781; --blue2:#2a7c92; --beige:#efe9dc; --gold:#e6c469;
@@ -24,6 +23,7 @@
   :root{ --bg:#0b1216; --bg2:#0e161b; --card:#101a20; --ink:#e9eef2; --muted:#a7b3bf; --border:#1f2a33; --badge:#0f1a21; --shadow:0 18px 60px rgba(0,0,0,.22); }
 }
 *{box-sizing:border-box}html,body{margin:0;height:100%}
+html{scroll-behavior:smooth}
 body{
   font-family:system-ui,-apple-system,"Tajawal","Noto Kufi Arabic",Segoe UI,Roboto,sans-serif;
   color:var(--ink);
@@ -165,11 +165,11 @@ main{padding-bottom:110px} /* space for tabbar */
 
 <!-- Tabbar (Mobile) -->
 <nav class="tabbar" role="navigation" aria-label="تنقّل سفلي">
-  <a data-tab href="#/" class="active">الرئيسية</a>
-  <a data-tab href="#/assessment">التقييم</a>
-  <a data-tab href="#/roadmap">الخطة</a>
-  <a data-tab href="#/partners">الشركاء</a>
-  <a data-tab href="#/about">عن المنصّة</a>
+  <a data-tab href="#/"              data-anchor="">الرئيسية</a>
+  <a data-tab href="#/assessment"    data-anchor="#namesSection">التقييم</a>
+  <a data-tab href="#/roadmap"       data-anchor="#roadmapTop">الخطة</a>
+  <a data-tab href="#/partners"      data-anchor="#partnersTop">الشركاء</a>
+  <a data-tab href="#/about"         data-anchor="#aboutTop">عن المنصّة</a>
 </nav>
 
 <main id="content" class="container" role="main">
@@ -180,8 +180,8 @@ main{padding-bottom:110px} /* space for tabbar */
         <h1 id="homeTitle" style="font-family:'Amiri',serif">إيماني المعاصر — زد إيمانك</h1>
         <p>منصّة عملية تعزّز الإيمان عبر الأسماء الحسنى، وتربط تقدّمك بسُلّم هاوكنز، هرَم ماسلو، وعجلة الحياة — ثم تمنحك خطة 14 يومًا مستندة إلى آيات وتمارين نفسية.</p>
         <div class="btns anim anim-2">
-          <a class="btn btn-primary" href="#/assessment">ابدأ التقييم الآن</a>
-          <a class="btn btn-ghost" href="#/vision2030">الارتباط برؤية 2030</a>
+          <a class="btn btn-primary" href="#/assessment" data-anchor="#namesSection">ابدأ التقييم الآن</a>
+          <a class="btn btn-ghost"   href="#/vision2030" data-anchor="#visionTop">الارتباط برؤية 2030</a>
         </div>
         <div class="kpis" style="margin-top:10px">
           <div class="kpi anim anim-3"><b id="kpiFaith">—%</b><span class="small">نسبة الإيمان (متوسط الأسماء)</span></div>
@@ -194,30 +194,15 @@ main{padding-bottom:110px} /* space for tabbar */
         <div class="small">الأعراف: 180</div>
       </div>
     </div>
-
-    <div class="section grid cols-2 reveal">
-      <div class="card anim anim-1">
-        <h3 style="font-family:'Amiri',serif">كيف يعمل؟</h3>
-        <ol class="small" style="line-height:1.9;padding-right:18px">
-          <li>قيّم عمق إيمانك (0–100) في <b>الأسماء الحسنى</b> (يشمل: الشافي).</li>
-          <li>نُسقط المتوسط على <b>هاوكنز</b> ونحدّد طبقة <b>ماسلو</b>.</li>
-          <li>املأ <b>عجلة الحياة</b> (8 جوانب) فتُبنى <b>خريطة طريق</b> 14 يومًا.</li>
-        </ol>
-      </div>
-      <div class="card anim anim-2">
-        <h3 style="font-family:'Amiri',serif">عجلة الحياة</h3>
-        <div class="radar"><canvas id="radar" height="240" aria-label="رسم راداري" role="img"></canvas></div>
-        <div class="small" style="margin-top:6px;color:var(--muted)">عدّل القيم من صفحة “التقييم”.</div>
-      </div>
-    </div>
   </section>
 
   <!-- التقييم -->
   <section id="page-assessment" class="page hide" aria-labelledby="assessTitle">
+    <div id="assessTop"></div>
     <div class="reveal">
       <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="assessTitle">التقييم الإيماني</b></nav>
       <div class="grid cols-2">
-        <div class="card anim anim-2">
+        <div class="card anim anim-2" id="namesSection">
           <h3 class="title-flash-target" style="font-family:'Amiri',serif">١) تقييم الأسماء الحسنى</h3>
           <div style="display:flex;gap:8px;align-items:center;margin:6px 0">
             <input id="searchName" class="input" placeholder="ابحث عن اسم (الشافي، الحكيم، الرزّاق…)" aria-label="ابحث"/>
@@ -225,23 +210,29 @@ main{padding-bottom:110px} /* space for tabbar */
           </div>
           <div id="namesWrap" class="grid cols-2" style="margin-top:8px;max-height:420px;overflow:auto"></div>
           <div class="separator"></div>
-          <button class="btn btn-primary" onclick="saveNames()">حفظ التقييم</button>
-          <button class="btn" onclick="exportData()">تصدير</button>
-          <label class="btn" for="importFile" style="cursor:pointer">استيراد</label>
-          <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importData(event)"/>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="saveNames()">حفظ التقييم</button>
+            <button class="btn" onclick="exportData()">تصدير</button>
+            <label class="btn" for="importFile" style="cursor:pointer">استيراد</label>
+            <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importData(event)"/>
+            <a class="btn" href="#/assessment" data-anchor="#lifeSection">انتقال إلى عجلة الحياة</a>
+          </div>
         </div>
-        <div class="card anim anim-3">
+        <div class="card anim anim-3" id="lifeSection">
           <h3 style="font-family:'Amiri',serif">٢) عجلة الحياة (٨ جوانب)</h3>
           <p class="small" style="color:var(--muted)">قيّم رضاك (0–10) بكل جانب.</p>
           <div id="lifeWrap" class="grid cols-2" style="margin-top:8px"></div>
           <div class="separator"></div>
-          <button class="btn btn-primary" onclick="saveLife()">حفظ العجلة</button>
-          <button class="btn" onclick="shareProgress()">مشاركة</button>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="saveLife()">حفظ العجلة</button>
+            <button class="btn" onclick="shareProgress()">مشاركة</button>
+            <a class="btn" href="#/assessment" data-anchor="#resultsSection">انتقال إلى النتائج</a>
+          </div>
         </div>
       </div>
 
       <div class="section grid cols-3">
-        <div class="card anim anim-1">
+        <div class="card anim anim-1" id="resultsSection">
           <h3 style="font-family:'Amiri',serif">٣) النتائج الفورية</h3>
           <div class="kpis">
             <div class="kpi"><b id="faithPct">—%</b><span class="small">نسبة الإيمان</span></div>
@@ -249,12 +240,13 @@ main{padding-bottom:110px} /* space for tabbar */
             <div class="kpi"><b id="maslowTier">—</b><span class="small">ماسلو</span></div>
           </div>
           <p class="small" id="levelBlurb" style="margin-top:8px;color:var(--muted)"></p>
+          <a class="btn" href="#/roadmap" data-anchor="#roadmapTop" style="margin-top:8px">اذهب إلى خريطة الطريق</a>
         </div>
-        <div class="card anim anim-2">
+        <div class="card anim anim-2" id="hawkinsSection">
           <h3 style="font-family:'Amiri',serif">٤) سُلّم هاوكنز</h3>
           <div class="table-wrap"><table class="table small"><thead><tr><th>النطاق</th><th>الشعور</th><th>القيمة</th><th>توصية</th></tr></thead><tbody id="hawkinsTable"></tbody></table></div>
         </div>
-        <div class="card anim anim-3">
+        <div class="card anim anim-3" id="maslowSection">
           <h3 style="font-family:'Amiri',serif">٥) هرم ماسلو</h3>
           <div class="table-wrap"><table class="table small">
             <thead><tr><th>الطبقة</th><th>الوصف</th><th>تطبيق</th></tr></thead>
@@ -268,13 +260,12 @@ main{padding-bottom:110px} /* space for tabbar */
             </tbody></table></div>
         </div>
       </div>
-
-      <div class="section"><a class="btn btn-primary anim anim-1" href="#/roadmap">خريطة الطريق (١٤ يومًا)</a></div>
     </div>
   </section>
 
   <!-- خريطة الطريق -->
   <section id="page-roadmap" class="page hide" aria-labelledby="roadTitle">
+    <div id="roadmapTop"></div>
     <div class="reveal">
       <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="roadTitle">خريطة الطريق</b></nav>
       <div class="card anim anim-2">
@@ -282,14 +273,18 @@ main{padding-bottom:110px} /* space for tabbar */
         <p class="small" style="color:var(--muted)">حسب الإيمان/هاوكنز/ماسلو/عجلة الحياة.</p>
         <div id="roadmapPlan" class="grid" style="margin-top:8px"></div>
         <div class="separator"></div>
-        <button class="btn btn-primary" onclick="downloadPlan()">حفظ كـ HTML</button>
-        <button class="btn btn-ghost" onclick="window.print()">طباعة</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="downloadPlan()">حفظ كـ HTML</button>
+          <button class="btn btn-ghost" onclick="window.print()">طباعة</button>
+          <a class="btn" href="#/assessment" data-anchor="#resultsSection">العودة للنتائج</a>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- الارتباط برؤية 2030 -->
   <section id="page-vision2030" class="page hide" aria-labelledby="vTitle">
+    <div id="visionTop"></div>
     <div class="reveal">
       <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="vTitle">الارتباط برؤية 2030</b></nav>
       <div class="grid cols-2">
@@ -314,8 +309,9 @@ main{padding-bottom:110px} /* space for tabbar */
     </div>
   </section>
 
-  <!-- شركاؤنا -->
+  <!-- الشركاء -->
   <section id="page-partners" class="page hide" aria-labelledby="pTitle">
+    <div id="partnersTop"></div>
     <div class="reveal">
       <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="pTitle">شركاؤنا</b></nav>
       <div class="card anim anim-2" style="text-align:center">
@@ -340,6 +336,7 @@ main{padding-bottom:110px} /* space for tabbar */
 
   <!-- عن المنصّة -->
   <section id="page-about" class="page hide" aria-labelledby="aTitle">
+    <div id="aboutTop"></div>
     <div class="reveal">
       <nav class="breadcrumbs anim anim-1"><a href="#/">الرئيسية</a> · <b id="aTitle">عن المنصّة</b></nav>
       <div class="card anim anim-2">
@@ -399,10 +396,10 @@ const OFFLINE_HTML=`<!doctype html><meta charset="utf-8"><title>وضع عدم ا
 const manifest={"name":"منصّة زد إيمانك","short_name":"زد إيمانك","start_url":"./?pwa=true","display":"standalone","lang":"ar","dir":"rtl","theme_color":"#0f6781","background_color":"#ffffff","icons":[
  {"src":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><rect rx='28' ry='28' width='128' height='128' fill='%230f6781'/><text x='64' y='84' text-anchor='middle' font-size='84' fill='white'>ز</text></svg>","sizes":"128x128","type":"image/svg+xml"},
  {"src":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect rx='80' ry='80' width='512' height='512' fill='%230f6781'/><text x='256' y='320' text-anchor='middle' font-size='300' fill='white'>ز</text></svg>","sizes":"512x512","type":"image/svg+xml","purpose":"maskable any"}
-],"shortcuts":[{"name":"ابدأ التقييم","url":"#/assessment","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><circle cx='64' cy='64' r='60' fill='%23e6c469'/><text x='64' y='84' text-anchor='middle' font-size='72' fill='%230f1a20'>✓</text></svg>","sizes":"128x128","type":"image/svg+xml"}]}]};
+],"shortcuts":[{"name":"ابدأ التقييم","url":"#/assessment#namesSection","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><circle cx='64' cy='64' r='60' fill='%23e6c469'/><text x='64' y='84' text-anchor='middle' font-size='72' fill='%230f1a20'>✓</text></svg>","sizes":"128x128","type":"image/svg+xml"}]}]};
 (function(){const link=document.getElementById('manifestLink');const url=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'}));link.href=url;})();
 (function(){if('serviceWorker' in navigator){
-  const sw=`const CACHE='iman-v5';let OFFLINE_URL='offline.html';
+  const sw=`const CACHE='iman-v6';let OFFLINE_URL='offline.html';
 self.addEventListener('install',e=>{e.waitUntil((async()=>{const c=await caches.open(CACHE);await c.addAll(['./',OFFLINE_URL]);})());self.skipWaiting();});
 self.addEventListener('activate',e=>self.clients.claim());
 self.addEventListener('fetch',e=>{e.respondWith((async()=>{try{const net=await fetch(e.request);const c=await caches.open(CACHE);c.put(e.request,net.clone());return net;}catch(err){const m=await caches.match(e.request);return m||caches.match(OFFLINE_URL);}})());});`;
@@ -411,12 +408,14 @@ self.addEventListener('fetch',e=>{e.respondWith((async()=>{try{const net=await f
   navigator.serviceWorker.register(swUrl);
 }})();
 
-/* ====== UI Helpers ====== */
+/* ====== Helpers ====== */
 const loadingBar=document.getElementById('loadingBar');
 function runLoading(){loadingBar.classList.add('active');setTimeout(()=>loadingBar.classList.remove('active'),450);}
 function vibrate(ms=18){try{navigator.vibrate&&navigator.vibrate(ms);}catch{}}
+function scrollToAnchor(anchor){ if(!anchor) return; const el = document.querySelector(anchor); if(!el) return;
+  el.scrollIntoView({behavior:'smooth', block:'start', inline:'nearest'}); }
 
-/* ====== Routing & Nav ====== */
+/* ====== Routing & Deep Anchor ====== */
 const routes=[
   {hash:"#/",label:"الرئيسية",welcome:"مرحبًا بك في الصفحة الرئيسية"},
   {hash:"#/assessment",label:"التقييم",welcome:"أهلاً بك في صفحة التقييم"},
@@ -427,7 +426,17 @@ const routes=[
 ];
 const nav=document.getElementById('nav');
 routes.forEach(r=>{const a=document.createElement('a');a.href=r.hash;a.textContent=r.label;a.setAttribute('data-route','');nav.appendChild(a);});
-document.querySelectorAll('.tabbar [data-tab]').forEach(a=>a.addEventListener('click',()=>vibrate(12)));
+document.querySelectorAll('.tabbar [data-tab], .btns a, .breadcrumbs a, nav.nav a').forEach(a=>{
+  a.addEventListener('click',(e)=>{
+    const anchor = a.getAttribute('data-anchor') || '';
+    if(anchor){ sessionStorage.setItem('pendingAnchor', anchor); }
+    // دعم صيغة #/page#anchor مباشرة من href
+    const href = a.getAttribute('href')||'';
+    const idx = href.indexOf('#',2); // ثاني #
+    if(idx>1){ sessionStorage.setItem('pendingAnchor', href.slice(idx)); }
+    vibrate(12);
+  });
+});
 
 const menuBtn=document.getElementById('menuBtn');menuBtn.addEventListener('click',()=>nav.classList.toggle('open'));
 document.addEventListener('click',e=>{if(!nav.contains(e.target)&&e.target!==menuBtn)nav.classList.remove('open');},{passive:true});
@@ -442,7 +451,9 @@ function setActiveLink(hash){
 
 function route(){
   runLoading();
-  const h=location.hash||"#/";
+  const fullHash=location.hash||"#/";
+  const [pageHash, anchorFromUrl] = fullHash.split('#/')[1]?.split('#') ? ["#/"+fullHash.split('#/')[1].split('#')[0], "#"+fullHash.split('#/')[1].split('#')[1]] : [fullHash, ""];
+  const h = pageHash || "#/";
   document.querySelectorAll('.page').forEach(p=>p.classList.add('hide'));
   const id=(h==="#/")?"page-home":(h==="#/assessment")?"page-assessment":(h==="#/roadmap")?"page-roadmap":(h==="#/vision2030")?"page-vision2030":(h==="#/partners")?"page-partners":"page-about";
   document.getElementById(id).classList.remove('hide');
@@ -452,7 +463,14 @@ function route(){
   if(h==="#/roadmap"){renderRoadmap();}
   if(h==="#/partners"){toggleFloatPartner(true);} else {toggleFloatPartner(false);}
   if(h!=="#/"){audioPauseSoft();}
-  window.scrollTo({top:0,behavior:'smooth'});
+  // مرّر بعد إظهار الصفحة
+  setTimeout(()=>{
+    const pending = sessionStorage.getItem('pendingAnchor') || "";
+    const deep = anchorFromUrl || "";
+    const anchor = deep || pending;
+    if(anchor){ scrollToAnchor(anchor); sessionStorage.removeItem('pendingAnchor'); }
+    else window.scrollTo({top:0,behavior:'smooth'});
+  }, 20);
 }
 window.addEventListener('hashchange',route);
 
@@ -565,15 +583,25 @@ function submitPartnerForm(){
 }
 function toggleFloatPartner(show){const b=document.getElementById('floatPartnerBtn');b.style.display=window.matchMedia('(max-width: 900px)').matches&&(show)?'inline-flex':'none';}
 
+/* Theme toggle */
+document.getElementById('themeBtn').addEventListener('click',()=>{
+  document.documentElement.classList.toggle('force-dark');
+  document.documentElement.style.colorScheme=document.documentElement.classList.contains('force-dark')?'dark':'light';
+});
+
 /* Install prompt */
 let deferredPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;const btn=document.createElement('button');btn.textContent='📲 تثبيت التطبيق';btn.className='btn';btn.style.marginRight='8px';document.querySelector('.btns')?.prepend(btn);btn.addEventListener('click',async()=>{btn.disabled=true;try{await deferredPrompt.prompt();}catch{}});});
 
-/* Theme toggle */
-document.getElementById('themeBtn').addEventListener('click',()=>{document.documentElement.classList.toggle('force-dark');document.documentElement.style.colorScheme=document.documentElement.classList.contains('force-dark')?'dark':'light';});
-
 /* Init */
 document.getElementById('year').textContent=new Date().getFullYear();
-route(); drawRadar(); refreshAll(); randomAyah(); fillHawkinsTable();
+function initialDeep(){ // دعم فتح رابط مباشرة بصيغة #/page#anchor
+  const fullHash=location.hash||"#/";
+  const parts = fullHash.split('#/');
+  if(parts.length>1 && parts[1].includes('#')) sessionStorage.setItem('pendingAnchor', '#'+parts[1].split('#')[1]);
+}
+initialDeep();
+route();
+drawRadar(); refreshAll(); randomAyah(); fillHawkinsTable();
 </script>
 </body>
 </html>
